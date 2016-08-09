@@ -8,7 +8,7 @@ class VisitaMedica {
 	private String CF_paziente;
 	private Date data_visita;
 	private boolean Agonistica;
-	
+
 	public VisitaMedica(String CF,Date data,int numero){
 		this.CF_paziente=CF;
 		this.data_visita=data;

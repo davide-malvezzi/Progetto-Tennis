@@ -7,10 +7,10 @@ public class Prenotazione {
 	Date data_inizio;
 	Date data_fine;
 	Campo field;
-	boolean pagato;
+	int pagato;
 	Giocatore player1,player2;
 	double importo;
-	
+
 	public Prenotazione(Date data1, Date data2, Campo field){
 		this.data_inizio=data1;
 		this.data_fine=data2;
@@ -41,11 +41,11 @@ public class Prenotazione {
 		this.field = field;
 	}
 
-	public boolean isPagato() {
+	public int getPagato() {
 		return pagato;
 	}
 
-	public void setPagato(boolean pagato) {
+	public void setPagato(int pagato) {
 		this.pagato = pagato;
 	}
 

@@ -23,7 +23,7 @@ public class Database {
                 "ID INTEGER primary key autoincrement," +
                 "Nome TEXT not null," +
                 "Cognome TEXT not null," +
-                "Data_nascita TEXT not null," +
+                "Data_nascita INTEGER not null," +
                 "CF varchar(20) not null unique," +
                 "Genere TEXT not null," +
                 "Indirizzo TEXT," +
@@ -37,16 +37,27 @@ public class Database {
                 "Posizione TEXT not null check (Posizione in ('Interno','Esterno')) )");
         stm.execute("create table Partite (" +
                 "Num INTEGER primary key autoincrement," +
-                "Data TEXT," +
+                "Data INTEGER," +
                 "Giocatore_1 INTEGER not null references Giocatori(ID)," +
                 "Giocatore_2 INTEGER not null references Giocatori(ID)," +
                 "Campo INTEGER references Campi(Num)," +
                 "Risultato TEXT not null check(Risultato in('6-0','6-1','6-2','6-3','6-4','7-5','7-6','0-6','1-6','2-6','3-6','4-6','5-7','6-7'))," +
-                "Vincitore INTEGER not null references Giocatori(ID))");
+                "Vincitore INTEGER not null references Giocatori(ID)" +
+                "check (Giocatore_1 != Giocatore_2))");
+        stm.execute("create table Prenotazioni(" +
+                "Num INTEGER primary key autoincrement," +
+                "Data_Inizio INTEGER not null," +
+                "Data_Fine INTEGER not null," +
+                "Campo INTEGER not null references Campo(Num)," +
+                "Giocatore_1 references Giocatore(ID)," +
+                "Giocatore_2 references Giocatore(ID)," +
+                "Importo REAL," +
+                "Pagato INTEGER " +
+                "check (Giocatore_1 != Giocatore_2))");
         stm.execute("create table VisiteMediche (" +
                 "Num INTEGER primary key autoincrement," +
                 "CF_Paziente TEXT not null references Giocatori(CF)," +
-                "Data TEXT not null," +
+                "Data INTEGER not null," +
                 "Agonistica INTEGER not null )");
         stm.execute("create table Partecipanti_MatchPlay (" +
                 "ID INTEGER not null references Giocatori(ID) )");
@@ -97,21 +108,17 @@ public class Database {
 
 
     public void InserisciPartita(Partite partita) {
-        String player1 = partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome();
-        String player2 = partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome();
-        String vincitore = partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome();
-
         prpst = null;
 
         try {
             prpst = con.prepareStatement("INSERT INTO partite(Data,Giocatore_1,Giocatore_2,Campo,Risultato,Vincitore) VALUES(?,?,?,?,?,?,?");   //inserisce i valori al posto delle '?'
             prpst.setDate(1, partita.getData_partita());
             prpst.setInt(2, partita.getNumero_partita());
-            prpst.setString(3, player1);
-            prpst.setString(4, player2);
+            prpst.setString(3,partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome());
+            prpst.setString(4,partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome() );
             prpst.setInt(5, partita.getField().getNumero_campo());
             prpst.setString(6, partita.getRisultato().getRisultato());
-            prpst.setString(7, vincitore);
+            prpst.setString(7,partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome() );
 
             prpst.execute();        //esegue la query nel DB
         } catch (SQLException e) {
@@ -119,7 +126,27 @@ public class Database {
         }
     }
 
-    private void InserisciVisita(VisitaMedica visita) {
+    public void InserisciPrenotazione(Prenotazione prenotazione) {
+        prpst = null;
+
+        try {
+            prpst=con.prepareStatement("INSERT INTO Prenotazioni (Data_Inizio,Data_Fine,Campo,Giocatore_1,Giocatore_2,Importo,Pagato) VALUES(?,?,?,?,?,?,?)");
+            prpst.setDate(1,prenotazione.getData_inizio());
+            prpst.setDate(2,prenotazione.getData_fine());
+            prpst.setInt(3,prenotazione.getField().getNumero_campo());
+            prpst.setString(4,prenotazione.getPlayer1().getNome() + " " + prenotazione.getPlayer1().getCognome());
+            prpst.setString(5,prenotazione.getPlayer2().getNome() + " " + prenotazione.getPlayer2().getCognome());
+            prpst.setDouble(6,prenotazione.getImporto());
+            prpst.setInt(7,prenotazione.getPagato());
+
+            prpst.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void InserisciVisita(VisitaMedica visita) {
         prpst = null;
 
         try {

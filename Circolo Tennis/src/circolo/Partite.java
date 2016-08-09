@@ -10,16 +10,16 @@ public class Partite {
 	Campo field;
 	Risultato risultato;
 	Giocatore vincitore;
-	
+
 	public Partite(Giocatore player1,Giocatore player2,Date data,Campo field){
 		this.player1=player1;
 		this.player2=player2;
 		this.data_partita=data;
 		this.field=field;
-		
+
 	}
-	
-	
+
+
 	public Date getData_partita() {
 		return data_partita;
 	}

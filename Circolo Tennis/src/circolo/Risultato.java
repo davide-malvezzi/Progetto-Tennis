@@ -27,5 +27,3 @@ public enum Risultato {
 	}
 	
 }
-
-
