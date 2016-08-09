@@ -4,6 +4,7 @@ package circolo;
 import java.sql.Date;
 
 class Giocatore {
+    private int ID;
     private String nome, cognome;
     private Date data_nascita;
     private String CF;
@@ -11,16 +12,15 @@ class Giocatore {
     private String indirizzo;
     private double classifica_FIT;
     private int fascia;
-
-    private boolean agonista, socio;
+    private int agonista, socio;
 
     Giocatore() {
     }
 
-    Giocatore ( String nome, String cognome, int fascia){
-        this.nome=nome;
-        this.cognome=cognome;
-        this.fascia=fascia;
+    Giocatore(String nome, String cognome, int fascia) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.fascia = fascia;
     }
 
 
@@ -100,21 +100,27 @@ class Giocatore {
         this.indirizzo = indirizzo;
     }
 
-    public boolean isAgonista() {
+    public int getAgonista() {
         return agonista;
     }
 
-    public void setAgonista(boolean agonista) {
+    public void setAgonista(int agonista) {
         this.agonista = agonista;
     }
 
-    public boolean isSocio() {
+    public int getSocio() {
         return socio;
     }
 
-    public void setSocio(boolean socio) {
+    public void setSocio(int socio) {
         this.socio = socio;
     }
 
+    public int getID() {
+        return ID;
+    }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 }

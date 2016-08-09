@@ -1,9 +1,5 @@
 package circolo;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 
 public class MatchPlay {
@@ -33,64 +29,44 @@ public class MatchPlay {
         } while (giocatori.peek() != null);
 
         System.out.println("\nGirone A:\n");
-        girone_A.forEach(System.out::println);
-        System.out.println("\nGirone B:\n");
-        girone_B.forEach(System.out::println);
-        System.out.println("\nGirone C:\n");
-        girone_C.forEach(System.out::println);
-        System.out.println("\nGirone D:\n");
-        girone_D.forEach(System.out::println);
-        System.out.println("\nPartite Girone A:\n");
-        this.GeneraPartite(girone_A);
-        System.out.println("\nPartite Girone B:\n");
-        this.GeneraPartite(girone_B);
-        System.out.println("\nPartite Girone C:\n");
-        this.GeneraPartite(girone_C);
-        System.out.println("\nPartite Girone D:\n");
-        this.GeneraPartite(girone_D);
-    }
+                girone_A.forEach(System.out::println);
+                System.out.println("\nGirone B:\n");
+                girone_B.forEach(System.out::println);
+                System.out.println("\nGirone C:\n");
+                girone_C.forEach(System.out::println);
+                System.out.println("\nGirone D:\n");
+                girone_D.forEach(System.out::println);
+                System.out.println("\nPartite Girone A:\n");
+                this.GeneraPartite(girone_A);
+                System.out.println("\nPartite Girone B:\n");
+                this.GeneraPartite(girone_B);
+                System.out.println("\nPartite Girone C:\n");
+                this.GeneraPartite(girone_C);
+                System.out.println("\nPartite Girone D:\n");
+                this.GeneraPartite(girone_D);
+                }
 
-    private void GeneraPartite(LinkedList<String> giocatori) {
+private void GeneraPartite(LinkedList<String> giocatori) {
         int num_giocatori = giocatori.size();
         int num_giornate = num_giocatori - 1;
         int num_partite = num_giocatori / 2;
 
         for (int i = 1; i <= num_giornate; i++) {
-            System.out.println(i + "° turno:");
+        System.out.println(i + "° turno:");
 
-            if (num_giocatori % 2 == 0)
-                System.out.println(giocatori.get(num_giocatori - 2) + " - " + giocatori.get(num_giocatori - 1));
-            for (int j = 0; j < num_partite - 1 + (num_giocatori % 2); j++) {
-                System.out.println(giocatori.get(j) + " - " + giocatori.get(num_giocatori - 3 - j + (num_giocatori % 2)));
-            }
-            if (num_giocatori % 2 == 1)
-                System.out.println("Riposa: " + giocatori.getLast());
-
-            giocatori.addFirst(giocatori.getLast());
-            giocatori.removeLast();
-            System.out.println();
+        if (num_giocatori % 2 == 0)
+        System.out.println(giocatori.get(num_giocatori - 2) + " - " + giocatori.get(num_giocatori - 1));
+        for (int j = 0; j < num_partite - 1 + (num_giocatori % 2); j++) {
+        System.out.println(giocatori.get(j) + " - " + giocatori.get(num_giocatori - 3 - j + (num_giocatori % 2)));
         }
-    }
+        if (num_giocatori % 2 == 1)
+        System.out.println("Riposa: " + giocatori.getLast());
 
-
-    //main di prova
-    public static void main(String args[]) throws ClassNotFoundException, SQLException {
-        MatchPlay prova = new MatchPlay();
-        LinkedList<String> giocatori = new LinkedList<String>();
-        String nome, cognome;
-        Connection con;
-        ConnessioneDB database = new ConnessioneDB();
-        con = database.Connessione();
-        Statement state = con.createStatement();
-        ResultSet resultset = null;
-        resultset = state.executeQuery("select * from Partecipanti order by Fascia desc");
-        while (resultset.next()) {
-            nome = resultset.getString(1);
-            cognome = resultset.getString(2);
-            String temp = nome + " " + cognome;
-            giocatori.add(temp);
+        giocatori.addFirst(giocatori.getLast());
+        giocatori.removeLast();
+        System.out.println();
         }
-        prova.GeneraGironi(giocatori);
-    }
+        }
+
 
 }
