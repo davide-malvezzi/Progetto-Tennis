@@ -3,7 +3,7 @@ package circolo;
 
 import java.sql.Date;
 
-public class Partite {
+public class Partita {
 	Date data_partita;
 	int numero_partita;
 	Giocatore player1,player2;
@@ -11,7 +11,7 @@ public class Partite {
 	Risultato risultato;
 	Giocatore vincitore;
 
-	public Partite(Giocatore player1,Giocatore player2,Date data,Campo field){
+	public Partita(Giocatore player1, Giocatore player2, Date data, Campo field){
 		this.player1=player1;
 		this.player2=player2;
 		this.data_partita=data;

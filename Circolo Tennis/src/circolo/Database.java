@@ -3,7 +3,7 @@ package circolo;
 import java.io.File;
 import java.sql.*;
 
-public class Database {
+class Database {
     private Connection con;
     private Statement stm = null;
     private PreparedStatement prpst = null;
@@ -12,7 +12,7 @@ public class Database {
         boolean exists = true;
         File f = new File("circolo.db");
         if (!f.canRead()) exists = false;
-        con = this.Connessione();
+        con = Connessione();
         stm = con.createStatement();
         if (!exists) CreaDatabase();
     }
@@ -24,7 +24,7 @@ public class Database {
                 "Nome TEXT not null," +
                 "Cognome TEXT not null," +
                 "Data_nascita INTEGER not null," +
-                "CF varchar(20) not null unique," +
+                "CF TEXT not null unique," +
                 "Genere TEXT not null," +
                 "Indirizzo TEXT," +
                 "Classifica_FIT REAL," +
@@ -38,29 +38,37 @@ public class Database {
         stm.execute("create table Partite (" +
                 "Num INTEGER primary key autoincrement," +
                 "Data INTEGER," +
-                "Giocatore_1 INTEGER not null references Giocatori(ID)," +
-                "Giocatore_2 INTEGER not null references Giocatori(ID)," +
+                "ID_Giocatore_1 INTEGER not null references Giocatori(ID)," +
+                "Giocatore_1 TEXT" +
+                "ID_Giocatore_2 INTEGER not null references Giocatori(ID)," +
+                "Giocatore_2 TEXT," +
                 "Campo INTEGER references Campi(Num)," +
-                "Risultato TEXT not null check(Risultato in('6-0','6-1','6-2','6-3','6-4','7-5','7-6','0-6','1-6','2-6','3-6','4-6','5-7','6-7'))," +
-                "Vincitore INTEGER not null references Giocatori(ID)" +
-                "check (Giocatore_1 != Giocatore_2))");
+                "Risultato TEXT, check(Risultato in('6-0','6-1','6-2','6-3','6-4','7-5','7-6','0-6','1-6','2-6','3-6','4-6','5-7','6-7'))," +
+                "Vincitore INTEGER references Giocatori(ID)" +
+                "check (ID_Giocatore_1 != ID_Giocatore_2))");
         stm.execute("create table Prenotazioni(" +
                 "Num INTEGER primary key autoincrement," +
                 "Data_Inizio INTEGER not null," +
                 "Data_Fine INTEGER not null," +
                 "Campo INTEGER not null references Campo(Num)," +
-                "Giocatore_1 references Giocatore(ID)," +
-                "Giocatore_2 references Giocatore(ID)," +
+                "ID_Giocatore_1 references Giocatore(ID)," +
+                "Giocatore_2 TEXT" +
+                "ID_Giocatore_2 references Giocatore(ID)," +
+                "Giocatore_2 TEXT" +
                 "Importo REAL," +
                 "Pagato INTEGER " +
-                "check (Giocatore_1 != Giocatore_2))");
+                "check (ID_Giocatore_1 != ID_Giocatore_2))");
         stm.execute("create table VisiteMediche (" +
                 "Num INTEGER primary key autoincrement," +
                 "CF_Paziente TEXT not null references Giocatori(CF)," +
                 "Data INTEGER not null," +
                 "Agonistica INTEGER not null )");
         stm.execute("create table Partecipanti_MatchPlay (" +
-                "ID INTEGER not null references Giocatori(ID) )");
+                "ID INTEGER not null references Giocatori(ID)" +
+                "Fascia INTEGER," +
+                "Edizione TEXT,)");
+
+
     }
 
     private Connection Connessione() {
@@ -80,6 +88,10 @@ public class Database {
             e.printStackTrace();
         }
         return con;
+    }
+
+    public ResultSet EseguiQuery(String s) throws SQLException {
+        return stm.executeQuery(s);
     }
 
     public void InserisciGiocatore(Giocatore giocatore) {
@@ -107,18 +119,19 @@ public class Database {
     }
 
 
-    public void InserisciPartita(Partite partita) {
+    public void InserisciPartita(Partita partita) {
         prpst = null;
 
         try {
-            prpst = con.prepareStatement("INSERT INTO partite(Data,Giocatore_1,Giocatore_2,Campo,Risultato,Vincitore) VALUES(?,?,?,?,?,?,?");   //inserisce i valori al posto delle '?'
+            prpst = con.prepareStatement("INSERT INTO Partite(Data,ID_Giocatore_1,Giocatore_1,ID_Giocatore_2,Giocatore_2,Campo) VALUES(?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
             prpst.setDate(1, partita.getData_partita());
-            prpst.setInt(2, partita.getNumero_partita());
+            prpst.setInt(2,partita.getPlayer1().getID());
             prpst.setString(3,partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome());
-            prpst.setString(4,partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome() );
-            prpst.setInt(5, partita.getField().getNumero_campo());
-            prpst.setString(6, partita.getRisultato().getRisultato());
-            prpst.setString(7,partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome() );
+            prpst.setInt(4,partita.getPlayer2().getID());
+            prpst.setString(5,partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome() );
+            prpst.setInt(6, partita.getField().getNumero_campo());
+            prpst.setString(7, partita.getRisultato().getRisultato());
+            prpst.setString(8,partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome() );
 
             prpst.execute();        //esegue la query nel DB
         } catch (SQLException e) {

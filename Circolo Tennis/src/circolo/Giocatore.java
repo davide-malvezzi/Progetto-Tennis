@@ -17,6 +17,12 @@ class Giocatore {
     Giocatore() {
     }
 
+    Giocatore(int ID, String nome, String cognome) {
+        this.ID = ID;
+        this.nome = nome;
+        this.cognome = cognome;
+    }
+
     Giocatore(String nome, String cognome, int fascia) {
         this.nome = nome;
         this.cognome = cognome;
