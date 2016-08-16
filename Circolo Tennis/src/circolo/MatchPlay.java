@@ -21,12 +21,12 @@ public class MatchPlay {
         //questo sistema inserisce prima tutti i giocatori di fascia 5, poi fascia 4 e così via..
         LinkedList<Giocatore> giocatori = new LinkedList<Giocatore>();
         Database db = new Database();
-        ResultSet rs = db.EseguiQuery("Select * " +
-                "from Partecipanti_MatchPlay " +//, Giocatori g" +
-                //"where mp.ID = g.ID" +
+        ResultSet rs = db.EseguiQuery("Select Nome, Cognome " +
+                "from Partecipanti_MatchPlay mp, Giocatori g" +
+                "where mp.ID = g.ID" +
                 "order by Fascia desc");
         while(rs.next()){
-            giocatori.add(new Giocatore(rs.getInt("ID"),rs.getString("Nome"),rs.getString("Cognome")));
+            giocatori.add(new Giocatore(rs.getString("Nome"),rs.getString("Cognome")));
         }
         do {
             if (giocatori.peek() != null)

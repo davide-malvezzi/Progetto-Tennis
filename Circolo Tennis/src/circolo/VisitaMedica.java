@@ -4,27 +4,21 @@ package circolo;
 import java.sql.Date;
 
 class VisitaMedica {
-	private int numero_visita;
 	private String CF_paziente;
-	private Date data_visita;
-	private boolean Agonistica;
+	Date data_visita;
+	private int Agonistica;
 
 	public VisitaMedica(String CF,Date data,int numero){
 		this.CF_paziente=CF;
 		this.data_visita=data;
-		this.numero_visita=numero;
 	}
 
-	public boolean isAgonistica() {
+	public int isAgonistica() {
 		return Agonistica;
 	}
 
-	public void setAgonistica(boolean agonistica) {
+	public void setAgonistica(int agonistica) {
 		Agonistica = agonistica;
-	}
-
-	public int getNumero_visita() {
-		return numero_visita;
 	}
 
 	public String getCF_paziente() {

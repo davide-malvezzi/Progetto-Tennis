@@ -5,7 +5,6 @@ import java.sql.Date;
 
 public class Partita {
 	Date data_partita;
-	int numero_partita;
 	Giocatore player1,player2;
 	Campo field;
 	Risultato risultato;
@@ -27,14 +26,6 @@ public class Partita {
 
 	public void setData_partita(Date data_partita) {
 		this.data_partita = data_partita;
-	}
-
-
-	public int getNumero_partita() {
-		return numero_partita;
-	}
-	public void setNumero_partita(int numero_partita) {
-		this.numero_partita = numero_partita;
 	}
 
 	public Giocatore getPlayer1() {

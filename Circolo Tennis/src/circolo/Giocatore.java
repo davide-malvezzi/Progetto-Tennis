@@ -4,9 +4,8 @@ package circolo;
 import java.sql.Date;
 
 class Giocatore {
-    private int ID;
     private String nome, cognome;
-    private Date data_nascita;
+    Date data_nascita;
     private String CF;
     private String genere;
     private String indirizzo;
@@ -17,8 +16,7 @@ class Giocatore {
     Giocatore() {
     }
 
-    Giocatore(int ID, String nome, String cognome) {
-        this.ID = ID;
+    Giocatore(String nome, String cognome) {
         this.nome = nome;
         this.cognome = cognome;
     }
@@ -120,13 +118,5 @@ class Giocatore {
 
     public void setSocio(int socio) {
         this.socio = socio;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 }
