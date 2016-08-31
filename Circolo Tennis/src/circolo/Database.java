@@ -1,11 +1,17 @@
 package circolo;
 
+import circolo.util.DateUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-class Database {
+public class Database {
     private Connection con;
     private Statement stm = null;
     private PreparedStatement prpst = null;
@@ -29,7 +35,7 @@ class Database {
                 "CF TEXT not null unique," +
                 "Genere TEXT not null," +
                 "Indirizzo TEXT," +
-                "Classifica_FIT REAL," +
+                "Classifica_FIT TEXT," +
                 "Fascia INTEGER," +
                 "Agonista INTEGER," +
                 "Socio INTEGER )");
@@ -91,18 +97,18 @@ class Database {
         return stm.executeQuery(s);
     }
 
-    public void InserisciGiocatore(Giocatore giocatore) {
+    public boolean InserisciGiocatore(Giocatore giocatore) {
         prpst = null;
 
         try {
             prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
             prpst.setString(1, giocatore.getNome());
             prpst.setString(2, giocatore.getCognome());
-            prpst.setString(3, giocatore.data_nascita.toString());
+            prpst.setString(3, DateUtil.format(giocatore.getData_nascita()));
             prpst.setString(4, giocatore.getCF());
             prpst.setString(5, giocatore.getGenere());
             prpst.setString(6, giocatore.getIndirizzo());
-            prpst.setDouble(7, giocatore.getClassifica_FIT());
+            prpst.setString(7, giocatore.getClassifica_FIT());
             prpst.setInt(8, giocatore.getFascia());
             prpst.setInt(9, giocatore.getAgonista());
             prpst.setInt(10, giocatore.getSocio());
@@ -112,7 +118,98 @@ class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        CloseConnection();
+        return true;
+    }
 
+    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) {
+        prpst = null;
+        ObservableList<Giocatore> lista = FXCollections.observableArrayList();
+        ResultSet rs;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
+        StringBuilder query = new StringBuilder();
+        query.append("select * from giocatori ");
+        String whereCondition = "";
+        if (giocatore.getNome() != null && giocatore.getNome().length() > 0)
+            whereCondition += " nome = ?";
+        if (giocatore.getCognome() != null && giocatore.getCognome().length() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " cognome = ?";
+        }
+        if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " CF = ?";
+        }
+        if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " indirizzo = ?";
+        }
+        if (giocatore.getGenere() != null && giocatore.getGenere().length() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " genere = ?";
+        }
+        if (giocatore.getClassifica_FIT() != null && giocatore.getClassifica_FIT().length() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " classifica_FIT = ?";
+        }
+        if(giocatore.getFascia() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " fascia = ?";
+        }
+        if(giocatore.getAgonista() > 0 ) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " agonista = 1";
+        }
+        if (giocatore.getSocio() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " socio = 1";
+        }
+        query.append(" where ").append(whereCondition);
+
+            try {
+                prpst = con.prepareStatement(query.toString());
+                int Index = 1;
+                if (giocatore.getNome() != null && giocatore.getNome().length() > 0)
+                    prpst.setString( Index++, giocatore.getNome());
+                if (giocatore.getCognome() != null && giocatore.getCognome().length() > 0) {
+                    prpst.setString( Index++, giocatore.getCognome());
+                }
+                if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
+                    prpst.setString( Index++, giocatore.getCF());
+                }
+                if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
+                    prpst.setString( Index++, giocatore.getIndirizzo());
+                }
+                if (giocatore.getGenere() != null && giocatore.getGenere().length() > 0) {
+                    prpst.setString( Index++, giocatore.getGenere());
+                }
+                if (giocatore.getClassifica_FIT() != null && giocatore.getClassifica_FIT().length() > 0) {
+                    prpst.setString( Index++, giocatore.getClassifica_FIT());
+                }
+                if(giocatore.getFascia() != 0) {
+                    prpst.setInt( Index++, giocatore.getFascia());
+                }
+                rs = prpst.executeQuery();
+                while (rs.next()) {
+                    Giocatore tmp = new Giocatore();
+                    tmp.setNome(rs.getString("Nome"));
+                    tmp.setCognome(rs.getString("Cognome"));
+                    tmp.setData_nascita(LocalDate.parse(rs.getString("Data_nascita"), formatter));
+                    tmp.setCF(rs.getString("CF"));
+                    tmp.setGenere(rs.getString("Genere"));
+                    if (rs.getString("Indirizzo") != null) tmp.setIndirizzo(rs.getString("Indirizzo"));
+                    if (rs.getString("Classifica_FIT") != null) tmp.setClassifica_FIT(rs.getString("Classifica_FIT"));
+                    tmp.setFascia(rs.getInt("Fascia"));
+                    tmp.setAgonista(rs.getInt("Agonista"));
+                    tmp.setSocio(rs.getInt("Socio"));
+                    lista.add(tmp);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        CloseConnection();
+        return lista;
     }
 
     public void InserisciPartecipante_MatchPlay(Giocatore giocatore) {

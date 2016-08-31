@@ -1,19 +1,21 @@
 package circolo;
 
 
-import java.sql.Date;
+import circolo.util.DateUtil;
+import javafx.beans.property.*;
 
-class Giocatore {
+import java.time.LocalDate;
+
+public class Giocatore {
     private String nome, cognome;
-    Date data_nascita;
+    LocalDate data_nascita;
     private String CF;
     private String genere;
     private String indirizzo;
-    private double classifica_FIT;
-    private int fascia;
-    private int agonista, socio;
+    private String classifica_FIT;
+    private int agonista, socio,fascia;
 
-    Giocatore() {
+    public Giocatore() {
     }
 
     Giocatore(String nome, String cognome) {
@@ -28,7 +30,7 @@ class Giocatore {
     }
 
 
-    public Giocatore(String nome, String cognome, Date data, String cf, String genere, String indirizzo) {
+    public Giocatore(String nome, String cognome, LocalDate data, String cf, String genere, String indirizzo) {
         this.nome = nome;
         this.cognome = cognome;
         this.data_nascita = data;
@@ -47,6 +49,10 @@ class Giocatore {
         return nome;
     }
 
+    public StringProperty getNomeProperty(){
+        return new SimpleStringProperty(nome);
+    }
+
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
@@ -56,12 +62,20 @@ class Giocatore {
         return cognome;
     }
 
-    public void setData_nascita(Date data_nascita) {
+    public StringProperty getCognomeProperty(){
+        return new SimpleStringProperty(cognome);
+    }
+
+    public void setData_nascita(LocalDate data_nascita) {
         this.data_nascita = data_nascita;
     }
 
-    Date getData_nascita() {
+    public LocalDate getData_nascita() {
         return data_nascita;
+    }
+
+    public StringProperty getData_NascitaProperty(){
+        return new SimpleStringProperty(DateUtil.format(this.getData_nascita()));
     }
 
     public void setCF(String CF) {
@@ -72,16 +86,28 @@ class Giocatore {
         return CF;
     }
 
-    double getClassifica_FIT() {
+    public StringProperty getCFProperty(){
+        return new SimpleStringProperty(CF);
+    }
+
+    String getClassifica_FIT() {
         return classifica_FIT;
     }
 
-    public void setClassifica_FIT(double classifica_FIT) {
+    public StringProperty getClassifica_FITProperty(){
+        return new SimpleStringProperty(classifica_FIT);
+    }
+
+    public void setClassifica_FIT(String classifica_FIT) {
         this.classifica_FIT = classifica_FIT;
     }
 
     int getFascia() {
         return fascia;
+    }
+
+    public StringProperty getFasciaProperty(){
+        return new SimpleStringProperty(String.valueOf(fascia));
     }
 
     public void setFascia(int fascia) {
@@ -96,8 +122,16 @@ class Giocatore {
         return genere;
     }
 
+    public StringProperty getGenereProperty(){
+        return new SimpleStringProperty(genere);
+    }
+
     String getIndirizzo() {
         return indirizzo;
+    }
+
+    public StringProperty getIndirizzoProperty(){
+        return new SimpleStringProperty(indirizzo);
     }
 
     public void setIndirizzo(String indirizzo) {
