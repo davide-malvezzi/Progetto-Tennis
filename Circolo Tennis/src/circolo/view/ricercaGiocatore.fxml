@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.ricercaGiocatoreController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.ricercaGiocatoreController">
     <top>
         <GridPane prefHeight="164.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <columnConstraints>
@@ -34,7 +34,7 @@
                     </GridPane.margin></Label>
                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="442.0" text="Cognome" GridPane.rowIndex="1" />
                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="392.0" text="Data di nascita" GridPane.rowIndex="2" />
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="398.0" text="CF" GridPane.rowIndex="3" />
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="398.0" text="Codice Fiscale" GridPane.rowIndex="3" />
                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="377.0" text="Indirizzo" GridPane.rowIndex="4" />
                 <TextField fx:id="nome" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" />
                 <TextField fx:id="cognome" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />

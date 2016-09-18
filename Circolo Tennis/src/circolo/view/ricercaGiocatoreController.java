@@ -4,7 +4,6 @@ import circolo.Database;
 import circolo.Giocatore;
 import circolo.MainApp;
 import circolo.util.DateUtil;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,7 +12,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ricercaGiocatoreController {
@@ -26,20 +24,23 @@ public class ricercaGiocatoreController {
     @FXML
     private TextField indirizzo;
     @FXML
-    private ComboBox sesso;
+    private ComboBox<String> sesso;
     @FXML
     private TextField cf;
     @FXML
-    private ComboBox classifica_fit;
+    private ComboBox<String> classifica_fit;
     @FXML
     private CheckBox socio;
     @FXML
     private CheckBox agonista;
     @FXML
-    private ComboBox fascia;
+    private ComboBox<String> fascia;
 
     private Giocatore giocatore = new Giocatore();
+
     private MainApp mainApp;
+
+    private Database db;
 
     public ricercaGiocatoreController() {
     }
@@ -47,36 +48,40 @@ public class ricercaGiocatoreController {
     @FXML
     private void initialize() {
         fascia.getItems().addAll("1", "2", "3", "4", "5");
-        classifica_fit.getItems().addAll("4.NC", 4.5, 4.4, 4.3, 4.2, 4.1, 4.0,
-                3.9, 3.8, 3.7, 3.6, 3.5, 3.4, 3.3, 3.2, 3.1, 3.0,
-                2.9, 2.8, 2.7, 2.6, 2.5, 2.4, 2.3, 2.2, 2.1, 2.0,
-                1.9, 1.8, 1.7, 1.6, 1.5, 1.4, 1.3, 1.2, 1.1);
+        classifica_fit.getItems().addAll("4.NC", "4.5", "4.4", "4.3", "4.2", "4.1", "4.0",
+                "3.9", "3.8", "3.7", "3.6", "3.5", "3.4", "3.3", "3.2", "3.1", "3.0",
+                "2.9", "2.8", "2.7", "2.6", "2.5", "2.4", "2.3", "2.2", "2.1", "2.0",
+                "1.9", "1.8", "1.7", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1");
         sesso.getItems().addAll("M", "F");
     }
 
     @FXML
-    private void handleCerca() throws SQLException {
+    private void handleCerca() {
         if (isInputValid()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
             giocatore.setNome(nome.getText());
             giocatore.setCognome(cognome.getText());
-            if (giocatore.getData_nascita() != null)
-                giocatore.setData_nascita(LocalDate.parse(data.getText(), formatter));
+            giocatore.setData_nascita(DateUtil.parse(data.getText()));
             giocatore.setCF(cf.getText());
-            if (indirizzo.getText().length() == 0)
-                giocatore.setIndirizzo(null);
-            else giocatore.setIndirizzo(indirizzo.getText());
+            giocatore.setIndirizzo(indirizzo.getText());
             giocatore.setAgonista(agonista.isSelected() ? 1 : 0);
             giocatore.setSocio(socio.isSelected() ? 1 : 0);
-            if (fascia.getValue() != null)
-                giocatore.setFascia(Integer.parseInt((String) fascia.getValue()));
-            if (classifica_fit.getValue() != null)
-                giocatore.setClassifica_FIT(classifica_fit.getValue().toString());
-            giocatore.setGenere((String) sesso.getValue());
-            ObservableList<Giocatore> lista = FXCollections.observableArrayList();
-            Database db = new Database();
-            lista = db.ricercaGiocatore(giocatore);
-            mainApp.showSearchResults(lista);
+            if(fascia.getValue() != null)
+                giocatore.setFascia(Integer.parseInt(fascia.getValue()));
+            else giocatore.setFascia(0);
+            giocatore.setClassifica_FIT(classifica_fit.getValue());
+            giocatore.setGenere(sesso.getValue());
+            ObservableList<Giocatore> lista;
+            try {
+                lista = db.ricercaGiocatore(giocatore);
+                mainApp.showrisultatiIscritti(lista);
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Errore");
+                alert.setHeaderText("Problema nella ricerca del giocatore nel Database");
+                alert.showAndWait();
+            }
+
         }
     }
 
@@ -119,7 +124,7 @@ public class ricercaGiocatoreController {
                 dateError = true;
             }
         }
-        if ( classifica_fit.getValue() != null){
+        if (classifica_fit.getValue() != null) {
             parametri++;
         }
         if (parametri > 0 && !dateError) {
@@ -127,6 +132,7 @@ public class ricercaGiocatoreController {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore");
+            alert.setHeaderText("Campi non validi");
             if (dateError) {
                 alert.setContentText("Data di nascita non valida. Usa il formato gg-mm-aaaa");
             }
@@ -155,6 +161,10 @@ public class ricercaGiocatoreController {
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+    }
+
+    public void setDatabase(Database db) {
+        this.db = db;
     }
 
 }

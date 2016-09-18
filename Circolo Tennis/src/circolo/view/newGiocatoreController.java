@@ -29,21 +29,23 @@ public class newGiocatoreController {
     @FXML
     private CheckBox socio;
     @FXML
-    private ComboBox classifica_fit;
+    private ComboBox<String> classifica_fit;
     @FXML
-    private ComboBox fascia;
+    private ComboBox<Integer> fascia;
     @FXML
-    private ComboBox sesso;
+    private ComboBox<String> sesso;
 
     private Giocatore giocatore = new Giocatore();
+
+    private Database db;
 
     @FXML
     private void initialize() {
         fascia.getItems().addAll(1, 2, 3, 4, 5);
-        classifica_fit.getItems().addAll("4.NC", 4.5, 4.4, 4.3, 4.2, 4.1, 4.0,
-                3.9, 3.8, 3.7, 3.6, 3.5, 3.4, 3.3, 3.2, 3.1, 3.0,
-                2.9, 2.8, 2.7, 2.6, 2.5, 2.4, 2.3, 2.2, 2.1, 2.0,
-                1.9, 1.8, 1.7, 1.6, 1.5, 1.4, 1.3, 1.2, 1.1);
+        classifica_fit.getItems().addAll("4.NC", "4.5", "4.4", "4.3", "4.2", "4.1", "4.0",
+                "3.9", "3.8", "3.7", "3.6", "3.5", "3.4", "3.3", "3.2", "3.1", "3.0",
+                "2.9", "2.8", "2.7", "2.6", "2.5", "2.4", "2.3", "2.2", "2.1", "2.0",
+                "1.9", "1.8", "1.7", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1");
         sesso.getItems().addAll("M", "F");
 
     }
@@ -64,9 +66,8 @@ public class newGiocatoreController {
             if (fascia.getValue() != null)
                 giocatore.setFascia((Integer) fascia.getValue());
             if (classifica_fit.getValue() != null)
-                giocatore.setClassifica_FIT(classifica_fit.getValue().toString());
+                giocatore.setClassifica_FIT(classifica_fit.getValue());
             giocatore.setGenere((String) sesso.getValue());
-            Database db = new Database();
             if (db.InserisciGiocatore(giocatore)) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Operazione Effettuata");
@@ -112,7 +113,7 @@ public class newGiocatoreController {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore");
-            alert.setHeaderText("Alcuni campi non sono validi");
+            alert.setHeaderText("Campi non validi");
             alert.setContentText(errorMessage);
 
             alert.showAndWait();
@@ -134,4 +135,7 @@ public class newGiocatoreController {
         classifica_fit.setValue(null);
     }
 
+    public void setDatabase(Database db){
+        this.db = db;
+    }
 }

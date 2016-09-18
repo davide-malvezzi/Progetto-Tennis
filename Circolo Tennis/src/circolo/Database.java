@@ -8,15 +8,14 @@ import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.time.LocalTime;
 
 public class Database {
     private Connection con;
     private Statement stm = null;
     private PreparedStatement prpst = null;
 
-    public Database() throws SQLException {
+    public Database() throws SQLException, ClassNotFoundException {
         boolean exists = true;
         File f = new File("circolo.db");
         if (!f.canRead()) exists = false;
@@ -56,11 +55,15 @@ public class Database {
                 "check (CF_Giocatore1 != CF_Giocatore2))");
         stm.execute("create table Prenotazioni(" +
                 "Num_Prenotazione INTEGER primary key autoincrement," +
-                "Data_Inizio TEXT not null," +
-                "Data_Fine TEXT not null," +
+                "Data TEXT not null," +
+                "Inizio TEXT not null," +
+                "Fine TEXT not null," +
                 "Num_Campo INTEGER not null references Campo(Num)," +
-                "Importo REAL," +
-                "Pagato INTEGER )");
+                "Titolare TEXT," +
+                "Recapito TEXT," +
+                "Importo TEXT," +
+                "Pagato INTEGER " +
+                ")");
         stm.execute("create table VisiteMediche (" +
                 "Num_Visita INTEGER primary key autoincrement," +
                 "CF TEXT not null references Giocatori(CF)," +
@@ -70,63 +73,46 @@ public class Database {
                 "ID INTEGER not null references Giocatori(ID)," +
                 "Fascia INTEGER," +
                 "Edizione INTEGER )");
-
-
     }
 
-    private Connection Connessione() {
+    private Connection Connessione() throws SQLException, ClassNotFoundException {
         String connectionUrl;
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        Class.forName("org.sqlite.JDBC");
         connectionUrl = "jdbc:sqlite:circolo.db";
-        try {
 
-            con = DriverManager.getConnection(connectionUrl);
 
-            System.out.println("Connessione al DB stabilita");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        con = DriverManager.getConnection(connectionUrl);
+
+        System.out.println("Connessione al DB stabilita");
+
         return con;
     }
 
-    public ResultSet EseguiQuery(String s) throws SQLException {
-        return stm.executeQuery(s);
-    }
-
-    public boolean InserisciGiocatore(Giocatore giocatore) {
+    public boolean InserisciGiocatore(Giocatore giocatore) throws SQLException {
         prpst = null;
 
-        try {
-            prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
-            prpst.setString(1, giocatore.getNome());
-            prpst.setString(2, giocatore.getCognome());
-            prpst.setString(3, DateUtil.format(giocatore.getData_nascita()));
-            prpst.setString(4, giocatore.getCF());
-            prpst.setString(5, giocatore.getGenere());
-            prpst.setString(6, giocatore.getIndirizzo());
-            prpst.setString(7, giocatore.getClassifica_FIT());
-            prpst.setInt(8, giocatore.getFascia());
-            prpst.setInt(9, giocatore.getAgonista());
-            prpst.setInt(10, giocatore.getSocio());
+        prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
+        prpst.setString(1, giocatore.getNome());
+        prpst.setString(2, giocatore.getCognome());
+        prpst.setString(3, DateUtil.format(giocatore.getData_nascita()));
+        prpst.setString(4, giocatore.getCF());
+        prpst.setString(5, giocatore.getGenere());
+        prpst.setString(6, giocatore.getIndirizzo());
+        prpst.setString(7, giocatore.getClassifica_FIT());
+        prpst.setInt(8, giocatore.getFascia());
+        prpst.setInt(9, giocatore.getAgonista());
+        prpst.setInt(10, giocatore.getSocio());
 
 
-            prpst.execute();        //esegue la query nel DB
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        CloseConnection();
+        prpst.execute();        //esegue la query nel DB
         return true;
     }
 
-    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) {
+    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) throws SQLException {
         prpst = null;
         ObservableList<Giocatore> lista = FXCollections.observableArrayList();
         ResultSet rs;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
         StringBuilder query = new StringBuilder();
         query.append("select * from giocatori ");
         String whereCondition = "";
@@ -152,11 +138,11 @@ public class Database {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
             whereCondition += " classifica_FIT = ?";
         }
-        if(giocatore.getFascia() > 0) {
+        if (giocatore.getFascia() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
             whereCondition += " fascia = ?";
         }
-        if(giocatore.getAgonista() > 0 ) {
+        if (giocatore.getAgonista() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
             whereCondition += " agonista = 1";
         }
@@ -166,156 +152,191 @@ public class Database {
         }
         query.append(" where ").append(whereCondition);
 
-            try {
-                prpst = con.prepareStatement(query.toString());
-                int Index = 1;
-                if (giocatore.getNome() != null && giocatore.getNome().length() > 0)
-                    prpst.setString( Index++, giocatore.getNome());
-                if (giocatore.getCognome() != null && giocatore.getCognome().length() > 0) {
-                    prpst.setString( Index++, giocatore.getCognome());
-                }
-                if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
-                    prpst.setString( Index++, giocatore.getCF());
-                }
-                if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
-                    prpst.setString( Index++, giocatore.getIndirizzo());
-                }
-                if (giocatore.getGenere() != null && giocatore.getGenere().length() > 0) {
-                    prpst.setString( Index++, giocatore.getGenere());
-                }
-                if (giocatore.getClassifica_FIT() != null && giocatore.getClassifica_FIT().length() > 0) {
-                    prpst.setString( Index++, giocatore.getClassifica_FIT());
-                }
-                if(giocatore.getFascia() != 0) {
-                    prpst.setInt( Index++, giocatore.getFascia());
-                }
-                rs = prpst.executeQuery();
-                while (rs.next()) {
-                    Giocatore tmp = new Giocatore();
-                    tmp.setNome(rs.getString("Nome"));
-                    tmp.setCognome(rs.getString("Cognome"));
-                    tmp.setData_nascita(LocalDate.parse(rs.getString("Data_nascita"), formatter));
-                    tmp.setCF(rs.getString("CF"));
-                    tmp.setGenere(rs.getString("Genere"));
-                    if (rs.getString("Indirizzo") != null) tmp.setIndirizzo(rs.getString("Indirizzo"));
-                    if (rs.getString("Classifica_FIT") != null) tmp.setClassifica_FIT(rs.getString("Classifica_FIT"));
-                    tmp.setFascia(rs.getInt("Fascia"));
-                    tmp.setAgonista(rs.getInt("Agonista"));
-                    tmp.setSocio(rs.getInt("Socio"));
-                    lista.add(tmp);
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        CloseConnection();
+        prpst = con.prepareStatement(query.toString());
+        int Index = 1;
+        if (giocatore.getNome() != null && giocatore.getNome().length() > 0)
+            prpst.setString(Index++, giocatore.getNome());
+        if (giocatore.getCognome() != null && giocatore.getCognome().length() > 0) {
+            prpst.setString(Index++, giocatore.getCognome());
+        }
+        if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
+            prpst.setString(Index++, giocatore.getCF());
+        }
+        if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
+            prpst.setString(Index++, giocatore.getIndirizzo());
+        }
+        if (giocatore.getGenere() != null && giocatore.getGenere().length() > 0) {
+            prpst.setString(Index++, giocatore.getGenere());
+        }
+        if (giocatore.getClassifica_FIT() != null && giocatore.getClassifica_FIT().length() > 0) {
+            prpst.setString(Index++, giocatore.getClassifica_FIT());
+        }
+        if (giocatore.getFascia() != 0) {
+            prpst.setInt(Index++, giocatore.getFascia());
+        }
+        rs = prpst.executeQuery();
+        while (rs.next()) {
+            Giocatore tmp = new Giocatore();
+            tmp.setNome(rs.getString("Nome"));
+            tmp.setCognome(rs.getString("Cognome"));
+            tmp.setData_nascita(DateUtil.parse(rs.getString("Data_nascita")));
+            tmp.setCF(rs.getString("CF"));
+            tmp.setGenere(rs.getString("Genere"));
+            if (rs.getString("Indirizzo") != null) tmp.setIndirizzo(rs.getString("Indirizzo"));
+            if (rs.getString("Classifica_FIT") != null) tmp.setClassifica_FIT(rs.getString("Classifica_FIT"));
+            tmp.setFascia(rs.getInt("Fascia"));
+            tmp.setAgonista(rs.getInt("Agonista"));
+            tmp.setSocio(rs.getInt("Socio"));
+            lista.add(tmp);
+        }
         return lista;
     }
 
-    public void InserisciPartecipante_MatchPlay(Giocatore giocatore) {
+    public void modificaIscritto(Giocatore newGiocatore) throws SQLException {
+        prpst = null;
+
+        prpst = con.prepareStatement("update Giocatori set Indirizzo = ?, Socio = ?, Agonista = ?, " +
+                "Classifica_FIT = ?, Fascia = ? " +
+                "where CF = ?");
+
+        prpst.setString(1,newGiocatore.getIndirizzo());
+        prpst.setInt(2,newGiocatore.getSocio());
+        prpst.setInt(3,newGiocatore.getAgonista());
+        prpst.setString(4,newGiocatore.getClassifica_FIT());
+        prpst.setInt(5,newGiocatore.getFascia());
+        prpst.setString(6,newGiocatore.getCF());
+
+        prpst.execute();
+    }
+
+
+    public void InserisciPartecipante_MatchPlay(Giocatore giocatore) throws SQLException {
         prpst = null;
         ResultSet rs;
         LocalDateTime data = LocalDateTime.now();
-        try {
-            prpst = con.prepareStatement("select ID,Fascia from Giocatori where CF = ? ");
-            prpst.setString(1, giocatore.getCF());
-            rs = prpst.executeQuery();
-            prpst = con.prepareStatement("INSERT INTO Partecipanti_MatchPlay VALUES (?,?,?)");
-            prpst.setInt(1, rs.getInt("ID"));
-            prpst.setInt(2, rs.getInt("Fascia"));
-            prpst.setInt(3, data.getYear());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        prpst = con.prepareStatement("select ID,Fascia from Giocatori where CF = ? ");
+        prpst.setString(1, giocatore.getCF());
+        rs = prpst.executeQuery();
+        prpst = con.prepareStatement("INSERT INTO Partecipanti_MatchPlay VALUES (?,?,?)");
+        prpst.setInt(1, rs.getInt("ID"));
+        prpst.setInt(2, rs.getInt("Fascia"));
+        prpst.setInt(3, data.getYear());
+        prpst.execute();
     }
 
-    public void InserisciPartita(Partita partita) {
+    public void InserisciPartita(Partita partita) throws SQLException {
         prpst = null;
 
-        try {
-            prpst = con.prepareStatement("INSERT INTO Partite(Data,CF_Giocatore1,Giocatore1,CF_Giocatore2,Giocatore2,Num_Campo) VALUES(?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
-            prpst.setString(1, partita.data_partita.toString());
-            prpst.setString(2, partita.getPlayer1().getCF());
-            prpst.setString(3, partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome());
-            prpst.setString(4, partita.getPlayer2().getCF());
-            prpst.setString(5, partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome());
-            prpst.setInt(6, partita.getField().getNumero_campo());
-            prpst.setString(7, partita.getRisultato().getRisultato());
-            prpst.setString(8, partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome());
+        prpst = con.prepareStatement("INSERT INTO Partite(Data,CF_Giocatore1,Giocatore1,CF_Giocatore2,Giocatore2,Num_Campo) VALUES(?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
+        prpst.setString(1, partita.data_partita.toString());
+        prpst.setString(2, partita.getPlayer1().getCF());
+        prpst.setString(3, partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome());
+        prpst.setString(4, partita.getPlayer2().getCF());
+        prpst.setString(5, partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome());
+        prpst.setInt(6, partita.getField().getNumero_campo());
+        prpst.setString(7, partita.getRisultato().getRisultato());
+        prpst.setString(8, partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome());
 
-            prpst.execute();        //esegue la query nel DB
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        prpst.execute();        //esegue la query nel DB
     }
 
-    public void InserisciPrenotazione(Prenotazione prenotazione) {
+    public void InserisciPrenotazione(Prenotazione prenotazione) throws SQLException {
         prpst = null;
 
-        try {
-            prpst = con.prepareStatement("INSERT INTO Prenotazioni (Data_Inizio,Data_Fine,Num_Campo,Importo,Pagato) VALUES(?,?,?,?,?)");
-            prpst.setString(1, prenotazione.data_inizio.toString());
-            prpst.setString(2, prenotazione.data_fine.toString());
-            prpst.setInt(3, prenotazione.getField().getNumero_campo());
-            prpst.setDouble(4, prenotazione.getImporto());
-            prpst.setInt(5, prenotazione.getPagato());
+        prpst = con.prepareStatement("INSERT INTO Prenotazioni (Data,Inizio,Fine,Num_Campo,Titolare,Recapito,Importo,Pagato) VALUES(?,?,?,?,?,?,?,?)");
+        prpst.setString(1, prenotazione.getData().toString());
+        prpst.setString(2, prenotazione.inizio.get().toString());
+        prpst.setString(3, prenotazione.fine.get().toString());
+        prpst.setInt(4, prenotazione.getcampo().getNumero_campo());
+        prpst.setString(5, prenotazione.getTitolare());
+        prpst.setString(6, prenotazione.getRecapito());
+        prpst.setString(7, prenotazione.getImporto());
+        prpst.setInt(8, prenotazione.getPagato());
 
-            prpst.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        prpst.execute();
 
     }
 
-    public ArrayList<Integer> checkDisponibilità(LocalDateTime dataInizio, LocalDateTime dataFine) throws SQLException {
-        prpst = con.prepareStatement("select distinct  c.Num_Campo " +
-                "from Campi  c left join Prenotazioni p on (p.Num_Campo = c.Num_Campo) " +
-                "where (datetime(?) not between datetime(data_inizio) and datetime(data_fine)" +
-                "and datetime(?) not between datetime(data_inizio) and datetime(data_fine) )" +
-                "or num_prenotazione is null");
+    public void setPrenotazionePagata(Prenotazione prenotazione) throws SQLException {
+        prpst = null;
 
-        prpst.setString(1, dataInizio.toString());
-        prpst.setString(2, dataFine.toString());
+        prpst = con.prepareStatement("update Prenotazioni set pagato = 1 where num_prenotazione = ?");
+
+        prpst.setInt(1, prenotazione.getNumeroPrenotazione());
+
+        prpst.execute();
+    }
+
+    public ObservableList<Prenotazione> trovaPrenotazioni(int numero) throws SQLException {
+        prpst = null;
+
+        prpst = con.prepareStatement("select * from prenotazioni order by num_prenotazione desc limit ?");
+
+        prpst.setInt(1, numero);
+
         ResultSet rs = prpst.executeQuery();
-        ArrayList<Integer> num_Campi = new ArrayList<Integer>();
+        ObservableList<Prenotazione> prenotazioni = FXCollections.observableArrayList();
         while (rs.next()) {
-            num_Campi.add(rs.getInt("Num_Campo"));
+            prenotazioni.add(new Prenotazione(rs.getInt("num_prenotazione"), LocalDate.parse(rs.getString("data")), LocalTime.parse(rs.getString("inizio")),
+                    LocalTime.parse(rs.getString("fine")), new Campo(rs.getInt("num_campo")), rs.getString("titolare"),
+                    rs.getString("recapito"), rs.getInt("pagato"), rs.getString("importo")));
         }
-        return num_Campi;
+        return prenotazioni;
     }
 
-    public void InserisciVisita(VisitaMedica visita) {
+    public ObservableList<Campo> checkDisponibilità(Prenotazione prenotazione) throws SQLException {
+        StringBuilder query = new StringBuilder();
+        boolean superficieOK = false;
+        query.append("select distinct c.* " +
+                "from campi c " +
+                "where c.num_campo not in(" +
+                "select distinct  c1.num_campo " +
+                "from Campi  c1 left join Prenotazioni p on (p.Num_Campo = c1.Num_Campo) " +
+                "where (date(?) = date(data) " +
+                "and time(?) between time(inizio) and time(fine)" +
+                "and time(?) between time(inizio) and time(fine)))");
+        if (prenotazione.getcampo().getSuperficie().length() > 0) {
+            query.append(" and superficie = ?");
+            superficieOK = true;
+        }
+        prpst = con.prepareStatement(query.toString());
+        prpst.setString(1, prenotazione.getData().toString());
+        prpst.setString(2, prenotazione.getInizio().toString());
+        prpst.setString(3, prenotazione.getFine().toString());
+        if (superficieOK) {
+            prpst.setString(4, prenotazione.getcampo().getSuperficie());
+        }
+        ResultSet rs = prpst.executeQuery();
+        ObservableList<Campo> Campi = FXCollections.observableArrayList();
+        while (rs.next()) {
+            Campi.add(new Campo(rs.getInt("Num_Campo"), rs.getString("Superficie"), rs.getString("Posizione")));
+        }
+        return Campi;
+    }
+
+    public void InserisciVisita(VisitaMedica visita) throws SQLException {
         prpst = null;
 
-        try {
-            prpst = con.prepareStatement("INSERT INTO VisiteMediche(CF,Data,Agonistica) VALUES(?,?,?)");   //inserisce i valori al posto delle '?'
-            prpst.setString(1, visita.getCF_paziente());
-            prpst.setString(2, visita.data_visita.toString());
-            prpst.setInt(3, visita.isAgonistica());
+        prpst = con.prepareStatement("INSERT INTO VisiteMediche(CF,Data,Agonistica) VALUES(?,?,?)");   //inserisce i valori al posto delle '?'
+        prpst.setString(1, visita.getCF_paziente());
+        prpst.setString(2, visita.getData().toString());
+        prpst.setInt(3, visita.getAgonistica());
 
-            prpst.execute();        //esegue la query nel DB
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        prpst.execute();        //esegue la query nel DB
 
     }
 
-    public void InserisciCampo(Campo field) {
+    public void InserisciCampo(Campo field) throws SQLException {
         prpst = null;
+        prpst = con.prepareStatement("INSERT INTO Campi(Superficie,Posizione) VALUES(?,?)");
+        prpst.setString(1, field.getSuperficie());
+        prpst.setString(2, field.getPosizione());
 
-        try {
-            prpst = con.prepareStatement("INSERT INTO Campi(Superficie,Posizione) VALUES(?,?)");
-            prpst.setString(1, field.getSuperficie());
-            prpst.setString(2, field.getPosizione());
+        prpst.execute();
 
-            prpst.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
-    private void CloseConnection() {
+    public void CloseConnection() {
         try {
             con.close();
             if (stm != null) stm.close();

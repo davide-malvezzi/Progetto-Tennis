@@ -1,75 +1,149 @@
 package circolo;
 
 
-import java.time.LocalDateTime;
+import javafx.beans.property.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Prenotazione {
-    LocalDateTime data_inizio;
-    LocalDateTime data_fine;
-    Campo field;
-    int pagato;
-    Giocatore player1, player2;
-    double importo;
+    int numeroPrenotazione;
+    ObjectProperty<LocalDate> data;
+    ObjectProperty<LocalTime> inizio;
+    ObjectProperty<LocalTime> fine;
+    Campo campo;
+    StringProperty recapito;
+    IntegerProperty pagato;
+    StringProperty titolare;
+    StringProperty importo;
 
-    public Prenotazione(LocalDateTime dataInizio, LocalDateTime dataFine, Campo field) {
-        this.data_inizio = dataInizio;
-        this.data_fine = dataFine;
-        this.field = field;
+    public Prenotazione(){
+        campo = new Campo();
+        data = new SimpleObjectProperty<>();
+        inizio = new SimpleObjectProperty<>();
+        fine = new SimpleObjectProperty<>();
+        titolare = new SimpleStringProperty();
+        recapito = new SimpleStringProperty();
+        importo = new SimpleStringProperty();
+        pagato = new SimpleIntegerProperty();
     }
 
-    public LocalDateTime getData_inizio() {
-        return data_inizio;
+    public Prenotazione(int numeroPrenotazione,LocalDate data,LocalTime Inizio, LocalTime Fine, Campo campo, String titolare,String recapito,int pagato,String importo){
+        this.numeroPrenotazione = numeroPrenotazione;
+        this.data = new SimpleObjectProperty<>(data);
+        this.inizio = new SimpleObjectProperty<>(Inizio);
+        this.fine = new SimpleObjectProperty<>(Fine);
+        this.campo = campo;
+        this.titolare = new SimpleStringProperty(titolare);
+        this.recapito = new SimpleStringProperty(recapito);
+        this.pagato = new SimpleIntegerProperty(pagato);
+        this.importo = new SimpleStringProperty(importo);
     }
 
-    public void setData_inizio(LocalDateTime data_inizio) {
-        this.data_inizio = data_inizio;
+    public Prenotazione(LocalDate data,LocalTime Inizio, LocalTime Fine, Campo campo) {
+        this.data = new SimpleObjectProperty<>(data);
+        this.inizio = new SimpleObjectProperty<>(Inizio);
+        this.fine = new SimpleObjectProperty<>(Fine);
+        this.campo = campo;
     }
 
-    public LocalDateTime getData_fine() {
-        return data_fine;
+    public void setNumeroPrenotazione(int numeroPrenotazione){
+        this.numeroPrenotazione = numeroPrenotazione;
     }
 
-    public void setData_fine(LocalDateTime data_fine) {
-        this.data_fine = data_fine;
+    public int getNumeroPrenotazione(){
+        return numeroPrenotazione;
     }
 
-    public Campo getField() {
-        return field;
+    public LocalDate getData() {
+        return data.get();
     }
 
-    public void setField(Campo field) {
-        this.field = field;
+    public ObjectProperty<LocalDate> getDataProperty() {
+        return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = new SimpleObjectProperty<>(data);
+    }
+
+    public LocalTime getInizio() {
+        return inizio.get();
+    }
+
+    public ObjectProperty<LocalTime> getInizioProperty() {
+        return inizio;
+    }
+
+    public void setInizio(LocalTime inizio) {
+        this.inizio = new SimpleObjectProperty<>(inizio);
+    }
+    public LocalTime getFine() {
+        return fine.get();
+    }
+
+    public ObjectProperty<LocalTime> getFineProperty() {
+        return fine;
+    }
+
+    public void setFine(LocalTime fine) {
+        this.fine = new SimpleObjectProperty<>(fine);
+    }
+
+
+    public Campo getcampo() {
+        return campo;
+    }
+
+    public void setcampo(Campo campo) {
+        this.campo = campo;
     }
 
     public int getPagato() {
+        return pagato.get();
+    }
+
+    public IntegerProperty getPagatoProperty(){
         return pagato;
     }
 
     public void setPagato(int pagato) {
-        this.pagato = pagato;
+        this.pagato = new SimpleIntegerProperty(pagato);
     }
 
-    public Giocatore getPlayer1() {
-        return player1;
+    public String getTitolare() {
+        return titolare.get();
     }
 
-    public void setPlayer1(Giocatore player1) {
-        this.player1 = player1;
+    public  StringProperty getTitolareProperty(){
+        return titolare;
     }
 
-    public Giocatore getPlayer2() {
-        return player2;
+    public void setTitolare(String titolare) {
+        this.titolare = new SimpleStringProperty(titolare);
     }
 
-    public void setPlayer2(Giocatore player2) {
-        this.player2 = player2;
+    public String getImporto() {
+        return importo.get();
     }
 
-    public double getImporto() {
+    public StringProperty getImportoProperty(){
         return importo;
     }
 
-    public void setImporto(double importo) {
-        this.importo = importo;
+    public void setImporto(String importo) {
+        this.importo = new SimpleStringProperty(importo);
+    }
+
+    public String getRecapito() {
+        return recapito.get();
+    }
+
+    public StringProperty getRecapitoProperty(){
+        return recapito;
+    }
+
+    public void setRecapito(String recapito) {
+        this.recapito = new SimpleStringProperty(recapito);
     }
 }

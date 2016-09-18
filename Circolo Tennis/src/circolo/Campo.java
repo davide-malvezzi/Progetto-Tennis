@@ -1,50 +1,66 @@
 package circolo;
 
 
-import java.sql.Date;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Campo {
-	Date disponibilità;
-	int numero_campo;
-	String superficie;
-	String posizione; // interno o esterno
-	
+	IntegerProperty numero;
+	StringProperty superficie;
+	StringProperty posizione; // interno o esterno
+
+	public Campo(){
+		numero = new SimpleIntegerProperty();
+		superficie = new SimpleStringProperty();
+		posizione = new SimpleStringProperty();
+	}
+
+	public Campo(int numero){
+		this.numero = new SimpleIntegerProperty(numero);
+	}
+
 	public Campo(int numero, String superficie, String posizione){
-		this.numero_campo=numero;
-		this.superficie=superficie;
-		this.posizione=posizione;
-	}
-
-	public Date getDisponibilità() {
-		return disponibilità;
-	}
-
-	public void setDisponibilità(Date disponibilità) {
-		this.disponibilità = disponibilità;
+		this.numero = new SimpleIntegerProperty(numero);
+		this.superficie = new SimpleStringProperty(superficie);
+		this.posizione = new SimpleStringProperty(posizione);
 	}
 
 	public int getNumero_campo() {
-		return numero_campo;
+		return numero.get();
+	}
+
+	public IntegerProperty getNumeroCampoProperty(){
+		return numero;
 	}
 
 	public void setNumero_campo(int numero_campo) {
-		this.numero_campo = numero_campo;
+		this.numero.set(numero_campo);
 	}
 
 	public String getSuperficie() {
+		return superficie.get();
+	}
+
+	public StringProperty getSuperficieProperty(){
 		return superficie;
 	}
 
 	public void setSuperficie(String superficie) {
-		this.superficie = superficie;
+		this.superficie.set(superficie);
 	}
 
 	public String getPosizione() {
+		return posizione.get();
+	}
+
+	public StringProperty getPosizioneProperty(){
 		return posizione;
 	}
 
 	public void setPosizione(String posizione) {
-		this.posizione = posizione;
+		this.posizione.set(posizione);
 	}
-	
+
 }

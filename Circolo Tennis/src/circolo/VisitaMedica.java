@@ -1,33 +1,63 @@
 package circolo;
 
 
-import java.sql.Date;
+import javafx.beans.property.*;
 
-class VisitaMedica {
-	private String CF_paziente;
-	Date data_visita;
-	private int Agonistica;
+import java.time.LocalDate;
 
-	public VisitaMedica(String CF,Date data,int numero){
-		this.CF_paziente=CF;
-		this.data_visita=data;
+public class VisitaMedica {
+	private StringProperty CF_paziente;
+	private ObjectProperty<LocalDate> data;
+	private IntegerProperty agonistica;
+
+
+
+	public VisitaMedica(){
+		CF_paziente = new SimpleStringProperty();
+		data = new SimpleObjectProperty<>();
+		agonistica = new SimpleIntegerProperty();
+
 	}
 
-	public int isAgonistica() {
-		return Agonistica;
+	public VisitaMedica(String CF,LocalDate data){
+		this.CF_paziente.set(CF);
+		this.data.set(data);
 	}
 
-	public void setAgonistica(int agonistica) {
-		Agonistica = agonistica;
-	}
-
-	public String getCF_paziente() {
+	public StringProperty getCF_pazienteProperty() {
 		return CF_paziente;
 	}
 
-	public Date getData_visita() {
-		return data_visita;
+	public String getCF_paziente(){
+		return CF_paziente.get();
 	}
-	
+
+	public void setCF_paziente(String CF_paziente) {
+		this.CF_paziente.set(CF_paziente);
+	}
+
+	public LocalDate getData() {
+		return data.get();
+	}
+
+	public ObjectProperty<LocalDate> getDataProperty() {
+		return data;
+	}
+
+	public void setData(LocalDate data) {
+		this.data.set(data);
+	}
+
+	public IntegerProperty getAgonisticaProperty() {
+		return agonistica;
+	}
+
+	public int getAgonistica(){
+		return agonistica.get();
+	}
+
+	public void setAgonistica(int agonistica){
+		this.agonistica.set(agonistica);
+	}
 
 }

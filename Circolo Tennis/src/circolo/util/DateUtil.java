@@ -1,6 +1,7 @@
 package circolo.util;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -57,6 +58,15 @@ public class DateUtil {
     public static boolean validDate(String dateString) {
         // Try to parse the String.
         return DateUtil.parse(dateString) != null;
+    }
+
+    public static boolean validTime(String timeString){
+        try{
+            LocalTime.parse(timeString);
+            return true;
+        }catch(DateTimeParseException e){
+            return false;
+        }
     }
 
 }

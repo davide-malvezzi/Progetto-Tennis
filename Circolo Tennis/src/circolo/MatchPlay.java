@@ -1,6 +1,5 @@
 package circolo;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
@@ -18,10 +17,11 @@ public class MatchPlay {
     }
 
     public void GeneraGironi() throws SQLException {
-        //questo sistema inserisce prima tutti i giocatori di fascia 5, poi fascia 4 e così via..
+        //todo fare genera gironi (in classe Database)
+
         LinkedList<Giocatore> giocatori = new LinkedList<Giocatore>();
-        Database db = new Database();
-        ResultSet rs = db.EseguiQuery("Select Nome, Cognome " +
+        //Database db = new Database();
+        /*ResultSet rs = db.EseguiQuery("Select Nome, Cognome " +
                 "from Partecipanti_MatchPlay mp, Giocatori g" +
                 "where mp.ID = g.ID" +
                 "order by Fascia desc");
@@ -37,7 +37,7 @@ public class MatchPlay {
                 girone_C.add(giocatori.poll());
             if (giocatori.peek() != null)
                 girone_D.add(giocatori.poll());
-        } while (giocatori.peek() != null);
+        } while (giocatori.peek() != null);*/
 
         System.out.println("\nGirone A:\n");
         for (Giocatore aGirone_A : girone_A) System.out.println(aGirone_A.getNome() + " " + aGirone_A.getCognome());
