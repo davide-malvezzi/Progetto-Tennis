@@ -19,9 +19,9 @@ public class MatchPlay {
     public void GeneraGironi() throws SQLException {
         //todo fare genera gironi (in classe Database)
 
-        LinkedList<Giocatore> giocatori = new LinkedList<Giocatore>();
-        //Database db = new Database();
-        /*ResultSet rs = db.EseguiQuery("Select Nome, Cognome " +
+        /*LinkedList<Giocatore> giocatori = new LinkedList<Giocatore>();
+        Database db = new Database();
+        ResultSet rs = db.EseguiQuery("Select Nome, Cognome " +
                 "from Partecipanti_MatchPlay mp, Giocatori g" +
                 "where mp.ID = g.ID" +
                 "order by Fascia desc");

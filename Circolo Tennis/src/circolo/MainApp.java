@@ -1,6 +1,7 @@
 package circolo;
 
 import circolo.view.ProgramUIController;
+import circolo.view.loginController;
 import circolo.view.risultatiIscrittiController;
 import circolo.view.risultatiPrenotazioniController;
 import javafx.application.Application;
@@ -45,9 +46,10 @@ public class MainApp extends Application {
             alert.showAndWait();
             primaryStage.close();
         }
-
-        showProgramUI();
+        showLogin();
     }
+
+
 
     private void initRootLayout() {
         try {
@@ -65,7 +67,22 @@ public class MainApp extends Application {
         }
     }
 
-    private void showProgramUI() {
+    private void showLogin(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("view/login.fxml"));
+        try {
+            BorderPane login = loader.load();
+            rootLayout.setCenter(login);
+            loginController controller = loader.getController();
+            controller.setMainApp(this);
+            controller.setPane(login);
+            controller.setDatabase(db);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showProgramUI() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/ProgramUI.fxml"));

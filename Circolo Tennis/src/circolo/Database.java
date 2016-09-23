@@ -73,6 +73,10 @@ public class Database {
                 "ID INTEGER not null references Giocatori(ID)," +
                 "Fascia INTEGER," +
                 "Edizione INTEGER )");
+        stm.execute("create table Admin(" +
+                "ID INTEGER primary key autoincrement" +
+                "Username TEXT not null unique" +
+                "Password TEXT )");
     }
 
     private Connection Connessione() throws SQLException, ClassNotFoundException {
@@ -87,6 +91,19 @@ public class Database {
         System.out.println("Connessione al DB stabilita");
 
         return con;
+    }
+
+    public boolean loginAdmin(String user, String password) throws SQLException {
+        prpst = null;
+        boolean found = false;
+        prpst = con.prepareStatement("select count(*) as num from Admin where username = ? and password = ? ");
+        prpst.setString(1, user);
+        prpst.setString(2, password);
+        ResultSet rs = prpst.executeQuery();
+        if (rs.getInt("num") > 0) {
+            found = true;
+        }
+        return found;
     }
 
     public boolean InserisciGiocatore(Giocatore giocatore) throws SQLException {
@@ -199,12 +216,12 @@ public class Database {
                 "Classifica_FIT = ?, Fascia = ? " +
                 "where CF = ?");
 
-        prpst.setString(1,newGiocatore.getIndirizzo());
-        prpst.setInt(2,newGiocatore.getSocio());
-        prpst.setInt(3,newGiocatore.getAgonista());
-        prpst.setString(4,newGiocatore.getClassifica_FIT());
-        prpst.setInt(5,newGiocatore.getFascia());
-        prpst.setString(6,newGiocatore.getCF());
+        prpst.setString(1, newGiocatore.getIndirizzo());
+        prpst.setInt(2, newGiocatore.getSocio());
+        prpst.setInt(3, newGiocatore.getAgonista());
+        prpst.setString(4, newGiocatore.getClassifica_FIT());
+        prpst.setInt(5, newGiocatore.getFascia());
+        prpst.setString(6, newGiocatore.getCF());
 
         prpst.execute();
     }

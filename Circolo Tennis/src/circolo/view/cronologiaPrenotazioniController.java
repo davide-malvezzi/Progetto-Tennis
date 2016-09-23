@@ -63,6 +63,9 @@ public class cronologiaPrenotazioniController {
         else pagatoButton.setDisable(true);
     }
 
+
+
+
     @FXML
     private void setPagato() {
         int indice = table.getSelectionModel().getSelectedIndex();
