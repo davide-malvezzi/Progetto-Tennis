@@ -73,7 +73,7 @@ public class Database {
                 "ID INTEGER not null references Giocatori(ID)," +
                 "Fascia INTEGER," +
                 "Edizione INTEGER )");
-        stm.execute("create table Admin(" +
+        stm.execute("create table Utenti(" +
                 "ID INTEGER primary key autoincrement" +
                 "Username TEXT not null unique" +
                 "Password TEXT )");
@@ -93,10 +93,10 @@ public class Database {
         return con;
     }
 
-    public boolean loginAdmin(String user, String password) throws SQLException {
+    public boolean login(String user, String password) throws SQLException {
         prpst = null;
         boolean found = false;
-        prpst = con.prepareStatement("select count(*) as num from Admin where username = ? and password = ? ");
+        prpst = con.prepareStatement("select count(*) as num from Utenti where username = ? and password = ? ");
         prpst.setString(1, user);
         prpst.setString(2, password);
         ResultSet rs = prpst.executeQuery();
