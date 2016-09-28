@@ -15,15 +15,14 @@ public class ProgramUIController {
     private Button Nuovo;
     @FXML
     private Button Ricerca;
-
     @FXML
     private SplitPane splitIscritti;
-
     @FXML
     private SplitPane splitPrenotazioni;
-
     @FXML
     private SplitPane splitVisite;
+    @FXML
+    private SplitPane splitMatchplay;
 
     private MainApp mainApp;
     private Database db;
@@ -34,16 +33,16 @@ public class ProgramUIController {
     @FXML
     private void initialize() {
     }
-
+        //PANNELLO GESTIONE ISCRITTI
         @FXML
         private void shownewGiocatore() throws IOException {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/newGiocatore.fxml"));
-            BorderPane nuovo = loader.load();
+            BorderPane iscritto = loader.load();
             newGiocatoreController controller = loader.getController();
             controller.setDatabase(db);
             clearPane("iscritti");
-            splitIscritti.getItems().add(nuovo);
+            splitIscritti.getItems().add(iscritto);
         }
 
         @FXML
@@ -57,6 +56,8 @@ public class ProgramUIController {
         controller.setMainApp(mainApp);
         controller.setDatabase(db);
     }
+
+    //PANNELLO GESTIONE PRENOTAZIONI
 
     @FXML
     private void showprenotazioneCampo() throws IOException {
@@ -81,6 +82,8 @@ public class ProgramUIController {
         controller.setDatabase(db);
     }
 
+    //PANNELLO GESTIONE VISITE MEDICHE
+
     @FXML
     private void showNewVisitaMedica() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -92,6 +95,42 @@ public class ProgramUIController {
         controller.setDatabase(db);
     }
 
+    //PANNELLO MATCHPLAY
+
+    @FXML
+    private void showNuovoPartecipante() throws IOException {
+       /* Button Iscritto = new Button("Iscritto");
+        Button nonIscritto = new Button("Non Iscritto");
+        clearPane("matchplay");
+        BorderPane choicePane = new BorderPane();
+        HBox hBox = new HBox();
+        choicePane.setCenter(hBox);
+        hBox.getChildren().addAll(Iscritto,nonIscritto);
+        HBox.setMargin(Iscritto, new Insets(150, 0, 0, 90));
+        HBox.setMargin(nonIscritto, new Insets(150,0,0,10));
+        splitMatchplay.getItems().add(choicePane);
+
+        nonIscritto.setOnAction(event -> {
+            try {
+                shownewGiocatore();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Errore");
+                alert.setHeaderText("Si è verificato un errore interno");
+                alert.setContentText("Riprova");
+            }
+        });*/
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("view/nuovoPartecipanteMatchplay.fxml"));
+        BorderPane partecipante = loader.load();
+        clearPane("matchplay");
+        splitMatchplay.getItems().add(partecipante);
+        nuovoPartecipanteMatchplayController controller = loader.getController();
+        controller.setDatabase(db);
+
+    }
+
 
     private void clearPane(String s) {
         switch (s){
@@ -100,6 +139,8 @@ public class ProgramUIController {
             case "prenotazioni": if (splitPrenotazioni.getItems().size() != 1) splitPrenotazioni.getItems().remove(1);
                 break;
             case "visite": if (splitVisite.getItems().size() != 1) splitVisite.getItems().remove(1);
+                break;
+            case "matchplay": if (splitMatchplay.getItems().size() != 1) splitMatchplay.getItems().remove(1);
         }
     }
 

@@ -39,6 +39,8 @@ public class newGiocatoreController {
 
     private Database db;
 
+    //todo; aggiungere città
+
     @FXML
     private void initialize() {
         fascia.getItems().addAll(1, 2, 3, 4, 5);

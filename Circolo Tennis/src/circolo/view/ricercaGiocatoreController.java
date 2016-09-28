@@ -12,7 +12,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 
 public class ricercaGiocatoreController {
     @FXML
@@ -36,14 +35,14 @@ public class ricercaGiocatoreController {
     @FXML
     private ComboBox<String> fascia;
 
-    private Giocatore giocatore = new Giocatore();
-
     private MainApp mainApp;
 
     private Database db;
 
     public ricercaGiocatoreController() {
     }
+
+    //todo; aggiungere città
 
     @FXML
     private void initialize() {
@@ -58,7 +57,7 @@ public class ricercaGiocatoreController {
     @FXML
     private void handleCerca() {
         if (isInputValid()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
+            Giocatore giocatore = new Giocatore();
             giocatore.setNome(nome.getText());
             giocatore.setCognome(cognome.getText());
             giocatore.setData_nascita(DateUtil.parse(data.getText()));

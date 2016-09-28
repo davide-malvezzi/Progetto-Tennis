@@ -58,7 +58,7 @@ public class prenotazioneCampoController {
         }
     }
 
-    //todo: fare data
+    //todo: fare ricerca per data
     @FXML
     private void handleAnnulla(){
         giorno.setValue(null);

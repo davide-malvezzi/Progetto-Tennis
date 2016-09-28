@@ -20,6 +20,9 @@ public class loginController {
     @FXML
     private VBox vBoxLogin;
 
+    @FXML
+    private Button backdoor;
+
     private MainApp mainApp;
     private Database db;
     private BorderPane pane;
@@ -60,6 +63,7 @@ public class loginController {
         login1.setOnAction(event -> handleLogin());
         login2.setOnAction(event -> handleLogin());
         indietro.setOnAction(event -> handleIndietro());
+        backdoor.setOnAction(event -> mainApp.showProgramUI());
     }
 
 
@@ -79,7 +83,7 @@ public class loginController {
             password = (pwd.getText() != null) ? pwd.getText() : "";
         }
         else {
-            username = "guest";
+            username = "Ospite";
             password = (pwdCircolo.getText() != null) ? pwdCircolo.getText() : "";
         }
         try {
@@ -96,6 +100,11 @@ public class loginController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Errore");
+            alert.setHeaderText("Accesso negato");
+            alert.setContentText("Si è verificato un problema interno");
+            alert.showAndWait();
         }
     }
 

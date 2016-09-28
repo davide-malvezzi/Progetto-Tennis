@@ -105,7 +105,6 @@ public class MainApp extends Application {
             resultsStage.setTitle("Risultati di ricerca");
             Scene scene = new Scene(pane);
             resultsStage.setScene(scene);
-           // resultsStage.setResizable(false);
             resultsStage.show();
             risultatiIscrittiController controller = loader.getController();
             controller.inserisciRisultatiTabella(lista);

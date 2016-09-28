@@ -19,25 +19,6 @@ public class MatchPlay {
     public void GeneraGironi() throws SQLException {
         //todo fare genera gironi (in classe Database)
 
-        /*LinkedList<Giocatore> giocatori = new LinkedList<Giocatore>();
-        Database db = new Database();
-        ResultSet rs = db.EseguiQuery("Select Nome, Cognome " +
-                "from Partecipanti_MatchPlay mp, Giocatori g" +
-                "where mp.ID = g.ID" +
-                "order by Fascia desc");
-        while(rs.next()){
-            giocatori.add(new Giocatore(rs.getString("Nome"),rs.getString("Cognome")));
-        }
-        do {
-            if (giocatori.peek() != null)
-                girone_A.add(giocatori.poll());
-            if (giocatori.peek() != null)
-                girone_B.add(giocatori.poll());
-            if (giocatori.peek() != null)
-                girone_C.add(giocatori.poll());
-            if (giocatori.peek() != null)
-                girone_D.add(giocatori.poll());
-        } while (giocatori.peek() != null);*/
 
         System.out.println("\nGirone A:\n");
         for (Giocatore aGirone_A : girone_A) System.out.println(aGirone_A.getNome() + " " + aGirone_A.getCognome());

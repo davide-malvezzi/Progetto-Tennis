@@ -33,6 +33,7 @@ public class Database {
                 "Data_nascita TEXT not null," +
                 "CF TEXT not null unique," +
                 "Genere TEXT not null," +
+                "Città TEXT," +
                 "Indirizzo TEXT," +
                 "Classifica_FIT TEXT," +
                 "Fascia INTEGER," +
@@ -69,14 +70,19 @@ public class Database {
                 "CF TEXT not null references Giocatori(CF)," +
                 "Data TEXT not null," +
                 "Agonistica INTEGER not null )");
-        stm.execute("create table Partecipanti_MatchPlay (" +
-                "ID INTEGER not null references Giocatori(ID)," +
+        stm.execute("create table MatchPlay (" +
+                "ID_Giocatore not null references Giocatori(ID)," +
                 "Fascia INTEGER," +
-                "Edizione INTEGER )");
-        stm.execute("create table Utenti(" +
-                "ID INTEGER primary key autoincrement" +
-                "Username TEXT not null unique" +
-                "Password TEXT )");
+                "Edizione INTEGER," +
+                "Nome TEXT," +
+                "Cognome TEXT," +
+                "Punti TEXT," +
+                "Game_Fatti INTEGER," +
+                "Game_Subiti INTEGER )");
+        stm.execute("create table Admin(" +
+                "Username TEXT primary key, " +
+                "Password TEXT " +
+                "Amministratore INTEGER not null )");
     }
 
     private Connection Connessione() throws SQLException, ClassNotFoundException {
@@ -96,7 +102,7 @@ public class Database {
     public boolean login(String user, String password) throws SQLException {
         prpst = null;
         boolean found = false;
-        prpst = con.prepareStatement("select count(*) as num from Utenti where username = ? and password = ? ");
+        prpst = con.prepareStatement("select count(*) as num from Admin where username = ? and password = ? ");
         prpst.setString(1, user);
         prpst.setString(2, password);
         ResultSet rs = prpst.executeQuery();
@@ -109,24 +115,25 @@ public class Database {
     public boolean InserisciGiocatore(Giocatore giocatore) throws SQLException {
         prpst = null;
 
-        prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
+        prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Citta,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
         prpst.setString(1, giocatore.getNome());
         prpst.setString(2, giocatore.getCognome());
         prpst.setString(3, DateUtil.format(giocatore.getData_nascita()));
         prpst.setString(4, giocatore.getCF());
         prpst.setString(5, giocatore.getGenere());
-        prpst.setString(6, giocatore.getIndirizzo());
-        prpst.setString(7, giocatore.getClassifica_FIT());
-        prpst.setInt(8, giocatore.getFascia());
-        prpst.setInt(9, giocatore.getAgonista());
-        prpst.setInt(10, giocatore.getSocio());
+        prpst.setString(6,giocatore.getCitta());
+        prpst.setString(7, giocatore.getIndirizzo());
+        prpst.setString(8, giocatore.getClassifica_FIT());
+        prpst.setInt(9, giocatore.getFascia());
+        prpst.setInt(10, giocatore.getAgonista());
+        prpst.setInt(11, giocatore.getSocio());
 
 
         prpst.execute();        //esegue la query nel DB
         return true;
     }
 
-    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) throws SQLException {
+    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) throws SQLException { //todo: aggiungere città
         prpst = null;
         ObservableList<Giocatore> lista = FXCollections.observableArrayList();
         ResultSet rs;
@@ -239,6 +246,54 @@ public class Database {
         prpst.setInt(2, rs.getInt("Fascia"));
         prpst.setInt(3, data.getYear());
         prpst.execute();
+    }
+
+    public ObservableList<ObservableList<Giocatore>> generaGironiMatchPlay() throws SQLException {
+        ObservableList<ObservableList<Giocatore>> urna  = FXCollections.observableArrayList();
+        ObservableList<ObservableList<Giocatore>> gironi = FXCollections.observableArrayList();
+        ResultSet rs;
+        for(int i =0; i<5;i++) {
+            urna.add(FXCollections.observableArrayList());
+            gironi.add(FXCollections.observableArrayList());
+        }
+        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+                "where m.fascia = 1 and edizione = strftime('%Y','now')");
+        while(rs.next()){
+            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+            urna.get(0).add(giocatore);
+        }
+
+        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+                "where m.fascia = 2 and edizione = strftime('%Y','now')");
+        while(rs.next()){
+            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+            urna.get(1).add(giocatore);
+        }
+
+        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+                "where m.fascia = 3 and edizione = strftime('%Y','now')");
+        while(rs.next()){
+            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+            urna.get(2).add(giocatore);
+        }
+
+        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+                "where m.fascia = 4 and edizione = strftime('%Y','now')");
+        while(rs.next()){
+            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+            urna.get(3).add(giocatore);
+        }
+
+        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+                "where m.fascia = 5 and edizione = strftime('%Y','now')");
+        while(rs.next()){
+            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+            urna.get(4).add(giocatore);
+        }
+
+
+
+        return urna;
     }
 
     public void InserisciPartita(Partita partita) throws SQLException {

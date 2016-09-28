@@ -11,11 +11,23 @@ public class Giocatore {
     private ObjectProperty<LocalDate> data_nascita;
     private StringProperty CF;
     private StringProperty genere;
+    private StringProperty citta;
     private StringProperty indirizzo;
     private StringProperty classifica_FIT;
     private IntegerProperty agonista, socio,fascia;
 
     public Giocatore() {
+        nome = new SimpleStringProperty();
+        cognome = new SimpleStringProperty();
+        data_nascita = new SimpleObjectProperty<>();
+        CF = new SimpleStringProperty();
+        genere = new SimpleStringProperty();
+        citta = new SimpleStringProperty();
+        indirizzo = new SimpleStringProperty();
+        classifica_FIT = new SimpleStringProperty();
+        agonista = new SimpleIntegerProperty();
+        socio = new SimpleIntegerProperty();
+        fascia = new SimpleIntegerProperty();
     }
 
     public Giocatore(String nome, String cognome) {
@@ -145,6 +157,18 @@ public class Giocatore {
 
     public void setIndirizzo(String indirizzo) {
         this.indirizzo = new SimpleStringProperty(indirizzo);
+    }
+
+    public String getCitta(){
+        return citta.get();
+    }
+
+    public StringProperty getCittaProperty(){
+        return citta;
+    }
+
+    public void setCitta(String citta){
+        this.citta = new SimpleStringProperty(citta);
     }
 
     public int getAgonista() {

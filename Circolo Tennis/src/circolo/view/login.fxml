@@ -19,6 +19,11 @@
                <VBox.margin>
                   <Insets left="50.0" top="10.0" />
                </VBox.margin></Button>
+            <Button fx:id="backdoor" mnemonicParsing="false" text="Backdoor">
+               <VBox.margin>
+                  <Insets left="50.0" top="20.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </right>
