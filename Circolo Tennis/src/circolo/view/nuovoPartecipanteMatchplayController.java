@@ -2,12 +2,10 @@ package circolo.view;
 
 import circolo.Database;
 import circolo.Giocatore;
+import circolo.util.AlertUtil;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
@@ -19,12 +17,13 @@ public class nuovoPartecipanteMatchplayController {
     private TextField cognome;
     @FXML
     private BorderPane pane;
-
+    @FXML
+    private Button iscriviButton;
     private Database db;
+    private Giocatore giocatore = new Giocatore();
 
     public nuovoPartecipanteMatchplayController(){}
 
-//todo: da finire
     @FXML
     private void initialize(){
     }
@@ -42,12 +41,10 @@ public class nuovoPartecipanteMatchplayController {
                 IscrizionePartecipante(lista);
             } catch (SQLException e) {
                 e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Errore");
-                alert.setHeaderText("Si è verificato un errore interno");
-                alert.setContentText("Riprova");
+                AlertUtil.displayGenericError();
             }
         }
+
     }
 
 
@@ -74,10 +71,25 @@ public class nuovoPartecipanteMatchplayController {
         indirizzo.setCellValueFactory(cellData -> cellData.getValue().getIndirizzoProperty());
 
         table.setItems(lista);
-
+        table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Selezione(newValue));
         pane.setCenter(table);
 
 
+    }
+
+    @FXML
+    private void handleIscrivi(){
+        try {
+            db.InserisciPartecipante_MatchPlay(giocatore);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            AlertUtil.displayPersonalizedError("Giocatore già iscritto", null);
+        }
+    }
+
+    private void Selezione(Giocatore giocatore){
+        iscriviButton.setDisable(false);
+        this.giocatore = giocatore;
     }
 
     private boolean isInputValid(){

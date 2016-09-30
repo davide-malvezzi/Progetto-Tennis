@@ -78,7 +78,8 @@ public class Database {
                 "Cognome TEXT," +
                 "Punti TEXT," +
                 "Game_Fatti INTEGER," +
-                "Game_Subiti INTEGER )");
+                "Game_Subiti INTEGER " +
+                "UNIQUE (ID_Giocatore,Edizione)");
         stm.execute("create table Admin(" +
                 "Username TEXT primary key, " +
                 "Password TEXT " +
@@ -141,10 +142,10 @@ public class Database {
         query.append("select * from giocatori ");
         String whereCondition = "";
         if (giocatore.getNome() != null && giocatore.getNome().length() > 0)
-            whereCondition += " nome = ?";
+            whereCondition += " nome = ? COLLATE NOCASE ";
         if (giocatore.getCognome() != null && giocatore.getCognome().length() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
-            whereCondition += " cognome = ?";
+            whereCondition += " cognome = ? COLLATE NOCASE ";
         }
         if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
@@ -152,7 +153,7 @@ public class Database {
         }
         if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
-            whereCondition += " indirizzo = ?";
+            whereCondition += " indirizzo = ? COLLATE NOCASE ";
         }
         if (giocatore.getGenere() != null && giocatore.getGenere().length() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
@@ -238,14 +239,30 @@ public class Database {
         prpst = null;
         ResultSet rs;
         LocalDateTime data = LocalDateTime.now();
-        prpst = con.prepareStatement("select ID,Fascia from Giocatori where CF = ? ");
+        prpst = con.prepareStatement("select ID,Fascia,Nome,Cognome from Giocatori where CF = ? ");
         prpst.setString(1, giocatore.getCF());
         rs = prpst.executeQuery();
-        prpst = con.prepareStatement("INSERT INTO Partecipanti_MatchPlay VALUES (?,?,?)");
+        prpst = con.prepareStatement("INSERT INTO MatchPlay(id_giocatore, fascia, edizione, nome, cognome) VALUES (?,?,?,?,?)");
         prpst.setInt(1, rs.getInt("ID"));
         prpst.setInt(2, rs.getInt("Fascia"));
         prpst.setInt(3, data.getYear());
+        prpst.setString(4,rs.getString("Nome"));
+        prpst.setString(5,rs.getString("Cognome"));
         prpst.execute();
+    }
+
+    public ObservableList<Giocatore> ListaPartecipanti() throws SQLException {
+        ObservableList<Giocatore> lista = FXCollections.observableArrayList();
+        ResultSet rs = stm.executeQuery("select * from Matchplay where edizione = strftime('%Y','now')");
+        while(rs.next()){
+            Giocatore giocatore = new Giocatore();
+            giocatore.setNome(rs.getString("nome"));
+            giocatore.setCognome(rs.getString("cognome"));
+            giocatore.setFascia(rs.getInt("fascia"));
+            lista.add(giocatore);
+        }
+
+        return lista;
     }
 
     public ObservableList<ObservableList<Giocatore>> generaGironiMatchPlay() throws SQLException {

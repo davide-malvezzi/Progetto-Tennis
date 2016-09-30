@@ -38,7 +38,7 @@ public class MainApp extends Application {
         initRootLayout();
         try {
             db = new Database();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  | ClassNotFoundException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore");
             alert.setHeaderText("Impossibile connettersi al database");

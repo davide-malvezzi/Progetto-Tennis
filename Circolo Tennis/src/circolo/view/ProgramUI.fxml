@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane prefHeight="336.0" prefWidth="431.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.ProgramUIController">
+<TabPane prefHeight="336.0" prefWidth="431.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.ProgramUIController">
   <tabs>
     <Tab text="Gestione Iscritti">
       <content>
@@ -84,7 +84,7 @@
                               <VBox layoutX="14.0" layoutY="53.0" prefHeight="305.0" prefWidth="429.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#showNuovoPartecipante" text="Nuovo Partecipante" />
-                                    <Button mnemonicParsing="false" text="Lista Iscritti" />
+                                    <Button mnemonicParsing="false" onAction="#showListaPartecipanti" text="Lista Iscritti" />
                                     <Button mnemonicParsing="false" text="Gironi" />
                                     <Button mnemonicParsing="false" text="Partite" />
                                     <Button mnemonicParsing="false" text="Risultati" />
