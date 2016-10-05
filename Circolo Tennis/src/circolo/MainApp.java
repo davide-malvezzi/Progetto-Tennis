@@ -39,6 +39,7 @@ public class MainApp extends Application {
         try {
             db = new Database();
         } catch (SQLException  | ClassNotFoundException e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore");
             alert.setHeaderText("Impossibile connettersi al database");

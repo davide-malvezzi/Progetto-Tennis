@@ -78,8 +78,8 @@ public class Database {
                 "Cognome TEXT," +
                 "Punti TEXT," +
                 "Game_Fatti INTEGER," +
-                "Game_Subiti INTEGER " +
-                "UNIQUE (ID_Giocatore,Edizione)");
+                "Game_Subiti INTEGER, " +
+                "UNIQUE (ID_Giocatore,Edizione))");
         stm.execute("create table Admin(" +
                 "Username TEXT primary key, " +
                 "Password TEXT " +
@@ -116,7 +116,7 @@ public class Database {
     public boolean InserisciGiocatore(Giocatore giocatore) throws SQLException {
         prpst = null;
 
-        prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Citta,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
+        prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Città,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
         prpst.setString(1, giocatore.getNome());
         prpst.setString(2, giocatore.getCognome());
         prpst.setString(3, DateUtil.format(giocatore.getData_nascita()));
@@ -259,10 +259,19 @@ public class Database {
             giocatore.setNome(rs.getString("nome"));
             giocatore.setCognome(rs.getString("cognome"));
             giocatore.setFascia(rs.getInt("fascia"));
+            giocatore.setID(rs.getInt("ID_Giocatore"));
             lista.add(giocatore);
         }
 
         return lista;
+    }
+
+    public void rimuoviPartecipante(Giocatore giocatore) throws SQLException{ //rimuove un partecipante dalla lista matchplay
+        prpst = null;
+
+        prpst = con.prepareStatement("delete from Matchplay where ID_Giocatore = ?");
+        prpst.setInt(1,giocatore.getID());
+        prpst.execute();
     }
 
     public ObservableList<ObservableList<Giocatore>> generaGironiMatchPlay() throws SQLException {

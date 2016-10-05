@@ -7,6 +7,7 @@ import javafx.beans.property.*;
 import java.time.LocalDate;
 
 public class Giocatore {
+    private IntegerProperty ID;
     private StringProperty nome, cognome;
     private ObjectProperty<LocalDate> data_nascita;
     private StringProperty CF;
@@ -17,6 +18,7 @@ public class Giocatore {
     private IntegerProperty agonista, socio,fascia;
 
     public Giocatore() {
+        ID = new SimpleIntegerProperty();
         nome = new SimpleStringProperty();
         cognome = new SimpleStringProperty();
         data_nascita = new SimpleObjectProperty<>();
@@ -193,5 +195,17 @@ public class Giocatore {
 
     public void setSocio(int socio) {
         this.socio = new SimpleIntegerProperty(socio);
+    }
+
+    public int getID() {
+        return ID.get();
+    }
+
+    public IntegerProperty IDProperty() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID.set(ID);
     }
 }
