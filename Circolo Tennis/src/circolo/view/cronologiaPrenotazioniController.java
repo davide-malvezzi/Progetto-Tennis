@@ -68,11 +68,10 @@ public class cronologiaPrenotazioniController {
 
     @FXML
     private void setPagato() {
-        int indice = table.getSelectionModel().getSelectedIndex();
         prenotazione.setPagato(1);
         try {
             db.setPrenotazionePagata(prenotazione);
-            table.getItems().set(indice, prenotazione);
+            table.refresh();
         } catch (SQLException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);

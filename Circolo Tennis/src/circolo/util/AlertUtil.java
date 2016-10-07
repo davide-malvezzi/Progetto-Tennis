@@ -23,7 +23,7 @@ public class AlertUtil {
 
     public static void displayPersonalizedInfo(String header, String content){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Operazione Eseguita");
+        alert.setTitle("Info");
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();

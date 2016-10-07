@@ -9,6 +9,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Random;
 
 public class Database {
     private Connection con;
@@ -122,7 +123,7 @@ public class Database {
         prpst.setString(3, DateUtil.format(giocatore.getData_nascita()));
         prpst.setString(4, giocatore.getCF());
         prpst.setString(5, giocatore.getGenere());
-        prpst.setString(6,giocatore.getCitta());
+        prpst.setString(6, giocatore.getCitta());
         prpst.setString(7, giocatore.getIndirizzo());
         prpst.setString(8, giocatore.getClassifica_FIT());
         prpst.setInt(9, giocatore.getFascia());
@@ -134,7 +135,7 @@ public class Database {
         return true;
     }
 
-    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) throws SQLException { //todo: aggiungere città
+    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) throws SQLException {
         prpst = null;
         ObservableList<Giocatore> lista = FXCollections.observableArrayList();
         ResultSet rs;
@@ -150,6 +151,10 @@ public class Database {
         if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
             whereCondition += " CF = ?";
+        }
+        if (giocatore.getCitta() != null && giocatore.getCitta().length() > 0) {
+            whereCondition += (whereCondition.length() > 0 ? " AND " : "");
+            whereCondition += " città = ? COLLATE NOCASE ";
         }
         if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
@@ -187,6 +192,9 @@ public class Database {
         if (giocatore.getCF() != null && giocatore.getCF().length() > 0) {
             prpst.setString(Index++, giocatore.getCF());
         }
+        if (giocatore.getCitta() != null && giocatore.getCitta().length() > 0) {
+            prpst.setString(Index++, giocatore.getCitta());
+        }
         if (giocatore.getIndirizzo() != null && giocatore.getIndirizzo().length() > 0) {
             prpst.setString(Index++, giocatore.getIndirizzo());
         }
@@ -207,8 +215,9 @@ public class Database {
             tmp.setData_nascita(DateUtil.parse(rs.getString("Data_nascita")));
             tmp.setCF(rs.getString("CF"));
             tmp.setGenere(rs.getString("Genere"));
-            if (rs.getString("Indirizzo") != null) tmp.setIndirizzo(rs.getString("Indirizzo"));
-            if (rs.getString("Classifica_FIT") != null) tmp.setClassifica_FIT(rs.getString("Classifica_FIT"));
+            tmp.setCitta(rs.getString("Città"));
+            tmp.setIndirizzo(rs.getString("Indirizzo"));
+            tmp.setClassifica_FIT(rs.getString("Classifica_FIT"));
             tmp.setFascia(rs.getInt("Fascia"));
             tmp.setAgonista(rs.getInt("Agonista"));
             tmp.setSocio(rs.getInt("Socio"));
@@ -221,7 +230,7 @@ public class Database {
         prpst = null;
 
         prpst = con.prepareStatement("update Giocatori set Indirizzo = ?, Socio = ?, Agonista = ?, " +
-                "Classifica_FIT = ?, Fascia = ? " +
+                "Classifica_FIT = ?, Fascia = ?, Città = ? " +
                 "where CF = ?");
 
         prpst.setString(1, newGiocatore.getIndirizzo());
@@ -229,7 +238,8 @@ public class Database {
         prpst.setInt(3, newGiocatore.getAgonista());
         prpst.setString(4, newGiocatore.getClassifica_FIT());
         prpst.setInt(5, newGiocatore.getFascia());
-        prpst.setString(6, newGiocatore.getCF());
+        prpst.setString(6, newGiocatore.getCitta());
+        prpst.setString(7, newGiocatore.getCF());
 
         prpst.execute();
     }
@@ -246,15 +256,15 @@ public class Database {
         prpst.setInt(1, rs.getInt("ID"));
         prpst.setInt(2, rs.getInt("Fascia"));
         prpst.setInt(3, data.getYear());
-        prpst.setString(4,rs.getString("Nome"));
-        prpst.setString(5,rs.getString("Cognome"));
+        prpst.setString(4, rs.getString("Nome"));
+        prpst.setString(5, rs.getString("Cognome"));
         prpst.execute();
     }
 
     public ObservableList<Giocatore> ListaPartecipanti() throws SQLException {
         ObservableList<Giocatore> lista = FXCollections.observableArrayList();
         ResultSet rs = stm.executeQuery("select * from Matchplay where edizione = strftime('%Y','now')");
-        while(rs.next()){
+        while (rs.next()) {
             Giocatore giocatore = new Giocatore();
             giocatore.setNome(rs.getString("nome"));
             giocatore.setCognome(rs.getString("cognome"));
@@ -266,60 +276,91 @@ public class Database {
         return lista;
     }
 
-    public void rimuoviPartecipante(Giocatore giocatore) throws SQLException{ //rimuove un partecipante dalla lista matchplay
+    public void rimuoviPartecipante(Giocatore giocatore) throws SQLException { //rimuove un partecipante dalla lista matchplay
         prpst = null;
 
         prpst = con.prepareStatement("delete from Matchplay where ID_Giocatore = ?");
-        prpst.setInt(1,giocatore.getID());
+        prpst.setInt(1, giocatore.getID());
         prpst.execute();
     }
 
     public ObservableList<ObservableList<Giocatore>> generaGironiMatchPlay() throws SQLException {
-        ObservableList<ObservableList<Giocatore>> urna  = FXCollections.observableArrayList();
+        ObservableList<ObservableList<Giocatore>> urna = FXCollections.observableArrayList();
         ObservableList<ObservableList<Giocatore>> gironi = FXCollections.observableArrayList();
+        ObservableList<Giocatore> urnaCorrente = FXCollections.observableArrayList();
+        ObservableList<Giocatore> minore = FXCollections.observableArrayList();
         ResultSet rs;
-        for(int i =0; i<5;i++) {
+        Random random = new Random();
+        int indiceMinore = 0;
+        int indiceEstrazione = 0;
+        int indiceFascia = 4;
+        for (int i = 0; i < 5; i++) {
             urna.add(FXCollections.observableArrayList());
+        }
+        for (int i = 0; i < 4; i++) {
             gironi.add(FXCollections.observableArrayList());
         }
-        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+        rs = stm.executeQuery("select distinct m.* from matchplay m " +
                 "where m.fascia = 1 and edizione = strftime('%Y','now')");
-        while(rs.next()){
-            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+        while (rs.next()) {
+            Giocatore giocatore = new Giocatore(rs.getString("nome"), rs.getString("cognome"), rs.getInt("fascia"));
             urna.get(0).add(giocatore);
         }
 
-        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+        rs = stm.executeQuery("select distinct m.* from matchplay m " +
                 "where m.fascia = 2 and edizione = strftime('%Y','now')");
-        while(rs.next()){
-            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+        while (rs.next()) {
+            Giocatore giocatore = new Giocatore(rs.getString("nome"), rs.getString("cognome"), rs.getInt("fascia"));
             urna.get(1).add(giocatore);
         }
 
-        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+        rs = stm.executeQuery("select distinct m.* from matchplay m " +
                 "where m.fascia = 3 and edizione = strftime('%Y','now')");
-        while(rs.next()){
-            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+        while (rs.next()) {
+            Giocatore giocatore = new Giocatore(rs.getString("nome"), rs.getString("cognome"), rs.getInt("fascia"));
             urna.get(2).add(giocatore);
         }
 
-        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+        rs = stm.executeQuery("select distinct m.* from matchplay m " +
                 "where m.fascia = 4 and edizione = strftime('%Y','now')");
-        while(rs.next()){
-            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+        while (rs.next()) {
+            Giocatore giocatore = new Giocatore(rs.getString("nome"), rs.getString("cognome"), rs.getInt("fascia"));
             urna.get(3).add(giocatore);
         }
 
-        rs = stm.executeQuery("select distinct m.* from matchplay m left join giocatori g on (g.id = m.id_giocatore) " +
+        rs = stm.executeQuery("select distinct m.* from matchplay m " +
                 "where m.fascia = 5 and edizione = strftime('%Y','now')");
-        while(rs.next()){
-            Giocatore giocatore = new Giocatore(rs.getString("nome"),rs.getString("cognome"),rs.getInt("fascia"));
+        while (rs.next()) {
+            Giocatore giocatore = new Giocatore(rs.getString("nome"), rs.getString("cognome"), rs.getInt("fascia"));
             urna.get(4).add(giocatore);
         }
 
 
+        while (urna.size() != 0) {
+            urnaCorrente = urna.get(indiceFascia);
+            urna.remove(indiceFascia);
+            indiceFascia--;
+            while (urnaCorrente.size() != 0) {
+                for (int i = indiceMinore; i < gironi.size(); i++) {
+                    if (urnaCorrente.size() != 0) {
+                        indiceEstrazione = random.nextInt(urnaCorrente.size());
+                        gironi.get(i).add(urnaCorrente.get(indiceEstrazione));
+                        urnaCorrente.remove(indiceEstrazione);
+                    }
+                }
+                minore = gironi.get(0);
+                indiceMinore = 0;
+                for (int i = 1; i < gironi.size(); i++) {
+                    if (gironi.get(i).size() < minore.size()) {
+                        minore = gironi.get(i);
+                        indiceMinore = gironi.indexOf(minore);
+                    }
+                }
+            }
+        }
 
-        return urna;
+        return gironi;
+
     }
 
     public void InserisciPartita(Partita partita) throws SQLException {

@@ -2,6 +2,7 @@ package circolo.view;
 
 import circolo.Database;
 import circolo.Giocatore;
+import circolo.util.AlertUtil;
 import circolo.util.DateUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,8 +11,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class newGiocatoreController {
     @FXML
@@ -22,6 +21,8 @@ public class newGiocatoreController {
     private TextField Data_nascita;
     @FXML
     private TextField CF;
+    @FXML
+    private TextField Città;
     @FXML
     private TextField Indirizzo;
     @FXML
@@ -39,7 +40,6 @@ public class newGiocatoreController {
 
     private Database db;
 
-    //todo; aggiungere città
 
     @FXML
     private void initialize() {
@@ -55,33 +55,26 @@ public class newGiocatoreController {
     @FXML
     private void handleOK() throws SQLException {
         if (isInputValid()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
             giocatore.setNome(Nome.getText());
             giocatore.setCognome(Cognome.getText());
-            giocatore.setData_nascita(LocalDate.parse(Data_nascita.getText(), formatter));
+            giocatore.setData_nascita(DateUtil.parse(Data_nascita.getText()));
             giocatore.setCF(CF.getText());
-            if (Indirizzo.getText().length() == 0)
-                giocatore.setIndirizzo(null);
-            else giocatore.setIndirizzo(Indirizzo.getText());
+            giocatore.setCitta(Città.getText());
+            giocatore.setIndirizzo(Indirizzo.getText());
             giocatore.setAgonista(agonista.isSelected() ? 1 : 0);
             giocatore.setSocio(socio.isSelected() ? 1 : 0);
-            if (fascia.getValue() != null)
-                giocatore.setFascia((Integer) fascia.getValue());
-            if (classifica_fit.getValue() != null)
-                giocatore.setClassifica_FIT(classifica_fit.getValue());
-            giocatore.setGenere((String) sesso.getValue());
+            if(fascia.getValue() != null) giocatore.setFascia(fascia.getValue());
+            if(classifica_fit.getValue() != null) giocatore.setClassifica_FIT(classifica_fit.getValue());
+            giocatore.setGenere( sesso.getValue());
             if (db.InserisciGiocatore(giocatore)) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Operazione Effettuata");
-                alert.setHeaderText(null);
-                alert.setContentText("Nuovo giocatore salvato");
-                alert.showAndWait();
+                AlertUtil.displayPersonalizedInfo("Operazione Effettuata","Nuovo giocatore salvato");
                 clearFields();
             }
         }
     }
+
     @FXML
-    private void handleAnnulla(){
+    private void handleAnnulla() {
         clearFields();
     }
 
@@ -129,6 +122,7 @@ public class newGiocatoreController {
         Cognome.setText("");
         Data_nascita.setText("");
         CF.setText("");
+        Città.setText("");
         Indirizzo.setText("");
         agonista.setSelected(false);
         socio.setSelected(false);
@@ -137,7 +131,7 @@ public class newGiocatoreController {
         classifica_fit.setValue(null);
     }
 
-    public void setDatabase(Database db){
+    public void setDatabase(Database db) {
         this.db = db;
     }
 }

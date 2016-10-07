@@ -17,17 +17,16 @@ public class MatchPlay {
     }
 
     public void GeneraGironi() throws SQLException {
-        //todo fare genera gironi (in classe Database)
 
 
         System.out.println("\nGirone A:\n");
-        for (Giocatore aGirone_A : girone_A) System.out.println(aGirone_A.getNome() + " " + aGirone_A.getCognome());
+        for (Giocatore aGirone_A : girone_A) System.out.println(aGirone_A.getNome() + " " + aGirone_A.getCognome() + " " + aGirone_A.getFascia());
         System.out.println("\nGirone B:\n");
-        for (Giocatore aGirone_B : girone_B) System.out.println(aGirone_B.getNome() + " " + aGirone_B.getCognome());
+        for (Giocatore aGirone_B : girone_B) System.out.println(aGirone_B.getNome() + " " + aGirone_B.getCognome() + " " + aGirone_B.getFascia());
         System.out.println("\nGirone C:\n");
-        for (Giocatore aGirone_C : girone_C) System.out.println(aGirone_C.getNome() + " " + aGirone_C.getCognome());
+        for (Giocatore aGirone_C : girone_C) System.out.println(aGirone_C.getNome() + " " + aGirone_C.getCognome() + " " + aGirone_C.getFascia());
         System.out.println("\nGirone D:\n");
-        for (Giocatore aGirone_D : girone_D) System.out.println(aGirone_D.getNome() + " " + aGirone_D.getCognome());
+        for (Giocatore aGirone_D : girone_D) System.out.println(aGirone_D.getNome() + " " + aGirone_D.getCognome() + " " + aGirone_D.getFascia());
         System.out.println("\nPartite Girone A:\n");
         this.GeneraPartite(girone_A);
         System.out.println("\nPartite Girone B:\n");

@@ -3,6 +3,7 @@ package circolo.view;
 import circolo.Database;
 import circolo.Giocatore;
 import circolo.MainApp;
+import circolo.util.AlertUtil;
 import circolo.util.DateUtil;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ public class ricercaGiocatoreController {
     private TextField cognome;
     @FXML
     private TextField data;
+    @FXML
+    private TextField città;
     @FXML
     private TextField indirizzo;
     @FXML
@@ -42,7 +45,6 @@ public class ricercaGiocatoreController {
     public ricercaGiocatoreController() {
     }
 
-    //todo; aggiungere città
 
     @FXML
     private void initialize() {
@@ -62,6 +64,7 @@ public class ricercaGiocatoreController {
             giocatore.setCognome(cognome.getText());
             giocatore.setData_nascita(DateUtil.parse(data.getText()));
             giocatore.setCF(cf.getText());
+            giocatore.setCitta(città.getText());
             giocatore.setIndirizzo(indirizzo.getText());
             giocatore.setAgonista(agonista.isSelected() ? 1 : 0);
             giocatore.setSocio(socio.isSelected() ? 1 : 0);
@@ -105,6 +108,9 @@ public class ricercaGiocatoreController {
         if (sesso.getValue() != null) {
             parametri++;
         }
+        if (città.getText() != null && città.getText().length() > 0) {
+            parametri++;
+        }
         if (indirizzo.getText() != null && indirizzo.getText().length() > 0) {
             parametri++;
         }
@@ -129,17 +135,14 @@ public class ricercaGiocatoreController {
         if (parametri > 0 && !dateError) {
             return true;
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Errore");
-            alert.setHeaderText("Campi non validi");
+            String errorMessage="";
             if (dateError) {
-                alert.setContentText("Data di nascita non valida. Usa il formato gg-mm-aaaa");
+                errorMessage = "Data di nascita non valida. Usa il formato gg-mm-aaaa";
             }
             if (parametri == 0) {
-                alert.setContentText("Devi inserire almeno un parametro");
+                errorMessage = "Devi inserire almeno un parametro";
             }
-            alert.showAndWait();
-
+            AlertUtil.displayPersonalizedError("Campi non validi",errorMessage);
             return false;
         }
     }
@@ -150,6 +153,7 @@ public class ricercaGiocatoreController {
         cognome.setText("");
         data.setText("");
         cf.setText("");
+        città.setText("");
         indirizzo.setText("");
         agonista.setSelected(false);
         socio.setSelected(false);

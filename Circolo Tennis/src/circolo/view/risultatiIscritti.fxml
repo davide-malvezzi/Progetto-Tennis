@@ -29,6 +29,7 @@
             <TableColumn fx:id="data_nascita" prefWidth="95.0" text="Data di nascita" />
             <TableColumn fx:id="CF" prefWidth="106.0" text="Codice fiscale" />
             <TableColumn fx:id="sesso" minWidth="8.0" prefWidth="47.0" text="Sesso" />
+            <TableColumn fx:id="città" prefWidth="75.0" text="Città" />
             <TableColumn fx:id="indirizzo" prefWidth="154.0" text="Indirizzo" />
             <TableColumn fx:id="classifica_fit" minWidth="9.0" prefWidth="88.0" text="Classifica FIT" />
             <TableColumn fx:id="fascia" prefWidth="44.0" text="Fascia" />

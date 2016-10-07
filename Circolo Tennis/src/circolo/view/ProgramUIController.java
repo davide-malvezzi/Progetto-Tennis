@@ -5,17 +5,12 @@ import circolo.MainApp;
 import circolo.util.AlertUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
 public class ProgramUIController {
-    @FXML
-    private Button Nuovo;
-    @FXML
-    private Button Ricerca;
     @FXML
     private SplitPane splitIscritti;
     @FXML
@@ -60,14 +55,15 @@ public class ProgramUIController {
             BorderPane ricerca = null;
             try {
                 ricerca = loader.load();
-                splitIscritti.getItems().add(ricerca);
                 ricercaGiocatoreController controller = loader.getController();
                 controller.setMainApp(mainApp);
                 controller.setDatabase(db);
+                clearPane("iscritti");
+                splitIscritti.getItems().add(ricerca);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            clearPane("iscritti");
+
 
     }
 
@@ -163,6 +159,23 @@ public class ProgramUIController {
             controller.setDatabase(db);
             controller.inserisciLista();
         } catch (IOException e) {
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
+        }
+    }
+
+    @FXML
+    private void showGironi(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("view/gironiMatchplay.fxml"));
+        BorderPane gironi;
+        try{
+            gironi = loader.load();
+            clearPane("matchplay");
+            splitMatchplay.getItems().add(gironi);
+            gironiMatchplayController controller = loader.getController();
+
+        }catch (IOException e){
             e.printStackTrace();
             AlertUtil.displayGenericError();
         }

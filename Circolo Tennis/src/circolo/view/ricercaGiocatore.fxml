@@ -25,22 +25,25 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="367.0" text="Nome">
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="400.0" text="Nome">
                     <GridPane.margin>
                         <Insets />
                     </GridPane.margin></Label>
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="442.0" text="Cognome" GridPane.rowIndex="1" />
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="392.0" text="Data di nascita" GridPane.rowIndex="2" />
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="398.0" text="Codice Fiscale" GridPane.rowIndex="3" />
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="377.0" text="Indirizzo" GridPane.rowIndex="4" />
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="400.0" text="Cognome" GridPane.rowIndex="1" />
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="400.0" text="Data di nascita" GridPane.rowIndex="2" />
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="400.0" text="Codice Fiscale" GridPane.rowIndex="3" />
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="377.0" text="Indirizzo" GridPane.rowIndex="5" />
                 <TextField fx:id="nome" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" />
                 <TextField fx:id="cognome" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="cf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField fx:id="indirizzo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="indirizzo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <TextField fx:id="data" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="città" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="400.0" text="Città" GridPane.rowIndex="4" />
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

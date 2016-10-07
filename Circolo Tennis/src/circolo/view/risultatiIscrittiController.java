@@ -27,6 +27,8 @@ public class risultatiIscrittiController {
     @FXML
     private TableColumn<Giocatore, String> sesso;
     @FXML
+    private TableColumn<Giocatore,String> città;
+    @FXML
     private TableColumn<Giocatore, String> indirizzo;
     @FXML
     private TableColumn<Giocatore, String> classifica_fit;
@@ -61,6 +63,7 @@ public class risultatiIscrittiController {
         data_nascita.setCellValueFactory(cellData -> cellData.getValue().getData_NascitaProperty());
         CF.setCellValueFactory(cellData -> cellData.getValue().getCFProperty());
         sesso.setCellValueFactory(cellData -> cellData.getValue().getGenereProperty());
+        città.setCellValueFactory(cellData -> cellData.getValue().getCittaProperty());
         indirizzo.setCellValueFactory(cellData -> cellData.getValue().getIndirizzoProperty());
         classifica_fit.setCellValueFactory(cellData -> cellData.getValue().getClassifica_FITProperty());
         agonista.setCellValueFactory(cellData -> cellData.getValue().getAgonista() == 1 ? new SimpleStringProperty("Sì") : new SimpleStringProperty("No"));

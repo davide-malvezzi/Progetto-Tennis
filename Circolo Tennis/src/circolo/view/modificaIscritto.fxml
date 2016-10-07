@@ -1,47 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.Pane?>
 
 <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.modificaIscrittoController">
    <children>
       <Button layoutX="534.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleConferma" text="Conferma" AnchorPane.rightAnchor="10.0" />
-      <TilePane layoutX="14.0" layoutY="-1.0" maxHeight="-Infinity" prefHeight="185.0" prefWidth="389.0">
+      <Pane layoutX="14.0" prefHeight="200.0" prefWidth="351.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="133.0" text="Indirizzo" />
-            <TextField fx:id="newIndirizzo" />
-            <CheckBox fx:id="newSocio" mnemonicParsing="false" text="Socio" />
-            <CheckBox fx:id="newAgonista" mnemonicParsing="false" text="Agonista" />
-            <Label text="Classifica FIT">
-               <TilePane.margin>
-                  <Insets left="40.0" />
-               </TilePane.margin>
-            </Label>
-            <ChoiceBox fx:id="newClassificaFIT" prefHeight="25.0" prefWidth="60.0">
-               <TilePane.margin>
-                  <Insets right="90.0" />
-               </TilePane.margin>
-            </ChoiceBox>
-            <Label prefHeight="17.0" prefWidth="88.0" text="Fascia">
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <TilePane.margin>
-                  <Insets left="20.0" top="15.0" />
-               </TilePane.margin>
-            </Label>
-            <ChoiceBox fx:id="newFascia" prefHeight="25.0" prefWidth="60.0">
-               <TilePane.margin>
-                  <Insets right="90.0" top="15.0" />
-               </TilePane.margin>
-            </ChoiceBox>
+            <Label alignment="CENTER" contentDisplay="TOP" layoutX="59.0" layoutY="18.0" text="Indirizzo" />
+            <TextField fx:id="newIndirizzo" layoutX="138.0" layoutY="14.0" />
+            <CheckBox fx:id="newSocio" layoutX="56.0" layoutY="77.0" mnemonicParsing="false" text="Socio" />
+            <CheckBox fx:id="newAgonista" layoutX="161.0" layoutY="77.0" mnemonicParsing="false" text="Agonista" />
+            <Label layoutX="48.0" layoutY="116.0" text="Classifica FIT" />
+            <ChoiceBox fx:id="newClassificaFIT" layoutX="157.0" layoutY="112.0" prefHeight="25.0" prefWidth="60.0" />
+            <Label layoutX="81.0" layoutY="151.0" text="Fascia" />
+            <ChoiceBox fx:id="newFascia" layoutX="157.0" layoutY="147.0" prefHeight="25.0" prefWidth="60.0" />
+            <Label layoutX="81.0" layoutY="48.0" text="Città" />
+            <TextField fx:id="newCittà" layoutX="138.0" layoutY="44.0" />
          </children>
-      </TilePane>
+      </Pane>
    </children>
 </AnchorPane>

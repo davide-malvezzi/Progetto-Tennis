@@ -12,6 +12,8 @@ public class modificaIscrittoController {
     @FXML
     private TextField newIndirizzo;
     @FXML
+    private TextField newCittà;
+    @FXML
     private CheckBox newAgonista;
     @FXML
     private CheckBox newSocio;
@@ -38,17 +40,17 @@ public class modificaIscrittoController {
 
     @FXML
     private void handleConferma() {
-        int indice = table.getSelectionModel().getSelectedIndex();
         Giocatore newGiocatore = oldGiocatore;
+        newGiocatore.setCitta(newCittà.getText());
         newGiocatore.setIndirizzo(newIndirizzo.getText());
         newGiocatore.setSocio(newSocio.isSelected() ? 1 : 0);
         newGiocatore.setAgonista(newAgonista.isSelected() ? 1 : 0);
-        newGiocatore.setFascia(newFascia.getValue());
+        newGiocatore.setFascia(newFascia.getValue() == null ? 0 : newFascia.getValue());
         newGiocatore.setClassifica_FIT(newClassificaFIT.getValue());
         newGiocatore.setCF(oldGiocatore.getCF());
         try {
             db.modificaIscritto(newGiocatore);
-            table.getItems().set(indice, newGiocatore);
+            table.refresh();
         } catch (SQLException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -64,9 +66,10 @@ public class modificaIscrittoController {
     public void setParametri(Giocatore giocatore){
         if(giocatore != null) {
             newIndirizzo.setText(giocatore.getIndirizzo());
+            newCittà.setText(giocatore.getCitta());
             newSocio.setSelected(giocatore.getSocio() == 1);
             newAgonista.setSelected(giocatore.getAgonista() == 1);
-            newFascia.setValue(giocatore.getFascia());
+            newFascia.setValue(giocatore.getFascia() == 0 ? null : giocatore.getFascia());
             newClassificaFIT.setValue(giocatore.getClassifica_FIT());
             this.oldGiocatore = giocatore;
         }

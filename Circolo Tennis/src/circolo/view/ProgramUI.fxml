@@ -85,7 +85,7 @@
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#showNuovoPartecipante" text="Nuovo Partecipante" />
                                     <Button mnemonicParsing="false" onAction="#showListaPartecipanti" text="Lista Iscritti" />
-                                    <Button mnemonicParsing="false" text="Gironi" />
+                                    <Button mnemonicParsing="false" onAction="#showGironi" text="Gironi" />
                                     <Button mnemonicParsing="false" text="Partite" />
                                     <Button mnemonicParsing="false" text="Risultati" />
                                     <Button mnemonicParsing="false" text="Ricerca" />

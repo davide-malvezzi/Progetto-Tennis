@@ -81,7 +81,7 @@ public class nuovoPartecipanteMatchplayController {
     private void handleIscrivi(){
         try {
             db.InserisciPartecipante_MatchPlay(giocatore);
-            AlertUtil.displayPersonalizedInfo("Giocatore iscritto",null);
+            AlertUtil.displayPersonalizedInfo("Operazione Eseguita","Giocatore iscritto");
         } catch (SQLException e) {
             e.printStackTrace();
             AlertUtil.displayPersonalizedError("Giocatore già iscritto", null);
