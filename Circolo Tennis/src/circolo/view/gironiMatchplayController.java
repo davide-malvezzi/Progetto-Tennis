@@ -63,7 +63,6 @@ public class gironiMatchplayController {
         CognomegironeD.setCellValueFactory(cellData -> cellData.getValue().getCognomeProperty());
     }
 
-    //todo: creare tabella gironi in db e fare bottone blocca lista
 
     public void inserisci() {
         ObservableList<ObservableList<Giocatore>> lista;
