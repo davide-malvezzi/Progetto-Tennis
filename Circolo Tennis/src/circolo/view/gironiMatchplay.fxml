@@ -6,30 +6,76 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Girone A" />
-          <TableColumn prefWidth="75.0" text="Girone B" />
-            <TableColumn prefWidth="75.0" text="Girone C" />
-            <TableColumn prefWidth="75.0" text="Girone D" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </center>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.gironiMatchplayController">
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button mnemonicParsing="false" text="Modifica Manuale" />
-          <Button mnemonicParsing="false" text="Blocca e Genera Partite" />
+            <Button fx:id="modifica" mnemonicParsing="false" text="Modifica Manuale" />
+          <Button fx:id="creaPartite" mnemonicParsing="false" onAction="#handleCreaPartite" text="Blocca e Genera Partite" />
         </buttons>
          <BorderPane.margin>
             <Insets right="10.0" />
          </BorderPane.margin>
       </ButtonBar>
    </bottom>
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="tableA" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="gironeA" prefWidth="75.0" text="Girone A">
+                     <columns>
+                        <TableColumn fx:id="NomegironeA" prefWidth="75.0" text="Nome" />
+                        <TableColumn fx:id="CognomegironeA" prefWidth="75.0" text="Cognome" />
+                     </columns>
+                  </TableColumn>
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TableView fx:id="tableB" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="gironeB" prefWidth="75.0" text="Girone B">
+                     <columns>
+                        <TableColumn fx:id="NomegironeB" prefWidth="75.0" text="Nome" />
+                        <TableColumn fx:id="CognomegironeB" prefWidth="75.0" text="Cognome" />
+                     </columns>
+                  </TableColumn>
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TableView fx:id="tableC" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="gironeC" prefWidth="75.0" text="Girone C">
+                     <columns>
+                        <TableColumn fx:id="NomegironeC" prefWidth="75.0" text="Nome" />
+                        <TableColumn fx:id="CognomegironeC" prefWidth="75.0" text="Cognome" />
+                     </columns>
+                  </TableColumn>
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TableView fx:id="tableD" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="gironeD" prefWidth="75.0" text="Girone D">
+                     <columns>
+                        <TableColumn fx:id="NomegironeD" prefWidth="75.0" text="Nome" />
+                        <TableColumn fx:id="CognomegironeD" prefWidth="75.0" text="Cognome" />
+                     </columns>
+                  </TableColumn>
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </HBox>
+   </center>
 </BorderPane>

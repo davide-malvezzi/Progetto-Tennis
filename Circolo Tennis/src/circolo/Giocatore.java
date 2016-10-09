@@ -37,6 +37,7 @@ public class Giocatore {
         this.cognome = new SimpleStringProperty(cognome);
     }
 
+
     public Giocatore(String nome, String cognome, int fascia) {
         this.nome = new SimpleStringProperty(nome);
         this.cognome = new SimpleStringProperty(cognome);

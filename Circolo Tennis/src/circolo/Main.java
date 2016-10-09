@@ -12,7 +12,7 @@ public class Main {
             partecipanti.add(FXCollections.observableArrayList());
         try {
             Database db = new Database();
-            partecipanti = db.generaGironiMatchPlay();
+            partecipanti = db.mostraGironi();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -25,8 +25,6 @@ public class Main {
         for (int i =0;i<partecipanti.get(2).size();i++) System.out.println(partecipanti.get(2).get(i).getNome() + " " + partecipanti.get(2).get(i).getCognome() + " " + partecipanti.get(2).get(i).getFascia());
         System.out.println("\nGirone D:\n");
         for (int i =0;i<partecipanti.get(3).size();i++) System.out.println(partecipanti.get(3).get(i).getNome() + " " + partecipanti.get(3).get(i).getCognome() + " " + partecipanti.get(3).get(i).getFascia());
-
-
     }
 
 }

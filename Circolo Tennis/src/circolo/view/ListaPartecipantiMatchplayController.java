@@ -7,9 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -66,6 +64,17 @@ public class ListaPartecipantiMatchplayController {
             table.getItems().clear();
             table.getItems().addAll(lista);
         }catch (SQLException e){
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
+        }
+    }
+
+    @FXML
+    private void handleFormaGironi(){
+        try {
+            db.generaGironiMatchPlay();
+            AlertUtil.displayPersonalizedInfo("Gironi Formati", null);
+        } catch (SQLException e) {
             e.printStackTrace();
             AlertUtil.displayGenericError();
         }

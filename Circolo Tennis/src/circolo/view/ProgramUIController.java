@@ -174,7 +174,8 @@ public class ProgramUIController {
             clearPane("matchplay");
             splitMatchplay.getItems().add(gironi);
             gironiMatchplayController controller = loader.getController();
-
+            controller.setDatabase(db);
+            controller.inserisci();
         }catch (IOException e){
             e.printStackTrace();
             AlertUtil.displayGenericError();
