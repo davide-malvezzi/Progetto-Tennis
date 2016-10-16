@@ -37,7 +37,7 @@ public class MainApp extends Application {
         resultsStage.initModality(Modality.WINDOW_MODAL);
         initRootLayout();
         try {
-            db = new Database();
+            db = Database.getInstance();
         } catch (SQLException  | ClassNotFoundException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);

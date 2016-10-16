@@ -15,14 +15,22 @@ public class Database {
     private Connection con;
     private Statement stm = null;
     private PreparedStatement prpst = null;
+    private static Database uniqueInstance;
 
-    public Database() throws SQLException, ClassNotFoundException {
+    private Database() throws SQLException, ClassNotFoundException {
         boolean exists = true;
         File f = new File("circolo.db");
         if (!f.canRead()) exists = false;
         con = Connessione();
         stm = con.createStatement();
         if (!exists) CreaDatabase();
+    }
+
+    public static Database getInstance() throws SQLException, ClassNotFoundException {
+        if (uniqueInstance == null) {
+            uniqueInstance = new Database();
+        }
+        return uniqueInstance;
     }
 
     private void CreaDatabase() throws SQLException {
@@ -46,15 +54,16 @@ public class Database {
                 "Posizione TEXT check (Posizione in ('Interno','Esterno')) )");
         stm.execute("create table Partite (" +
                 "Num_Partita INTEGER primary key autoincrement," +
-                "Data TEXT," +
-                "CF_Giocatore1 TEXT not null references Giocatori(CF)," +
+                "Edizione INTEGER," +
+                "ID_Giocatore1 INTEGER not null references Giocatori(ID)," +
                 "Giocatore1 TEXT," +
-                "CF_Giocatore2 TEXT not null references Giocatori(CF)," +
+                "ID_Giocatore2 INTEGER not null references Giocatori(ID)," +
                 "Giocatore2 TEXT," +
                 "Num_Campo INTEGER references Campi(Num)," +
-                "Risultato TEXT check(Risultato in('6-0','6-1','6-2','6-3','6-4','7-5','7-6','0-6','1-6','2-6','3-6','4-6','5-7','6-7'))," +
-                "Vincitore INTEGER references Giocatori(ID) " +
-                "check (CF_Giocatore1 != CF_Giocatore2))");
+                "Risultato TEXT, " +
+                "Vincitore INTEGER references Giocatori(ID)," +
+                "Girone INTEGER references Matchplay(Girone), " +
+                "check (ID_Giocatore1 != ID_Giocatore2))");
         stm.execute("create table Prenotazioni(" +
                 "Num_Prenotazione INTEGER primary key autoincrement," +
                 "Data TEXT not null," +
@@ -285,7 +294,18 @@ public class Database {
         prpst.execute();
     }
 
+    public boolean checkGironi() throws SQLException {
+        LocalDate date = LocalDate.now();
+        ResultSet rs;
+        prpst = null;
+        prpst = con.prepareStatement("select count(distinct girone) as num from matchplay where edizione = ?");
+        prpst.setInt(1,date.getYear());
+        rs = prpst.executeQuery();
+        return rs.getInt("num") <= 0;
+    }
+
     public void generaGironiMatchPlay() throws SQLException {
+
         ObservableList<ObservableList<Giocatore>> urna = FXCollections.observableArrayList();
         ObservableList<ObservableList<Giocatore>> gironi = FXCollections.observableArrayList();
         ObservableList<Giocatore> urnaCorrente;
@@ -296,6 +316,8 @@ public class Database {
         int indiceEstrazione;
         int indiceFascia = 4;
         int nomeGirone = 1;
+
+
         for (int i = 0; i < 5; i++) {
             urna.add(FXCollections.observableArrayList());
         }
@@ -391,7 +413,14 @@ public class Database {
             nomeGirone++;
             gironi.remove(0);
         }
+    }
 
+    public void modificaGirone(Giocatore giocatore, int girone) throws SQLException {
+        prpst = null;
+        prpst = con.prepareStatement("update Matchplay set girone = ? where ID_giocatore = ?");
+        prpst.setInt(1, girone);
+        prpst.setInt(2, giocatore.getID());
+        prpst.execute();
     }
 
     public ObservableList<ObservableList<Giocatore>> mostraGironi() throws SQLException {
@@ -401,12 +430,12 @@ public class Database {
         prpst = null;
         rs = stm.executeQuery("select count(distinct girone) as num from matchplay");
         numeroGironi = rs.getInt("num");
-        for(int i = 0; i<numeroGironi;i++) {
+        for (int i = 0; i < numeroGironi; i++) {
             lista.add(FXCollections.observableArrayList());
             prpst = con.prepareStatement("select * from matchplay where girone = ?");
-            prpst.setInt(1,i+1);
-            rs= prpst.executeQuery();
-            while (rs.next()){
+            prpst.setInt(1, i + 1);
+            rs = prpst.executeQuery();
+            while (rs.next()) {
                 Giocatore giocatore = new Giocatore();
                 giocatore.setNome(rs.getString("nome"));
                 giocatore.setCognome(rs.getString("cognome"));
@@ -418,18 +447,28 @@ public class Database {
 
     }
 
+    public boolean checkPartite() throws SQLException {
+        ResultSet rs;
+        LocalDate date = LocalDate.now();
+        prpst = null;
+        prpst = con.prepareStatement("select count(*) as num from partite where edizione = ?");
+        prpst.setInt(1,date.getYear());
+        rs = prpst.executeQuery();
+        return rs.getInt("num") <= 0;
+    }
+
     public void InserisciPartita(Partita partita) throws SQLException {
+        LocalDate data = LocalDate.now();
+
         prpst = null;
 
-        prpst = con.prepareStatement("INSERT INTO Partite(Data,CF_Giocatore1,Giocatore1,CF_Giocatore2,Giocatore2,Num_Campo) VALUES(?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
-        prpst.setString(1, partita.data_partita.toString());
-        prpst.setString(2, partita.getPlayer1().getCF());
-        prpst.setString(3, partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome());
-        prpst.setString(4, partita.getPlayer2().getCF());
-        prpst.setString(5, partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome());
-        prpst.setInt(6, partita.getField().getNumero_campo());
-        prpst.setString(7, partita.getRisultato().getRisultato());
-        prpst.setString(8, partita.getVincitore().getNome() + " " + partita.getVincitore().getCognome());
+        prpst = con.prepareStatement("INSERT INTO Partite(ID_Giocatore1,Giocatore1,ID_Giocatore2,Giocatore2,Girone,Edizione) VALUES(?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
+        prpst.setInt(1, partita.getPlayer1().getID());
+        prpst.setString(2, partita.getPlayer1().getNome() + " " + partita.getPlayer1().getCognome());
+        prpst.setInt(3, partita.getPlayer2().getID());
+        prpst.setString(4, partita.getPlayer2().getNome() + " " + partita.getPlayer2().getCognome());
+        prpst.setInt(5, partita.getGirone());
+        prpst.setInt(6, data.getYear());
 
         prpst.execute();        //esegue la query nel DB
     }

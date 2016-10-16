@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
@@ -155,9 +156,6 @@ public class ProgramUIController {
             lista = loader.load();
             clearPane("matchplay");
             splitMatchplay.getItems().add(lista);
-            ListaPartecipantiMatchplayController controller = loader.getController();
-            controller.setDatabase(db);
-            controller.inserisciLista();
         } catch (IOException e) {
             e.printStackTrace();
             AlertUtil.displayGenericError();
@@ -169,13 +167,14 @@ public class ProgramUIController {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("view/gironiMatchplay.fxml"));
         BorderPane gironi;
+        HBox bottom;
         try{
             gironi = loader.load();
             clearPane("matchplay");
             splitMatchplay.getItems().add(gironi);
             gironiMatchplayController controller = loader.getController();
-            controller.setDatabase(db);
-            controller.inserisci();
+            bottom =  (HBox) gironi.getBottom();
+            controller.setControlli(gironi,bottom);
         }catch (IOException e){
             e.printStackTrace();
             AlertUtil.displayGenericError();

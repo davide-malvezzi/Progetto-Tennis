@@ -8,22 +8,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.gironiMatchplayController">
-   <bottom>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <buttons>
-            <Button fx:id="modifica" mnemonicParsing="false" text="Modifica Manuale" />
-          <Button fx:id="creaPartite" mnemonicParsing="false" onAction="#handleCreaPartite" text="Blocca e Genera Partite" />
-        </buttons>
-         <BorderPane.margin>
-            <Insets right="10.0" />
-         </BorderPane.margin>
-      </ButtonBar>
-   </bottom>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.gironiMatchplayController">
    <center>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableA" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tableA" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="gironeA" prefWidth="75.0" text="Girone A">
                      <columns>
@@ -36,7 +25,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <TableView fx:id="tableB" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tableB" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="gironeB" prefWidth="75.0" text="Girone B">
                      <columns>
@@ -49,7 +38,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <TableView fx:id="tableC" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tableC" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="gironeC" prefWidth="75.0" text="Girone C">
                      <columns>
@@ -62,7 +51,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <TableView fx:id="tableD" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tableD" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="gironeD" prefWidth="75.0" text="Girone D">
                      <columns>
@@ -78,4 +67,19 @@
          </children>
       </HBox>
    </center>
+   <bottom>
+      <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <ButtonBar prefHeight="45.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
+              <buttons>
+                  <Button fx:id="modifica" mnemonicParsing="false" onAction="#handleModfica" text="Modifica Manuale" />
+                <Button fx:id="creaPartite" mnemonicParsing="false" onAction="#handleCreaPartite" text="Blocca e Genera Partite" />
+              </buttons>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </ButtonBar>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
