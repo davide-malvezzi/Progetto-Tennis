@@ -6,6 +6,8 @@ import circolo.util.AlertUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -13,22 +15,52 @@ import java.io.IOException;
 
 public class ProgramUIController {
     @FXML
-    private SplitPane splitIscritti;
+    private TabPane tabPane;
     @FXML
-    private SplitPane splitPrenotazioni;
+    private Tab Iscritti;
     @FXML
-    private SplitPane splitVisite;
+    private Tab Prenotazioni;
+    @FXML
+    private Tab Matchplay;
     @FXML
     private SplitPane splitMatchplay;
 
     private MainApp mainApp;
     private Database db;
+    BorderPane pane;
+    private boolean prenotazioniLoaded;
 
     public ProgramUIController() {
     }
 
     @FXML
     private void initialize() {
+        MainApp.getRoot().getTop().setVisible(true);
+        prenotazioniLoaded = false;
+        FXMLLoader loaderIscritti = new FXMLLoader();
+        try {
+            loaderIscritti.setLocation(MainApp.class.getResource("view/gestioneIscritti.fxml"));
+            pane = loaderIscritti.load();
+            Iscritti.setContent(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void showGestionePrenotazioni(){
+        if(!prenotazioniLoaded) {
+            prenotazioniLoaded= true;
+            FXMLLoader loaderPrenotazioni = new FXMLLoader();
+            loaderPrenotazioni.setLocation(MainApp.class.getResource("view/gestionePrenotazioni.fxml"));
+            try {
+                pane = loaderPrenotazioni.load();
+                Prenotazioni.setContent(pane);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
         //PANNELLO GESTIONE ISCRITTI
         @FXML
@@ -39,9 +71,7 @@ public class ProgramUIController {
             try {
                 iscritto = loader.load();
                 newGiocatoreController controller = loader.getController();
-                controller.setDatabase(db);
                 clearPane("iscritti");
-                splitIscritti.getItems().add(iscritto);
             } catch (IOException e) {
                 e.printStackTrace();
                 AlertUtil.displayGenericError();
@@ -60,7 +90,6 @@ public class ProgramUIController {
                 controller.setMainApp(mainApp);
                 controller.setDatabase(db);
                 clearPane("iscritti");
-                splitIscritti.getItems().add(ricerca);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,7 +107,6 @@ public class ProgramUIController {
         try {
             prenotazione = loader.load();
             clearPane("prenotazioni");
-            splitPrenotazioni.getItems().add(prenotazione);
             prenotazioneCampoController controller = loader.getController();
             controller.setMainapp(mainApp);
             controller.setDatabase(db);
@@ -97,7 +125,6 @@ public class ProgramUIController {
         try {
             prenotazione = loader.load();
             clearPane("prenotazioni");
-            splitPrenotazioni.getItems().add(prenotazione);
             cronologiaPrenotazioniController controller = loader.getController();
             controller.setDatabase(db);
         } catch (IOException e) {
@@ -117,9 +144,7 @@ public class ProgramUIController {
         try {
             visita = loader.load();
             clearPane("visite");
-            splitVisite.getItems().add(visita);
             newVisitaMedicaController controller = loader.getController();
-            controller.setDatabase(db);
         } catch (IOException e) {
             e.printStackTrace();
             AlertUtil.displayGenericError();
@@ -181,14 +206,22 @@ public class ProgramUIController {
         }
     }
 
+    public void showPartite(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("view/PartiteMatchplay.fxml"));
+        BorderPane partite;
+
+        try{
+            partite= loader.load();
+            clearPane("matchplay");
+            splitMatchplay.getItems().add(partite);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void clearPane(String s) {
         switch (s){
-            case "iscritti": if (splitIscritti.getItems().size() != 1) splitIscritti.getItems().remove(1);
-                break;
-            case "prenotazioni": if (splitPrenotazioni.getItems().size() != 1) splitPrenotazioni.getItems().remove(1);
-                break;
-            case "visite": if (splitVisite.getItems().size() != 1) splitVisite.getItems().remove(1);
-                break;
             case "matchplay": if (splitMatchplay.getItems().size() != 1) splitMatchplay.getItems().remove(1);
         }
     }

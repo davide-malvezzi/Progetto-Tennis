@@ -45,6 +45,12 @@ public class risultatiPrenotazioniController {
         posCol.setCellValueFactory(cellData -> cellData.getValue().getPosizioneProperty());
 
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Selezione(newValue));
+
+        try {
+            db = Database.getInstance();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void inserisciRisultatiTabella(ObservableList<Campo> lista){
@@ -116,10 +122,6 @@ public class risultatiPrenotazioniController {
 
     }
 
-
-    public void setDatabase(Database db){
-        this.db = db;
-    }
 
 
 }

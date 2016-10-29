@@ -1,6 +1,7 @@
 package circolo;
 
 
+import circolo.util.DateUtil;
 import javafx.beans.property.*;
 
 import java.time.LocalDate;
@@ -59,8 +60,8 @@ public class Prenotazione {
         return data.get();
     }
 
-    public ObjectProperty<LocalDate> getDataProperty() {
-        return data;
+    public StringProperty getDataProperty() {
+        return new SimpleStringProperty(DateUtil.format(this.getData()));
     }
 
     public void setData(LocalDate data) {

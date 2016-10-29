@@ -111,21 +111,26 @@ public class Database {
         return con;
     }
 
-    public boolean login(String user, String password) throws SQLException {
+    public int login(String user, String password) throws SQLException {
         prpst = null;
         boolean found = false;
-        prpst = con.prepareStatement("select count(*) as num from Admin where username = ? and password = ? ");
+        prpst = con.prepareStatement("select administrator,count(*) as num from Admin where username = ? and password = ? ");
         prpst.setString(1, user);
         prpst.setString(2, password);
         ResultSet rs = prpst.executeQuery();
-        if (rs.getInt("num") > 0) {
-            found = true;
-        }
-        return found;
+        if (rs.getInt("num") != 0)
+            return rs.getInt("administrator");
+        else return -1;
     }
 
     public boolean InserisciGiocatore(Giocatore giocatore) throws SQLException {
         prpst = null;
+        ResultSet rs;
+        prpst = con.prepareStatement("select exists(SELECT 1 FROM giocatori WHERE cf = ? limit 1) as find");
+        prpst.setString(1, giocatore.getCF());
+        rs = prpst.executeQuery();
+        if (rs.getInt("find") == 1) return false;
+
 
         prpst = con.prepareStatement("INSERT INTO Giocatori (Nome,Cognome,Data_nascita,CF,Genere,Città,Indirizzo,Classifica_FIT,Fascia,Agonista,Socio) VALUES(?,?,?,?,?,?,?,?,?,?,?)");   //inserisce i valori al posto delle '?'
         prpst.setString(1, giocatore.getNome());
@@ -145,7 +150,36 @@ public class Database {
         return true;
     }
 
-    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore) throws SQLException {
+    public ObservableList<Giocatore> loadIscritti(int offset) throws SQLException {
+        prpst = null;
+        ObservableList<Giocatore> lista = FXCollections.observableArrayList();
+        ResultSet rs;
+        prpst = con.prepareStatement("select * from giocatori limit 10 offset ?");
+        prpst.setInt(1, offset);
+        rs = prpst.executeQuery();
+
+        while (rs.next()) {
+            Giocatore tmp = new Giocatore();
+            tmp.setID(rs.getInt("ID"));
+            tmp.setNome(rs.getString("Nome"));
+            tmp.setCognome(rs.getString("Cognome"));
+            tmp.setData_nascita(DateUtil.parse(rs.getString("data_nascita")));
+            tmp.setCF(rs.getString("CF"));
+            tmp.setGenere(rs.getString("Genere"));
+            tmp.setCitta(rs.getString("Città"));
+            tmp.setIndirizzo(rs.getString("Indirizzo"));
+            tmp.setClassifica_FIT(rs.getString("Classifica_FIT"));
+            tmp.setFascia(rs.getInt("Fascia"));
+            tmp.setAgonista(rs.getInt("Agonista"));
+            tmp.setSocio(rs.getInt("Socio"));
+            lista.add(tmp);
+        }
+
+        return lista;
+
+    }
+
+    public ObservableList<Giocatore> ricercaGiocatore(Giocatore giocatore, int offset) throws SQLException {
         prpst = null;
         ObservableList<Giocatore> lista = FXCollections.observableArrayList();
         ResultSet rs;
@@ -190,7 +224,7 @@ public class Database {
             whereCondition += (whereCondition.length() > 0 ? " AND " : "");
             whereCondition += " socio = 1";
         }
-        query.append(" where ").append(whereCondition);
+        query.append(" where ").append(whereCondition).append(" limit 10 offset ? ");
 
         prpst = con.prepareStatement(query.toString());
         int Index = 1;
@@ -217,12 +251,14 @@ public class Database {
         if (giocatore.getFascia() != 0) {
             prpst.setInt(Index++, giocatore.getFascia());
         }
+        prpst.setInt(Index++, offset);
         rs = prpst.executeQuery();
         while (rs.next()) {
             Giocatore tmp = new Giocatore();
+            tmp.setID(rs.getInt("ID"));
             tmp.setNome(rs.getString("Nome"));
             tmp.setCognome(rs.getString("Cognome"));
-            tmp.setData_nascita(DateUtil.parse(rs.getString("Data_nascita")));
+            tmp.setData_nascita(DateUtil.parse(rs.getString("data_nascita")));
             tmp.setCF(rs.getString("CF"));
             tmp.setGenere(rs.getString("Genere"));
             tmp.setCitta(rs.getString("Città"));
@@ -234,6 +270,12 @@ public class Database {
             lista.add(tmp);
         }
         return lista;
+    }
+
+    public void eliminaGiocatore(Giocatore giocatore) throws SQLException {
+        prpst = con.prepareStatement("delete from giocatori where ID = ?");
+        prpst.setInt(1, giocatore.getID());
+        prpst.execute();
     }
 
     public void modificaIscritto(Giocatore newGiocatore) throws SQLException {
@@ -299,9 +341,9 @@ public class Database {
         ResultSet rs;
         prpst = null;
         prpst = con.prepareStatement("select count(distinct girone) as num from matchplay where edizione = ?");
-        prpst.setInt(1,date.getYear());
+        prpst.setInt(1, date.getYear());
         rs = prpst.executeQuery();
-        return rs.getInt("num") <= 0;
+        return rs.getInt("num") >= 0;
     }
 
     public void generaGironiMatchPlay() throws SQLException {
@@ -452,9 +494,9 @@ public class Database {
         LocalDate date = LocalDate.now();
         prpst = null;
         prpst = con.prepareStatement("select count(*) as num from partite where edizione = ?");
-        prpst.setInt(1,date.getYear());
+        prpst.setInt(1, date.getYear());
         rs = prpst.executeQuery();
-        return rs.getInt("num") <= 0;
+        return rs.getInt("num") >= 0;
     }
 
     public void InserisciPartita(Partita partita) throws SQLException {
@@ -471,6 +513,65 @@ public class Database {
         prpst.setInt(6, data.getYear());
 
         prpst.execute();        //esegue la query nel DB
+    }
+
+    public ObservableList<ObservableList<Partita>> loadPartite() throws SQLException {
+        Integer girone;
+        ResultSet rs;
+        ObservableList<ObservableList<Partita>> lista = FXCollections.observableArrayList();
+        int num;
+
+
+        prpst = con.prepareStatement("select count(distinct girone) as num from partite where edizione = ? ");
+        prpst.setInt(1, LocalDate.now().getYear());
+        rs = prpst.executeQuery();
+        num = rs.getInt("num");
+        girone = num;
+        for (int i = 0; i < num; i++) {
+            lista.add(FXCollections.observableArrayList());
+            prpst = con.prepareStatement("select distinct id_giocatore1, g1.nome as nome1, g1.cognome as cognome1, id_giocatore2, g2.nome as nome2,g2.cognome as cognome2 " +
+                    "from partite p left join giocatori g1 on (p.id_giocatore1 = g1.id)  left join giocatori g2 on (p.id_giocatore2 = g2.id) " +
+                    "where edizione = ? and girone = ? order by num_partita desc");
+            prpst.setInt(1, LocalDate.now().getYear());
+            prpst.setInt(2, girone);
+            rs = prpst.executeQuery();
+
+            while (rs.next()) {
+                Giocatore giocatore1 = new Giocatore();
+                Giocatore giocatore2 = new Giocatore();
+                giocatore1.setID(rs.getInt("ID_giocatore1"));
+                giocatore1.setNome(rs.getString("Nome1"));
+                giocatore1.setCognome(rs.getString("Cognome1"));
+                giocatore2.setID(rs.getInt("ID_giocatore2"));
+                giocatore2.setNome(rs.getString("Nome2"));
+                giocatore2.setCognome(rs.getString("Cognome2"));
+
+                lista.get(i).add(new Partita(giocatore1, giocatore2, girone));
+            }
+
+            girone--;
+        }
+
+        return lista;
+    }
+
+    public ObservableList<Prenotazione> loadPrenotazioni(int offset) throws SQLException {
+        ResultSet rs;
+        ObservableList<Prenotazione> lista = FXCollections.observableArrayList();
+
+        prpst = con.prepareStatement("select * from prenotazioni order by data desc limit 10 offset ?");
+
+        prpst.setInt(1, offset);
+
+        rs = prpst.executeQuery();
+
+        while (rs.next()) {
+            lista.add(new Prenotazione(rs.getInt("num_prenotazione"), LocalDate.parse(rs.getString("data")), LocalTime.parse(rs.getString("inizio")),
+                    LocalTime.parse(rs.getString("fine")), new Campo(rs.getInt("num_campo")), rs.getString("titolare"),
+                    rs.getString("recapito"), rs.getInt("pagato"), rs.getString("importo")));
+
+        }
+        return lista;
     }
 
     public void InserisciPrenotazione(Prenotazione prenotazione) throws SQLException {
@@ -500,12 +601,13 @@ public class Database {
         prpst.execute();
     }
 
-    public ObservableList<Prenotazione> trovaPrenotazioni(int numero) throws SQLException {
+    public ObservableList<Prenotazione> trovaPrenotazioni(LocalDate date, int offset) throws SQLException {
         prpst = null;
 
-        prpst = con.prepareStatement("select * from prenotazioni order by num_prenotazione desc limit ?");
+        prpst = con.prepareStatement("select * from prenotazioni where data = ? limit 10 offset ?");
 
-        prpst.setInt(1, numero);
+        prpst.setString(1, date.toString());
+        prpst.setInt(2, offset);
 
         ResultSet rs = prpst.executeQuery();
         ObservableList<Prenotazione> prenotazioni = FXCollections.observableArrayList();

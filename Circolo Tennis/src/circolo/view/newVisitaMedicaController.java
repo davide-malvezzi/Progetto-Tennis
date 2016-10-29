@@ -1,13 +1,13 @@
 package circolo.view;
 
 import circolo.Database;
+import circolo.Giocatore;
 import circolo.VisitaMedica;
+import circolo.util.AlertUtil;
 import circolo.util.DateUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
@@ -15,35 +15,45 @@ public class newVisitaMedicaController {
     @FXML
     private DatePicker data;
     @FXML
-    private TextField cf;
-    @FXML
     private CheckBox agonistica;
 
     private Database db;
+    private Giocatore giocatore = new Giocatore();
+    private BorderPane controlPane;
+    private ButtonBar defaultPane;
 
     @FXML
     private void initialize() {
+        try {
+            db = Database.getInstance();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
+        }
     }
 
     @FXML
-    private void handleOK() throws SQLException {
+    private void handleOK() {
         VisitaMedica visita = new VisitaMedica();
-        if (isInputValid()) {
-            visita.setData(data.getValue());
-            visita.setCF_paziente(cf.getText());
-            visita.setAgonistica(agonistica.isSelected() ? 1 : 0);
-            db.InserisciVisita(visita);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Messaggio");
-            alert.setHeaderText("Nuova visita medica inserita\n" +
-                    "Riepilogo Dati:");
-            alert.setContentText("Data: " + DateUtil.format(visita.getData()) + "\n" +
-                    "Codice Fiscale: " + visita.getCF_paziente() + "\n" +
-                    "Tipo: " + (visita.getAgonistica() == 1 ? "Agonistica" : "Non agonistica"));
+        try {
+            if (isInputValid()) {
+                visita.setData(data.getValue());
+                visita.setCF_paziente(giocatore.getCF());
+                visita.setAgonistica(agonistica.isSelected() ? 1 : 0);
+                db.InserisciVisita(visita);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Messaggio");
+                alert.setHeaderText("Nuova visita medica inserita");
+                alert.setContentText("Riepilogo Dati: \n\nData: " + DateUtil.format(visita.getData()) + "\n" +
+                        "Codice Fiscale: " + visita.getCF_paziente() + "\n" +
+                        "Tipo: " + (visita.getAgonistica() == 1 ? "Agonistica" : "Non agonistica"));
 
-            alert.showAndWait();
-
-            clearFields();
+                alert.showAndWait();
+                controlPane.setBottom(defaultPane);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
         }
 
 
@@ -51,15 +61,13 @@ public class newVisitaMedicaController {
 
     @FXML
     private void handleAnnulla(){
-        clearFields();
+        controlPane.setBottom(defaultPane);
     }
 
     private boolean isInputValid() {
         String errorMessage = "";
         if (data.getValue() == null)
             errorMessage += "Data non può essere vuota\n";
-        if (cf.getText() == null || cf.getText().length() == 0)
-            errorMessage += "Codice Fiscale non può essere vuoto\n";
         if (errorMessage.length() == 0)
             return true;
         else {
@@ -77,11 +85,16 @@ public class newVisitaMedicaController {
 
     private void clearFields(){
         data.setValue(null);
-        cf.setText(null);
         agonistica.setSelected(false);
     }
 
-    public void setDatabase(Database db){
-        this.db = db;
+    public void setParametri(Giocatore giocatore){
+        this.giocatore = giocatore;
     }
+
+    public void setControlli(BorderPane pane,ButtonBar defaultPane){
+        this.controlPane = pane;
+        this.defaultPane = defaultPane;
+    }
+
 }

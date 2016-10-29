@@ -4,7 +4,6 @@ import circolo.Database;
 import circolo.Giocatore;
 import circolo.MainApp;
 import circolo.util.AlertUtil;
-import circolo.util.DateUtil;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -62,7 +61,6 @@ public class ricercaGiocatoreController {
             Giocatore giocatore = new Giocatore();
             giocatore.setNome(nome.getText());
             giocatore.setCognome(cognome.getText());
-            giocatore.setData_nascita(DateUtil.parse(data.getText()));
             giocatore.setCF(cf.getText());
             giocatore.setCitta(città.getText());
             giocatore.setIndirizzo(indirizzo.getText());
@@ -75,7 +73,7 @@ public class ricercaGiocatoreController {
             giocatore.setGenere(sesso.getValue());
             ObservableList<Giocatore> lista;
             try {
-                lista = db.ricercaGiocatore(giocatore);
+                lista = db.ricercaGiocatore(giocatore,0);
                 mainApp.showrisultatiIscritti(lista);
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -122,12 +120,6 @@ public class ricercaGiocatoreController {
         }
         if (fascia.getValue() != null) {
             parametri++;
-        }
-        if (data.getText() != null && data.getText().length() > 0) {
-            parametri++;
-            if (!DateUtil.validDate(data.getText())) {
-                dateError = true;
-            }
         }
         if (classifica_fit.getValue() != null) {
             parametri++;

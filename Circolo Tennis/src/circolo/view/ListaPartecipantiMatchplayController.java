@@ -31,7 +31,6 @@ public class ListaPartecipantiMatchplayController {
     private Database db;
     private ObservableList<Giocatore> lista = FXCollections.observableArrayList();
     private Giocatore giocatore = new Giocatore();
-    private Service backgroundThread;
 
 
     @FXML
@@ -43,7 +42,7 @@ public class ListaPartecipantiMatchplayController {
         try {
             db = Database.getInstance();
             lista = db.ListaPartecipanti();
-            table.getItems().addAll(lista);
+            table.setItems(lista);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             AlertUtil.displayGenericError();
@@ -72,10 +71,10 @@ public class ListaPartecipantiMatchplayController {
     @FXML
     private void handleFormaGironi() {
         try {
-            if (!db.checkGironi())
+            if (db.checkGironi())
                 AlertUtil.displayPersonalizedInfo("Gironi già formati", null);
             else {
-                backgroundThread = new Service() {
+                Service backgroundThread = new Service() {
                     @Override
                     protected Task createTask() {
                         return new Task() {

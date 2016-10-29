@@ -36,6 +36,11 @@ public class modificaIscrittoController {
                 "3.9", "3.8", "3.7", "3.6", "3.5", "3.4", "3.3", "3.2", "3.1", "3.0",
                 "2.9", "2.8", "2.7", "2.6", "2.5", "2.4", "2.3", "2.2", "2.1", "2.0",
                 "1.9", "1.8", "1.7", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1");
+        try {
+            db = Database.getInstance();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -75,8 +80,7 @@ public class modificaIscrittoController {
         }
     }
 
-    public void setControlli(Database db,BorderPane pane,ButtonBar defaultPane,TableView<Giocatore> table){
-        this.db = db;
+    public void setControlli(BorderPane pane,ButtonBar defaultPane,TableView<Giocatore> table){
         this.controlPane = pane;
         this.defaultPane = defaultPane;
         this.table = table;

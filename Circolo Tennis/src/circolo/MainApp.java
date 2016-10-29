@@ -1,15 +1,13 @@
 package circolo;
 
-import circolo.view.ProgramUIController;
-import circolo.view.loginController;
-import circolo.view.risultatiIscrittiController;
-import circolo.view.risultatiPrenotazioniController;
+import circolo.view.*;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,9 +16,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainApp extends Application {
-    private Stage primaryStage;
-    private BorderPane rootLayout;
-    private TabPane ProgramUI;
+    private static Stage primaryStage;
+    private static BorderPane rootLayout;
     private Stage resultsStage = new Stage();
     private Database db;
 
@@ -29,10 +26,18 @@ public class MainApp extends Application {
         launch(args);
     }
 
+    public static BorderPane getRoot(){
+        return rootLayout;
+    }
+
+    public static Stage getPrimaryStage(){
+        return primaryStage;
+    }
+
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Tennis Club San Felice");
+        MainApp.primaryStage = primaryStage;
+        MainApp.primaryStage.setTitle("Tennis Club San Felice");
         resultsStage.initOwner(primaryStage);
         resultsStage.initModality(Modality.WINDOW_MODAL);
         initRootLayout();
@@ -54,12 +59,13 @@ public class MainApp extends Application {
 
     private void initRootLayout() {
         try {
-            // Load root layout from fxml file.
+
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/rootLayout.fxml"));
             rootLayout = loader.load();
+            rootLayoutController controller = loader.getController();
+            controller.setMainApp(this);
 
-            // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -68,7 +74,7 @@ public class MainApp extends Application {
         }
     }
 
-    private void showLogin(){
+    public void showLogin(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("view/login.fxml"));
         try {
@@ -76,8 +82,6 @@ public class MainApp extends Application {
             rootLayout.setCenter(login);
             loginController controller = loader.getController();
             controller.setMainApp(this);
-            controller.setPane(login);
-            controller.setDatabase(db);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,8 +91,8 @@ public class MainApp extends Application {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/ProgramUI.fxml"));
-            this.ProgramUI = loader.load();
-            rootLayout.setCenter(ProgramUI);
+            TabPane programUI = loader.load();
+            rootLayout.setCenter(programUI);
             ProgramUIController controller = loader.getController();
             controller.setMainApp(this);
             controller.setDatabase(db);
@@ -96,6 +100,21 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    public void showGuestUI(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("view/prenotazioneCampo.fxml"));
+        try {
+            AnchorPane prenotazione = loader.load();
+            rootLayout.setCenter(prenotazione);
+            rootLayout.getTop().setVisible(true);
+            prenotazioneCampoController controller = loader.getController();
+            controller.setMainapp(this);
+            controller.setDatabase(db);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void showrisultatiIscritti(ObservableList<Giocatore> lista) {
@@ -127,16 +146,12 @@ public class MainApp extends Application {
             resultsStage.setResizable(false);
             resultsStage.show();
             risultatiPrenotazioniController controller = loader.getController();
+            controller.setResultStage(resultsStage);
             controller.setPrenotazione(prenotazione);
             controller.inserisciRisultatiTabella(lista);
-            controller.setResultStage(resultsStage);
-            controller.setDatabase(db);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
 }

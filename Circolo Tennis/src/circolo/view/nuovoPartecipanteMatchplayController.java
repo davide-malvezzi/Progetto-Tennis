@@ -37,7 +37,7 @@ public class nuovoPartecipanteMatchplayController {
             giocatore.setNome(nome.getText());
             giocatore.setCognome(cognome.getText());
             try {
-                lista = db.ricercaGiocatore(giocatore);
+                lista = db.ricercaGiocatore(giocatore,0);
                 IscrizionePartecipante(lista);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -80,8 +80,12 @@ public class nuovoPartecipanteMatchplayController {
     @FXML
     private void handleIscrivi(){
         try {
-            db.InserisciPartecipante_MatchPlay(giocatore);
-            AlertUtil.displayPersonalizedInfo("Operazione Eseguita","Giocatore iscritto");
+            if(db.checkPartite())
+                AlertUtil.displayPersonalizedInfo("Impossibile iscrivere nuovo giocatore","Le partite sono già state formate");
+            else {
+                db.InserisciPartecipante_MatchPlay(giocatore);
+                AlertUtil.displayPersonalizedInfo("Operazione Eseguita", "Giocatore iscritto");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             AlertUtil.displayPersonalizedError("Giocatore già iscritto", null);

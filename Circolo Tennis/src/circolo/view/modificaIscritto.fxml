@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.modificaIscrittoController">
+<AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="93.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.modificaIscrittoController">
    <children>
-      <Button layoutX="534.0" layoutY="148.0" mnemonicParsing="false" onAction="#handleConferma" text="Conferma" AnchorPane.rightAnchor="10.0" />
-      <Pane layoutX="14.0" prefHeight="200.0" prefWidth="351.0">
+      <Button layoutX="718.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleConferma" text="Conferma" AnchorPane.rightAnchor="14.0" />
+      <Pane layoutX="24.0" layoutY="7.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="84.0" prefWidth="611.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="7.0">
          <children>
             <Label alignment="CENTER" contentDisplay="TOP" layoutX="59.0" layoutY="18.0" text="Indirizzo" />
             <TextField fx:id="newIndirizzo" layoutX="138.0" layoutY="14.0" />
-            <CheckBox fx:id="newSocio" layoutX="56.0" layoutY="77.0" mnemonicParsing="false" text="Socio" />
-            <CheckBox fx:id="newAgonista" layoutX="161.0" layoutY="77.0" mnemonicParsing="false" text="Agonista" />
-            <Label layoutX="48.0" layoutY="116.0" text="Classifica FIT" />
-            <ChoiceBox fx:id="newClassificaFIT" layoutX="157.0" layoutY="112.0" prefHeight="25.0" prefWidth="60.0" />
-            <Label layoutX="81.0" layoutY="151.0" text="Fascia" />
-            <ChoiceBox fx:id="newFascia" layoutX="157.0" layoutY="147.0" prefHeight="25.0" prefWidth="60.0" />
+            <CheckBox fx:id="newSocio" layoutX="454.0" layoutY="18.0" mnemonicParsing="false" text="Socio" />
+            <CheckBox fx:id="newAgonista" layoutX="454.0" layoutY="48.0" mnemonicParsing="false" text="Agonista" />
+            <Label layoutX="306.0" layoutY="18.0" text="Classifica FIT" />
+            <ChoiceBox fx:id="newClassificaFIT" layoutX="379.0" layoutY="14.0" prefHeight="25.0" prefWidth="60.0" />
+            <Label layoutX="323.0" layoutY="48.0" text="Fascia" />
+            <ChoiceBox fx:id="newFascia" layoutX="379.0" layoutY="44.0" prefHeight="25.0" prefWidth="60.0" />
             <Label layoutX="81.0" layoutY="48.0" text="Città" />
             <TextField fx:id="newCittà" layoutX="138.0" layoutY="44.0" />
          </children>

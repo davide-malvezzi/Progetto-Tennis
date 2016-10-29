@@ -99,9 +99,9 @@ public class gironiMatchplayController {
             tableB.setItems(lista.get(1));
             tableC.setItems(lista.get(2));
             tableD.setItems(lista.get(3));
-            if (!db.checkPartite()) {
+            if (db.checkPartite()) {
                 alreadyDone = true;
-               // modifica.setDisable(true);
+                modifica.setDisable(true);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

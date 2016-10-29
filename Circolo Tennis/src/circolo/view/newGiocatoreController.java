@@ -49,7 +49,12 @@ public class newGiocatoreController {
                 "2.9", "2.8", "2.7", "2.6", "2.5", "2.4", "2.3", "2.2", "2.1", "2.0",
                 "1.9", "1.8", "1.7", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1");
         sesso.getItems().addAll("M", "F");
-
+        try{
+            db = Database.getInstance();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
+        }
     }
 
     @FXML
@@ -69,12 +74,12 @@ public class newGiocatoreController {
             if (db.InserisciGiocatore(giocatore)) {
                 AlertUtil.displayPersonalizedInfo("Operazione Effettuata","Nuovo giocatore salvato");
                 clearFields();
-            }
+            }else AlertUtil.displayPersonalizedError("Giocatore già iscritto","E' già presente un giocatore con codice fiscale " + giocatore.getCF());
         }
     }
 
     @FXML
-    private void handleAnnulla() {
+    private void handlePulisciCampi() {
         clearFields();
     }
 
@@ -129,9 +134,5 @@ public class newGiocatoreController {
         sesso.setValue(null);
         fascia.setValue(null);
         classifica_fit.setValue(null);
-    }
-
-    public void setDatabase(Database db) {
-        this.db = db;
     }
 }

@@ -100,7 +100,7 @@ public class risultatiIscrittiController {
             modificaPane = loader.load();
             controller = loader.getController();
             controller.setParametri(oldGiocatore);
-            controller.setControlli(db, pane, defaultPane, table);
+            controller.setControlli(pane, defaultPane, table);
             modificaClicked = true;
             pane.setBottom(modificaPane);
         } catch (IOException e) {

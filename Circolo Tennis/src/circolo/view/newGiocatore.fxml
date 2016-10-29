@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.newGiocatoreController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.newGiocatoreController">
    <top>
       <GridPane prefHeight="164.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -54,7 +54,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
           <Button mnemonicParsing="false" onAction="#handleOK" text="OK" />
-            <Button mnemonicParsing="false" onAction="#handleAnnulla" text="Annulla" />
+            <Button mnemonicParsing="false" onAction="#handlePulisciCampi" text="Pulisci Campi" />
         </buttons>
          <BorderPane.margin>
             <Insets right="10.0" />
@@ -101,6 +101,9 @@
                </TilePane.margin>
             </ComboBox>
          </children>
+         <BorderPane.margin>
+            <Insets left="140.0" />
+         </BorderPane.margin>
       </TilePane>
    </left>
 </BorderPane>

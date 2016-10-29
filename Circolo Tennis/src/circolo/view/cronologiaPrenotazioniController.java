@@ -2,13 +2,14 @@ package circolo.view;
 
 import circolo.Database;
 import circolo.Prenotazione;
-import circolo.util.DateUtil;
+import circolo.util.AlertUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class cronologiaPrenotazioniController {
     @FXML
@@ -20,8 +21,6 @@ public class cronologiaPrenotazioniController {
     @FXML
     private TableColumn<Prenotazione, Integer> numCampo;
     @FXML
-    private TableColumn<Prenotazione, String> data;
-    @FXML
     private TableColumn<Prenotazione, String> Inizio;
     @FXML
     private TableColumn<Prenotazione, String> Fine;
@@ -30,13 +29,11 @@ public class cronologiaPrenotazioniController {
     @FXML
     private TableColumn<Prenotazione, String> pagato;
     @FXML
-    private TextField numero;
+    private DatePicker data;
     @FXML
     private Button pagatoButton;
 
     private Prenotazione prenotazione = new Prenotazione();
-
-    private int indice;
 
     private Database db;
 
@@ -45,7 +42,6 @@ public class cronologiaPrenotazioniController {
         titolare.setCellValueFactory(cellData -> cellData.getValue().getTitolareProperty());
         recapito.setCellValueFactory(cellData -> cellData.getValue().getRecapitoProperty());
         numCampo.setCellValueFactory(cellData -> cellData.getValue().getcampo().getNumeroCampoProperty().asObject());
-        data.setCellValueFactory(cellData -> new SimpleStringProperty(DateUtil.format(cellData.getValue().getDataProperty().get())));
         Inizio.setCellValueFactory(cellData -> cellData.getValue().getInizioProperty().asString());
         Fine.setCellValueFactory(cellData -> cellData.getValue().getFineProperty().asString());
         importo.setCellValueFactory(cellData -> cellData.getValue().getImportoProperty());
@@ -86,23 +82,18 @@ public class cronologiaPrenotazioniController {
     private void handleTrova() throws SQLException {
         ObservableList<Prenotazione> lista;
         if (isInputValid()) {
-            lista = db.trovaPrenotazioni(Integer.parseInt(numero.getText()));
-            table.setItems(lista);
+           lista = db.trovaPrenotazioni(LocalDate.parse(data.getValue().toString()),0);
+            if(lista.size() == 0)
+                AlertUtil.displayPersonalizedInfo("Nessuna prenotazione trovata per il giorno inserito", "Inserire un'altra data");
+            else table.setItems(lista);
         }
 
     }
 
     private boolean isInputValid() {
         String errorMessage = "";
-        if (numero.getText() == null || numero.getText().length() == 0)
-            errorMessage += "Inserisci il numero delle ultime prenotazioni da trovare\n";
-        else {
-            try {
-                Integer.parseInt(numero.getText());
-            } catch (NumberFormatException e) {
-                errorMessage += "Il valore inserito non è un numero";
-            }
-        }
+        if (data.getValue() == null || data.getValue().toString().length() == 0)
+            errorMessage += "Inserisci la data delle prenotazioni da trovare\n";
         if (errorMessage.length() == 0) {
             return true;
         } else {
