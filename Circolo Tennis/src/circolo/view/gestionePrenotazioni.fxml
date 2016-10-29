@@ -36,6 +36,7 @@
             <buttons>
             <Button fx:id="indietro" alignment="CENTER" mnemonicParsing="false" onAction="#handleIndietro" text="Indietro" />
             <Button fx:id="avanti" alignment="CENTER" mnemonicParsing="false" onAction="#handleAvanti" text="Avanti" />
+            <Button fx:id="elimina" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#handleElimina" text="Elimina" />
                 <Button fx:id="pagatoButton" disable="true" mnemonicParsing="false" onAction="#setPagato" text="Pagato" />
             </buttons>
             <BorderPane.margin>

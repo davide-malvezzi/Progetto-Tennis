@@ -54,6 +54,8 @@ public class gestionePrenotazioniController {
     @FXML
     private Button pagatoButton;
     @FXML
+    private Button elimina;
+    @FXML
     private Button avanti;
     @FXML
     private Button indietro;
@@ -96,6 +98,7 @@ public class gestionePrenotazioniController {
     @FXML
     private void handleAvanti() {
         indietro.setDisable(false);
+        Selezione(null);
         try {
             if (cercaClick) {
                 offsetCerca += 10;
@@ -115,6 +118,7 @@ public class gestionePrenotazioniController {
 
     @FXML
     private void handleIndietro() {
+        Selezione(null);
         try {
             if (cercaClick) {
                 offsetCerca -= 10;
@@ -227,10 +231,12 @@ public class gestionePrenotazioniController {
 
     private void Selezione(Prenotazione prenotazione) {
         this.prenotazione = prenotazione;
-        if (this.prenotazione != null)
+        if (this.prenotazione != null) {
+            elimina.setDisable(false);
             if (prenotazione.getPagato() == 0)
                 pagatoButton.setDisable(false);
             else pagatoButton.setDisable(true);
+        }
         else pagatoButton.setDisable(true);
     }
 
@@ -249,6 +255,20 @@ public class gestionePrenotazioniController {
             alert.setContentText("Riprova più tardi");
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void handleElimina(){
+
+        try {
+            db.eliminaPrenotazione(prenotazione);
+            lista.remove(lista.indexOf(prenotazione));
+            AlertUtil.displayPersonalizedInfo("Operazione effettuata","Prenotazione Cancellata");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
+        }
+
     }
 
     @FXML

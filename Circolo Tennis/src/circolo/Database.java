@@ -591,6 +591,14 @@ public class Database {
 
     }
 
+    public void eliminaPrenotazione(Prenotazione prenotazione) throws SQLException {
+
+        prpst = con.prepareStatement("delete from prenotazioni where Num_Prenotazione = ?");
+        prpst.setInt(1,prenotazione.getNumeroPrenotazione());
+
+        prpst.execute();
+    }
+
     public void setPrenotazionePagata(Prenotazione prenotazione) throws SQLException {
         prpst = null;
 
