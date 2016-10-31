@@ -18,5 +18,7 @@
     </orderEntry>
     <orderEntry type="library" name="sqlite-jdbc-3.7.2 (2)" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.7.2" level="project" />
+    <orderEntry type="library" name="Circolo Tennis" level="project" />
+    <orderEntry type="library" name="javaplanner-1.5" level="project" />
   </component>
 </module>
