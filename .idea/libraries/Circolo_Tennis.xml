@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Circolo Tennis">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/Circolo Tennis" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/Circolo Tennis/src" />
+      <root url="file://$PROJECT_DIR$/Circolo Tennis" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/Circolo Tennis" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/Circolo Tennis" recursive="false" type="SOURCES" />
+  </library>
+</component>

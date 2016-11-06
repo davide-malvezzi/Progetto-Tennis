@@ -11,31 +11,32 @@
   <tabs>
     <Tab fx:id="Iscritti" text="Gestione Iscritti" />
     <Tab fx:id="Prenotazioni" onSelectionChanged="#showGestionePrenotazioni" text="Gestione Prenotazioni" />
-      <Tab fx:id="Matchplay" text="MatchPlay">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane fx:id="splitMatchplay" layoutX="116.0" layoutY="74.0" prefHeight="307.0" prefWidth="431.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <VBox layoutX="14.0" layoutY="53.0" prefHeight="305.0" prefWidth="429.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#showNuovoPartecipante" text="Nuovo Partecipante" />
-                                    <Button mnemonicParsing="false" onAction="#showListaPartecipanti" text="Lista Iscritti" />
-                                    <Button mnemonicParsing="false" onAction="#showGironi" text="Gironi" />
-                                    <Button mnemonicParsing="false" onAction="#showPartite" text="Partite" />
-                                    <Button mnemonicParsing="false" text="Risultati" />
-                                    <Button mnemonicParsing="false" text="Ricerca" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-        </content>
-      </Tab>
+    <Tab fx:id="Matchplay" text="Gestione MatchPlay">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+          <children>
+            <SplitPane fx:id="splitMatchplay" layoutX="116.0" layoutY="74.0" prefHeight="307.0" prefWidth="431.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                  <children>
+                    <VBox layoutX="14.0" layoutY="53.0" prefHeight="305.0" prefWidth="429.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <children>
+                        <Button mnemonicParsing="false" onAction="#showNuovoPartecipante" text="Nuovo Partecipante" />
+                        <Button mnemonicParsing="false" onAction="#showListaPartecipanti" text="Lista Iscritti" />
+                        <Button mnemonicParsing="false" onAction="#showGironi" text="Gironi" />
+                        <Button mnemonicParsing="false" onAction="#showPartite" text="Partite" />
+                        <Button mnemonicParsing="false" text="Risultati" />
+                        <Button mnemonicParsing="false" text="Ricerca" />
+                      </children>
+                    </VBox>
+                  </children>
+                </AnchorPane>
+              </items>
+            </SplitPane>
+          </children>
+        </AnchorPane>
+      </content>
+    </Tab>
+    <Tab fx:id="AdminTools" text="Strumenti Amministratore" />
   </tabs>
 </TabPane>

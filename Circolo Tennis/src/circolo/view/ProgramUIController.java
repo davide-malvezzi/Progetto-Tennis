@@ -24,6 +24,8 @@ public class ProgramUIController {
     private Tab Matchplay;
     @FXML
     private SplitPane splitMatchplay;
+    @FXML
+    private Tab AdminTools;
 
     private MainApp mainApp;
     private Database db;
