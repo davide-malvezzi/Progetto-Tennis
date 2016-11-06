@@ -15,9 +15,21 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Classe che avvia il programma e gestisce le finestre
+ */
 public class MainApp extends Application {
+    /**
+     * Controlla la finestra principale dell'interfaccia
+     */
     private static Stage primaryStage;
+    /**
+     * controlla il pannello radice dell'interfaccia
+     */
     private static BorderPane rootLayout;
+    /**
+     * Finestra per i risultati di ricerca
+     */
     private Stage resultsStage = new Stage();
     private Database db;
 
@@ -26,14 +38,23 @@ public class MainApp extends Application {
         launch(args);
     }
 
+    /**
+     * @return l'istanza del pannello radice
+     */
     public static BorderPane getRoot(){
         return rootLayout;
     }
 
+    /**
+     * @return l'istanza di primarystage
+     */
     public static Stage getPrimaryStage(){
         return primaryStage;
     }
 
+    /**
+     * @param primaryStage variabile che controlla la finestra principale
+     */
     @Override
     public void start(Stage primaryStage) {
         MainApp.primaryStage = primaryStage;
@@ -56,7 +77,9 @@ public class MainApp extends Application {
     }
 
 
-
+    /**
+     * Inizializza la radice
+     */
     private void initRootLayout() {
         try {
 
@@ -74,6 +97,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Mostra la schermata di login
+     */
     public void showLogin(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("view/login.fxml"));
@@ -87,6 +113,9 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Mostra l'interfaccia principale
+     */
     public void showProgramUI() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -100,6 +129,9 @@ public class MainApp extends Application {
 
     }
 
+    /**
+     * Mostra l'interfaccia riservata a chi non è amministratore
+     */
     public void showGuestUI(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("view/prenotazioneCampo.fxml"));
@@ -111,25 +143,13 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
+    
 
-    public void showrisultatiIscritti(ObservableList<Giocatore> lista) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/risultatiIscritti.fxml"));
-            BorderPane pane = loader.load();
-            resultsStage.setTitle("Risultati di ricerca");
-            Scene scene = new Scene(pane);
-            resultsStage.setScene(scene);
-            resultsStage.show();
-            risultatiIscrittiController controller = loader.getController();
-            controller.inserisciRisultatiTabella(lista);
-            controller.setBorderPane(pane);
-            controller.setDatabase(db);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Metodo che mostra i risultati della ricerca dei campi disponibili
+     * @param lista lista contenente i campi disponibili
+     * @param prenotazione prenotazione che si vuole effettuare
+     */
     public void showrisultatiPrenotazioni(ObservableList<Campo> lista, Prenotazione prenotazione) {
         try {
             FXMLLoader loader = new FXMLLoader();

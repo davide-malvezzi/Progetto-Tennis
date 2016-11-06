@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
+/**
+ * Classe che gestisce l'interfaccia della scelta di un campo disponibile per prenotazione
+ */
 public class risultatiPrenotazioniController {
     @FXML
     private TableView<Campo> table;
@@ -63,6 +66,10 @@ public class risultatiPrenotazioniController {
         prenota.setDisable(false);
     }
 
+    /**
+     * Inserisce la prenotazione nel database
+     * @throws SQLException
+     */
     @FXML
     private void handlePrenota() throws SQLException{
         if(isInputValid()) {
@@ -87,10 +94,17 @@ public class risultatiPrenotazioniController {
         }
     }
 
+    /**
+     * @param prenotazione prenotazione che contiene il giorno e l'ora
+     */
     public void setPrenotazione(Prenotazione prenotazione){
        this.pren = prenotazione;
     }
 
+    /**
+     * setta il controllo della finestra
+     * @param resultStage
+     */
     public void setResultStage(Stage resultStage){
         this.resultStage = resultStage;
     }

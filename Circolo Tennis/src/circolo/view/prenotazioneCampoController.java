@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -33,16 +32,11 @@ public class prenotazioneCampoController {
     private TextField oraInizio;
     @FXML
     private TextField oraFine;
-    @FXML
-    private ChoiceBox<String> superficieBox;
-
     private Database db;
 
 
     @FXML
     private void initialize() {
-
-        superficieBox.getItems().addAll("","Cemento", "Erba", "Terra");
 
         try{
             db = Database.getInstance();
@@ -57,32 +51,12 @@ public class prenotazioneCampoController {
      */
     @FXML
     private void handleVerificaDisponibilità() throws SQLException {
-       /* Prenotazione prenotazione = new Prenotazione();
-        if (isInputValid()) {
-            prenotazione.setData(LocalDate.parse(giorno.getValue().toString()));
-            prenotazione.setInizio(LocalTime.parse(oraInizio.getText()));
-            prenotazione.setFine(LocalTime.parse(oraFine.getText()));
-            if (superficieBox.getValue() != null) prenotazione.getcampo().setSuperficie(superficieBox.getValue());
-            else prenotazione.getcampo().setSuperficie("");
-            ObservableList<Campo> lista;
-            lista = db.checkDisponibilità(prenotazione);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            if (lista.size() > 0) {
-                mainApp.showrisultatiPrenotazioni(lista,prenotazione);
-            }else{
-                alert.setHeaderText("Non sono stati trovati campi disponibili");
-                alert.showAndWait();
-            }
-        }*/
-
         Prenotazione prenotazione = new Prenotazione();
         ObservableList<Campo> listaCampi = FXCollections.observableArrayList();
         if (isInputValid()) {
             prenotazione.setData(LocalDate.parse(giorno.getValue().toString()));
             prenotazione.setInizio(LocalTime.parse(oraInizio.getText()));
             prenotazione.setFine(LocalTime.parse(oraFine.getText()));
-            if (superficieBox.getValue() != null) prenotazione.getcampo().setSuperficie(superficieBox.getValue());
-            else prenotazione.getcampo().setSuperficie("");
             listaCampi = db.checkDisponibilità(prenotazione);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (listaCampi.size() > 0) {
@@ -122,7 +96,6 @@ public class prenotazioneCampoController {
         giorno.setValue(null);
         oraInizio.setText("");
         oraFine.setText("");
-        superficieBox.setValue(null);
     }
 
 
@@ -167,11 +140,6 @@ public class prenotazioneCampoController {
             return false;
         }
     }
-
-
-    /**
-     * @see gestionePrenotazioniController#
-     */
 
 
 }

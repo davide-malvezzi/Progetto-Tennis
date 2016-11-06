@@ -106,7 +106,6 @@ public class Database {
                 "Num_Campo INTEGER not null references Campo(Num)," +
                 "Titolare TEXT," +
                 "Recapito TEXT," +
-                "Importo TEXT," +
                 "Pagato INTEGER " +
                 ")");
         stm.execute("create table MatchPlay (" +
@@ -893,28 +892,22 @@ public class Database {
         StringBuilder query = new StringBuilder();
         boolean superficieOK = false;
         query.append("select distinct c.* " +
-                "from campi c " +
+                "from campi c left join prenotazioni p on  (p.Num_Campo = c.Num_Campo) " +
                 "where c.num_campo not in(" +
                 "select distinct  c1.num_campo " +
                 "from Campi  c1 left join Prenotazioni p1 on (p1.Num_Campo = c1.Num_Campo) " +
                 "where (date(?) = date(data) " +
                 "and (time(?) between time(inizio) and time(fine)" +
-                "or time(?) between time(inizio) and time(fine))) " +
-                "or time(?) = time(fine) " +
-                "or time(?) = time(inizio))");
-        if (prenotazione.getcampo().getSuperficie().length() > 0) {
-            query.append(" and superficie = ?");
-            superficieOK = true;
-        }
+                "or time(?) between time(inizio) and time(fine)))) " +
+                "or( date(?) = date(data) and ( time(?) = time(fine) " +
+                "or time(?) = time(inizio)))");
         prpst = con.prepareStatement(query.toString());
         prpst.setString(1, prenotazione.getData().toString());
         prpst.setString(2, prenotazione.getInizio().toString());
         prpst.setString(3, prenotazione.getFine().toString());
-        prpst.setString(4,prenotazione.getInizio().toString());
-        prpst.setString(5, prenotazione.getFine().toString());
-        if (superficieOK) {
-            prpst.setString(6, prenotazione.getcampo().getSuperficie());
-        }
+        prpst.setString(4, prenotazione.getData().toString());
+        prpst.setString(5,prenotazione.getInizio().toString());
+        prpst.setString(6, prenotazione.getFine().toString());
         ResultSet rs = prpst.executeQuery();
         ObservableList<Campo> Campi = FXCollections.observableArrayList();
         while (rs.next()) {
@@ -934,9 +927,6 @@ public class Database {
 
     }
 
-    /**
-     * Metodo che chiude la connessi
-     */
     public void CloseConnection() {
         try {
             con.close();

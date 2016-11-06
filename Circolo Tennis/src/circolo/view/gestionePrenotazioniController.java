@@ -71,7 +71,6 @@ public class gestionePrenotazioniController {
 
     @FXML
     private void initialize() {
-        superficieBox.getItems().addAll("", "Cemento", "Erba", "Terra");
 
         titolareCol.setCellValueFactory(cellData -> cellData.getValue().getTitolareProperty());
         recapitoCol.setCellValueFactory(cellData -> cellData.getValue().getRecapitoProperty());
@@ -157,8 +156,6 @@ public class gestionePrenotazioniController {
             prenotazione.setData(LocalDate.parse(dataPrenotazione.getValue().toString()));
             prenotazione.setInizio(LocalTime.parse(oraInizio.getText()));
             prenotazione.setFine(LocalTime.parse(oraFine.getText()));
-            if (superficieBox.getValue() != null) prenotazione.getcampo().setSuperficie(superficieBox.getValue());
-            else prenotazione.getcampo().setSuperficie("");
             listaCampi = db.checkDisponibilità(prenotazione);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (listaCampi.size() > 0) {
@@ -181,8 +178,6 @@ public class gestionePrenotazioniController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
             } else {
                 alert.setHeaderText("Non sono stati trovati campi disponibili");
                 alert.showAndWait();

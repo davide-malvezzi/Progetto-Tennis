@@ -10,13 +10,25 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
+/**
+ * Classe che controlla l'interfaccia principale
+ */
 public class ProgramUIController {
     @FXML
     private TabPane tabPane;
+    /**
+     * Tab che contiene la gestione Iscritti
+     */
     @FXML
     private Tab Iscritti;
+    /**
+     * Tab che contiene la gestione Prenotazioni
+     */
     @FXML
     private Tab Prenotazioni;
+    /**
+     * Tab che contiene la gestione del Matchplay
+     */
     @FXML
     private Tab Matchplay;
     @FXML
@@ -24,9 +36,21 @@ public class ProgramUIController {
 
 
     BorderPane pane;
+    /**
+     * Boolean che indica se il pannello di gestione prenotazioni è già stato caricato
+     */
     private boolean prenotazioniLoaded;
+    /**
+     * Boolean che indica se il pannello di gestione matchplay è già stato caricato
+     */
     private boolean matchplayLoaded;
+    /**
+     * Boolean che indica se il pannello di gestione partite del matchplay è già stato caricato
+     */
     private boolean partiteLoaded;
+    /**
+     * Boolean che indica se il pannello di gestione gironi del matchplay è già stato caricato
+     */
     private boolean gironiLoaded;
     private BorderPane partitePane;
     private BorderPane gironiPane;
@@ -53,6 +77,9 @@ public class ProgramUIController {
         }
     }
 
+    /**
+     * Metodo che mostra il pannello delle prenotazioni
+     */
     @FXML
     private void showGestionePrenotazioni() {
         if (!prenotazioniLoaded) {
@@ -68,6 +95,9 @@ public class ProgramUIController {
         }
     }
 
+    /**
+     * Metodo che mostra il pannello del matchplay
+     */
     @FXML
     private void showGestioneMatchplay() {
         if (!matchplayLoaded) {
@@ -85,6 +115,9 @@ public class ProgramUIController {
         }
     }
 
+    /**
+     * metodo che cambia il pannello del matchplay tra iscrizioni, gironi o partite
+     */
     @FXML
     private void handleCambioSezione() {
         switch (sezioneMatchplay.getValue()) {
