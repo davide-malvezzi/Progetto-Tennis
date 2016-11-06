@@ -94,8 +94,6 @@ public class MainApp extends Application {
             TabPane programUI = loader.load();
             rootLayout.setCenter(programUI);
             ProgramUIController controller = loader.getController();
-            controller.setMainApp(this);
-            controller.setDatabase(db);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,9 +107,6 @@ public class MainApp extends Application {
             AnchorPane prenotazione = loader.load();
             rootLayout.setCenter(prenotazione);
             rootLayout.getTop().setVisible(true);
-            prenotazioneCampoController controller = loader.getController();
-            controller.setMainapp(this);
-            controller.setDatabase(db);
         } catch (IOException e) {
             e.printStackTrace();
         }

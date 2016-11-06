@@ -18,68 +18,148 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Classe che controlla l'interfaccia del tab Gestione Iscritti
+ */
 public class gestioneIscrittiController {
+    /**
+     * Pannello principale
+     */
     @FXML
     private BorderPane pane;
+    /**
+     * bottone che fa scorrere la lista degli iscritti in avanti
+     */
     @FXML
     private Button avanti;
+    /**
+     * bottone che fa scorrere la lista degli iscritti all'indietro
+     */
     @FXML
     private Button indietro;
+    /**
+     * Tabella che contiene gli iscritti
+     */
     @FXML
     private TableView<Giocatore> table;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene il nome del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> nomeCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene il cognome del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> cognomeCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene la data di nascita del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> data_nascitaCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene il codice fiscale del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> CFCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene il sesso del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> sessoCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene la città del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> cittàCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene l'indirizzo del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> indirizzoCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene la classifica FIT del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, String> classifica_fitCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che contiene la fascia del giocatore
+     */
     @FXML
     private TableColumn<Giocatore, Integer> fasciaCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che indica se il giocatore è agonista o no
+     */
     @FXML
     private TableColumn<Giocatore, String> agonistaCol;
+    /**
+     * colonna di {@link gestioneIscrittiController#table} che indica se il giocatore è socio o no
+     */
     @FXML
     private TableColumn<Giocatore, String> socioCol;
+    /**
+     * pulsante che fa apparire il pannello modifica giocatore
+     * @see gestioneIscrittiController#modificaPane
+     */
     @FXML
     private Button modifica;
+    /**
+     * pulsante che elimina un giocatore
+     */
     @FXML
     private Button elimina;
-    @FXML
-    private Button visitaMedica;
+    /**
+     * casella di testo dove inserire il nome del giocatore da cercare
+     */
     @FXML
     private TextField nome;
+    /**
+     * casella di testo dove inserire il cognome del giocatore da cercare
+     */
     @FXML
     private TextField cognome;
+    /**
+     * casella di testo dove inserire la città del giocatore da cercare
+     */
     @FXML
     private TextField città;
+    /**
+     * casella di testo dove inserire il sesso del giocatore da cercare
+     */
     @FXML
     private ComboBox<String> sesso;
+    /**
+     * casella di testo dove inserire il codice fiscale del giocatore da cercare
+     */
     @FXML
     private TextField cf;
+    /**
+     * casella dove scegliere la classifica FIT del giocatore da cercare
+     */
     @FXML
     private ComboBox<String> classifica_fit;
+    /**
+     * casella dove indicare se il giocatore è socio o no
+     */
     @FXML
     private CheckBox socio;
+    /**
+     * casella dove indicare se il giocatore è agonista o no
+     */
     @FXML
     private CheckBox agonista;
+    /**
+     * casella dove scegliere la fascia del giocatore da cercare
+     */
     @FXML
     private ComboBox<String> fascia;
-    @FXML
-    private Button nuovoButton;
 
     private Database db;
     private ObservableList<Giocatore> lista;
+    /**
+     * pannello che contiene i comandi per modificare i dati del giocatore
+     */
     private AnchorPane modificaPane;
-    private AnchorPane visitaPane;
     private int offset = 0;
     private boolean cercaClick = false;
     private int offsetCerca = 0;
@@ -87,12 +167,13 @@ public class gestioneIscrittiController {
     ButtonBar defaultPane;
 
     private boolean modificaClicked = false;
-    private boolean visitaClicked = false;
 
     private Giocatore selezionato = new Giocatore();
     private modificaIscrittoController controllerModifica;
-    private newVisitaMedicaController controllerVisita;
 
+    /**
+     * Inizializza il pannello gestione iscritti
+     */
     @FXML
     private void initialize() {
         fascia.getItems().addAll("1", "2", "3", "4", "5");
@@ -135,20 +216,18 @@ public class gestioneIscrittiController {
         if(giocatore == null){
             modifica.setDisable(true);
             elimina.setDisable(true);
-            visitaMedica.setDisable(true);
         }else {
             modifica.setDisable(false);
             elimina.setDisable(false);
-            visitaMedica.setDisable(false);
         }
         if (modificaClicked) {
             controllerModifica.setParametri(giocatore);
         }
-        if(visitaClicked){
-            controllerVisita.setParametri(giocatore);
-        }
     }
 
+    /**
+     * metodo che fa avanzare la lista
+     */
     @FXML
     private void handleAvanti() {
         Selezione(null);
@@ -171,6 +250,9 @@ public class gestioneIscrittiController {
         }
     }
 
+    /**
+     * metodo che scorre la lista all'indietro
+     */
     @FXML
     private void handleIndietro() {
         Selezione(null);
@@ -195,6 +277,9 @@ public class gestioneIscrittiController {
         }
     }
 
+    /**
+     * metodo che richiama il pannello modifica giocatore
+     */
     @FXML
     private void handleModifica() {
         if (!modificaClicked) {
@@ -217,29 +302,10 @@ public class gestioneIscrittiController {
         } else pane.setBottom(modificaPane);
     }
 
-    @FXML
-    private void handleVisita(){
-        if (!visitaClicked) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/nuovaVisitaMedica.fxml"));
-            try {
-                visitaPane = loader.load();
-                controllerVisita = loader.getController();
-                controllerVisita.setParametri(selezionato);
-                controllerVisita.setControlli(pane, defaultPane);
-                visitaClicked = true;
-                pane.setBottom(visitaPane);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Errore");
-                alert.setHeaderText("Si è verificato un problema interno");
-                alert.showAndWait();
-            }
-        } else pane.setBottom(visitaPane);
-    }
 
-
+    /**
+     * metodo che cerca giocatori
+     */
     @FXML
     private void handleCerca() {
         if (isInputValid()) {
@@ -271,6 +337,9 @@ public class gestioneIscrittiController {
         }
     }
 
+    /**
+     * metodo che annulla la ricerca
+     */
     @FXML
     private void handleAnnulla() {
         offsetCerca = 0;
@@ -294,6 +363,9 @@ public class gestioneIscrittiController {
         }
     }
 
+    /**
+     * metodo che richiama la finestra per registrare un nuovo giocatore
+     */
     @FXML
     private void handleNuovaIscrizione(){
         FXMLLoader loader = new FXMLLoader();
@@ -315,6 +387,9 @@ public class gestioneIscrittiController {
 
     }
 
+    /**
+     * metodo che elimina un giocatore
+     */
     @FXML
     private void handleElimina(){
         boolean elimina = AlertUtil.displayConfirmationDialog("Elimina Giocatore", "Vuoi eliminare definitivamente " + selezionato.getNome() + " " + selezionato.getCognome() + "?");
@@ -330,6 +405,10 @@ public class gestioneIscrittiController {
 
     }
 
+    /**
+     * Metodo che verifica che i parametri inseriti nelle caselle di ricerca siano accettabili
+     * @return <code>true</code> se almeno un parametro è inserito e la data di nascita è nel fomrato corretto, <code>false</code> altrimenti
+     */
     private boolean isInputValid() {
         int parametri = 0;
         if (nome.getText() != null && nome.getText().length() > 0) {
@@ -373,6 +452,9 @@ public class gestioneIscrittiController {
     }
 
 
+    /**
+     * metodo che azzera i campi di ricerca
+     */
     private void clearFields() {
         nome.setText("");
         cognome.setText("");

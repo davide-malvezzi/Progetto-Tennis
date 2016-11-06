@@ -23,7 +23,6 @@
             <TableColumn fx:id="dataCol" prefWidth="75.0" text="Data" />
                <TableColumn fx:id="InizioCol" prefWidth="75.0" text="Inizio" />
                <TableColumn fx:id="FineCol" prefWidth="75.0" text="Fine" />
-               <TableColumn fx:id="importoCol" prefWidth="75.0" text="Importo" />
                <TableColumn fx:id="pagatoCol" prefWidth="75.0" text="Pagato" />
            </columns>
            <columnResizePolicy>
@@ -45,7 +44,7 @@
         </ButtonBar>
     </bottom>
    <top>
-      <AnchorPane prefHeight="127.0" prefWidth="1500.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" prefWidth="1500.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER">
          <children>
                 <Label layoutX="20.0" layoutY="40.0" text="Data Prenotazioni da ricercare" textFill="WHITE" />
                 <Button layoutX="204.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleTrova" text="Trova" />

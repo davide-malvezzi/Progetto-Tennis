@@ -22,6 +22,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Classe che gestisce l'interfaccia del pannello Prenotazioni
+ */
 public class gestionePrenotazioniController {
     @FXML
     private DatePicker dataPrenotazione;
@@ -45,8 +48,6 @@ public class gestionePrenotazioniController {
     private TableColumn<Prenotazione, String> InizioCol;
     @FXML
     private TableColumn<Prenotazione, String> FineCol;
-    @FXML
-    private TableColumn<Prenotazione, String> importoCol;
     @FXML
     private TableColumn<Prenotazione, String> pagatoCol;
     @FXML
@@ -78,7 +79,6 @@ public class gestionePrenotazioniController {
         dataCol.setCellValueFactory(cellData -> cellData.getValue().getDataProperty());
         InizioCol.setCellValueFactory(cellData -> cellData.getValue().getInizioProperty().asString());
         FineCol.setCellValueFactory(cellData -> cellData.getValue().getFineProperty().asString());
-        importoCol.setCellValueFactory(cellData -> cellData.getValue().getImportoProperty());
         pagatoCol.setCellValueFactory(cellData -> cellData.getValue().getPagato() == 1 ? new SimpleStringProperty("Sì") : new SimpleStringProperty("No"));
 
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Selezione(newValue));
@@ -95,6 +95,9 @@ public class gestionePrenotazioniController {
     }
 
 
+    /**
+     * Metdodo che fa avanzare la lista delle prenotazioni
+     */
     @FXML
     private void handleAvanti() {
         indietro.setDisable(false);
@@ -116,6 +119,9 @@ public class gestionePrenotazioniController {
         }
     }
 
+    /**
+     * Metodo che scorre la lista delle prenotazioni all'indietro
+     */
     @FXML
     private void handleIndietro() {
         Selezione(null);
@@ -139,6 +145,10 @@ public class gestionePrenotazioniController {
         }
     }
 
+    /**
+     * Metodo che verifica la disponibilità di campi per la prenotazione
+     * @throws SQLException
+     */
     @FXML
     private void handleVerificaDisponibilità() throws SQLException {
         Prenotazione prenotazione = new Prenotazione();
@@ -181,6 +191,9 @@ public class gestionePrenotazioniController {
     }
 
 
+    /**
+     * Metodo che azzera i campi di ricerca
+     */
     @FXML
     private void handleAnnulla() {
         dataPrenotazione.setValue(null);
@@ -190,6 +203,10 @@ public class gestionePrenotazioniController {
     }
 
 
+    /**
+     * Metodo che verifica che i parametri inseriti nelle caselle di ricerca siano accettabili
+     * @return <code>true</code> se almeno un parametro è inserito e la date siano nel formato corretto, <code>false</code> altrimenti
+     */
     private boolean isInputValid() {
         String errorMessage = "";
         boolean orainizioOK = false;
@@ -241,6 +258,9 @@ public class gestionePrenotazioniController {
     }
 
 
+    /**
+     * setta la prenotazione selezionata come pagata
+     */
     @FXML
     private void setPagato() {
         prenotazione.setPagato(1);
@@ -257,6 +277,9 @@ public class gestionePrenotazioniController {
         }
     }
 
+    /**
+     * elimina una prenotazione
+     */
     @FXML
     private void handleElimina(){
 
@@ -271,6 +294,9 @@ public class gestionePrenotazioniController {
 
     }
 
+    /**
+     * trova prenotazioni in base alla data inserita
+     */
     @FXML
     private void handleTrova() {
         offsetCerca = 0;
@@ -296,6 +322,9 @@ public class gestionePrenotazioniController {
         }
     }
 
+    /**
+     * annulla la ricerca e ritorna allo stato precedente
+     */
     @FXML
     private void handleReset() {
         cercaClick = false;

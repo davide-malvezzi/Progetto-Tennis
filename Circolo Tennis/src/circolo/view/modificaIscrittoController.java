@@ -8,6 +8,10 @@ import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
+/**
+ * Classe che controlla il pannello modifica della gestione Iscritti
+ * @see gestioneIscrittiController#modificaPane
+ */
 public class modificaIscrittoController {
     @FXML
     private TextField newIndirizzo;
@@ -26,6 +30,9 @@ public class modificaIscrittoController {
     private BorderPane controlPane;
     private ButtonBar defaultPane;
     private TableView<Giocatore> table;
+    /**
+     * Giocatore selezionato di cui si vuole modificare i dati
+     */
     private Giocatore oldGiocatore;
 
 
@@ -43,6 +50,9 @@ public class modificaIscrittoController {
         }
     }
 
+    /**
+     * Cambia i dati del giocatore
+     */
     @FXML
     private void handleConferma() {
         Giocatore newGiocatore = oldGiocatore;
@@ -68,6 +78,10 @@ public class modificaIscrittoController {
 
     }
 
+    /**
+     * Metodo che inizializza il giocatore da modificare con i suoi dati
+     * @param giocatore giocatore che si vuole modificare
+     */
     public void setParametri(Giocatore giocatore){
         if(giocatore != null) {
             newIndirizzo.setText(giocatore.getIndirizzo());
@@ -80,6 +94,12 @@ public class modificaIscrittoController {
         }
     }
 
+    /**
+     * Metodo che prende i controlli dell'interfaccia di gestione Iscritti
+     * @param pane pannello della gestione iscritti
+     * @param defaultPane button bar di default
+     * @param table tabella giocatori
+     */
     public void setControlli(BorderPane pane,ButtonBar defaultPane,TableView<Giocatore> table){
         this.controlPane = pane;
         this.defaultPane = defaultPane;

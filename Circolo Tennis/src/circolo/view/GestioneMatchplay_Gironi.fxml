@@ -5,61 +5,87 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.gironiMatchplayController">
+<BorderPane prefHeight="555.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.GestioneMatchplay_GironiController">
+   <top>
+      <AnchorPane prefHeight="150.0" prefWidth="1000.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" layoutX="14.0" layoutY="111.0">
+               <children>
+                  <Button fx:id="inserisciA" disable="true" mnemonicParsing="false" text="Sposta in Girone A">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="inserisciB" disable="true" mnemonicParsing="false" text="Sposta in Girone B">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="inserisciC" disable="true" mnemonicParsing="false" text="Sposta in Girone C">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="inserisciD" disable="true" mnemonicParsing="false" text="Sposta in Girone D" />
+               </children>
+            </HBox>
+         </children></AnchorPane>
+   </top>
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox BorderPane.alignment="CENTER">
          <children>
             <TableView fx:id="tableA" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-              <columns>
-                <TableColumn fx:id="gironeA" prefWidth="75.0" text="Girone A">
+               <columns>
+                  <TableColumn fx:id="gironeA" prefWidth="75.0" text="Girone A">
                      <columns>
                         <TableColumn fx:id="NomegironeA" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeA" prefWidth="75.0" text="Cognome" />
                      </columns>
                   </TableColumn>
-              </columns>
+               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
             <TableView fx:id="tableB" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-              <columns>
-                <TableColumn fx:id="gironeB" prefWidth="75.0" text="Girone B">
+               <columns>
+                  <TableColumn fx:id="gironeB" prefWidth="75.0" text="Girone B">
                      <columns>
                         <TableColumn fx:id="NomegironeB" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeB" prefWidth="75.0" text="Cognome" />
                      </columns>
                   </TableColumn>
-              </columns>
+               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
             <TableView fx:id="tableC" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-              <columns>
-                <TableColumn fx:id="gironeC" prefWidth="75.0" text="Girone C">
+               <columns>
+                  <TableColumn fx:id="gironeC" prefWidth="75.0" text="Girone C">
                      <columns>
                         <TableColumn fx:id="NomegironeC" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeC" prefWidth="75.0" text="Cognome" />
                      </columns>
                   </TableColumn>
-              </columns>
+               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
             <TableView fx:id="tableD" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-              <columns>
-                <TableColumn fx:id="gironeD" prefWidth="75.0" text="Girone D">
+               <columns>
+                  <TableColumn fx:id="gironeD" prefWidth="75.0" text="Girone D">
                      <columns>
                         <TableColumn fx:id="NomegironeD" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeD" prefWidth="75.0" text="Cognome" />
                      </columns>
                   </TableColumn>
-              </columns>
+               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
@@ -68,13 +94,12 @@
       </HBox>
    </center>
    <bottom>
-      <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="bottom" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <ButtonBar prefHeight="45.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
-              <buttons>
-                  <Button fx:id="modifica" mnemonicParsing="false" onAction="#handleModfica" text="Modifica Manuale" />
-                <Button fx:id="creaPartite" mnemonicParsing="false" onAction="#handleCreaPartite" text="Blocca e Genera Partite" />
-              </buttons>
+               <buttons>
+                  <Button fx:id="creaPartite" mnemonicParsing="false" onAction="#handleCreaPartite" text="Blocca e Genera Partite" />
+               </buttons>
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>

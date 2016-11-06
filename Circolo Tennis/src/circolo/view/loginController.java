@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
 
+/**
+ * Classe che controlla l'interfaccia del login
+ */
 public class loginController {
     @FXML
     private TextField username;
@@ -34,6 +37,9 @@ public class loginController {
 
     }
 
+    /**
+     * metodo che verifica che i dati di login siano corretti e riconosce se l'utente è amministratore o no
+     */
     @FXML
     private void handleLogin() {
         String usr;

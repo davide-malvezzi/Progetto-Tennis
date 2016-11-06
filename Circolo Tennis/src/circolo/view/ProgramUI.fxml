@@ -1,41 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.BorderPane?>
 
-<TabPane fx:id="tabPane" prefHeight="336.0" prefWidth="431.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.ProgramUIController">
+<TabPane fx:id="tabPane" prefHeight="555.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.ProgramUIController">
   <tabs>
     <Tab fx:id="Iscritti" text="Gestione Iscritti" />
     <Tab fx:id="Prenotazioni" onSelectionChanged="#showGestionePrenotazioni" text="Gestione Prenotazioni" />
-      <Tab fx:id="Matchplay" text="MatchPlay">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane fx:id="splitMatchplay" layoutX="116.0" layoutY="74.0" prefHeight="307.0" prefWidth="431.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <VBox layoutX="14.0" layoutY="53.0" prefHeight="305.0" prefWidth="429.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#showNuovoPartecipante" text="Nuovo Partecipante" />
-                                    <Button mnemonicParsing="false" onAction="#showListaPartecipanti" text="Lista Iscritti" />
-                                    <Button mnemonicParsing="false" onAction="#showGironi" text="Gironi" />
-                                    <Button mnemonicParsing="false" onAction="#showPartite" text="Partite" />
-                                    <Button mnemonicParsing="false" text="Risultati" />
-                                    <Button mnemonicParsing="false" text="Ricerca" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-        </content>
-      </Tab>
+      <Tab fx:id="Matchplay" onSelectionChanged="#showGestioneMatchplay" text="MatchPlay">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <AnchorPane styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="TOP_RIGHT">
+                     <children>
+                        <ComboBox fx:id="sezioneMatchplay" onAction="#handleCambioSezione" prefHeight="25.0" prefWidth="110.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </top>
+            </BorderPane>
+         </content></Tab>
   </tabs>
 </TabPane>

@@ -5,17 +5,27 @@ import circolo.Database;
 import circolo.MainApp;
 import circolo.Prenotazione;
 import circolo.util.DateUtil;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Classe che gestisce la prenotazione di un campo per l'utente ospite
+ */
 public class prenotazioneCampoController {
     @FXML
     private DatePicker giorno;
@@ -26,20 +36,28 @@ public class prenotazioneCampoController {
     @FXML
     private ChoiceBox<String> superficieBox;
 
-    private MainApp mainApp;
     private Database db;
 
-    public prenotazioneCampoController() throws SQLException {
-    }
 
     @FXML
     private void initialize() {
+
         superficieBox.getItems().addAll("","Cemento", "Erba", "Terra");
+
+        try{
+            db = Database.getInstance();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * @see gestionePrenotazioniController#handleVerificaDisponibilità()
+     * @throws SQLException
+     */
     @FXML
     private void handleVerificaDisponibilità() throws SQLException {
-        Prenotazione prenotazione = new Prenotazione();
+       /* Prenotazione prenotazione = new Prenotazione();
         if (isInputValid()) {
             prenotazione.setData(LocalDate.parse(giorno.getValue().toString()));
             prenotazione.setInizio(LocalTime.parse(oraInizio.getText()));
@@ -55,10 +73,50 @@ public class prenotazioneCampoController {
                 alert.setHeaderText("Non sono stati trovati campi disponibili");
                 alert.showAndWait();
             }
+        }*/
+
+        Prenotazione prenotazione = new Prenotazione();
+        ObservableList<Campo> listaCampi = FXCollections.observableArrayList();
+        if (isInputValid()) {
+            prenotazione.setData(LocalDate.parse(giorno.getValue().toString()));
+            prenotazione.setInizio(LocalTime.parse(oraInizio.getText()));
+            prenotazione.setFine(LocalTime.parse(oraFine.getText()));
+            if (superficieBox.getValue() != null) prenotazione.getcampo().setSuperficie(superficieBox.getValue());
+            else prenotazione.getcampo().setSuperficie("");
+            listaCampi = db.checkDisponibilità(prenotazione);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            if (listaCampi.size() > 0) {
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(MainApp.class.getResource("view/risultatiPrenotazioni.fxml"));
+                    BorderPane pane = loader.load();
+                    risultatiPrenotazioniController controller = loader.getController();
+                    controller.inserisciRisultatiTabella(listaCampi);
+                    controller.setPrenotazione(prenotazione);
+                    Stage dialogStage = new Stage();
+                    dialogStage.setTitle("Campi Disponibili");
+                    dialogStage.initModality(Modality.WINDOW_MODAL);
+                    dialogStage.setResizable(false);
+                    dialogStage.initOwner(MainApp.getPrimaryStage());
+                    Scene scene = new Scene(pane);
+                    dialogStage.setScene(scene);
+                    controller.setResultStage(dialogStage);
+                    dialogStage.showAndWait();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            } else {
+                alert.setHeaderText("Non sono stati trovati campi disponibili");
+                alert.showAndWait();
+            }
         }
     }
 
-    //todo: fare ricerca per data
+    /**
+     * @see gestionePrenotazioniController#handleAnnulla()
+     */
     @FXML
     private void handleAnnulla(){
         giorno.setValue(null);
@@ -68,6 +126,9 @@ public class prenotazioneCampoController {
     }
 
 
+    /**
+     * @see gestionePrenotazioniController#isInputValid()
+     */
     private boolean isInputValid() {
         String errorMessage = "";
         boolean orainizioOK = false;
@@ -108,13 +169,9 @@ public class prenotazioneCampoController {
     }
 
 
+    /**
+     * @see gestionePrenotazioniController#
+     */
 
-    public void setMainapp(MainApp mainapp) {
-        this.mainApp = mainapp;
-    }
-
-    public void setDatabase(Database db){
-        this.db = db;
-    }
 
 }
