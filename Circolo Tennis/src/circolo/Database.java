@@ -373,6 +373,34 @@ public class Database {
         prpst.execute();
     }
 
+    /**
+     * Rimuove un utente dal db
+     * @param user utente da eliminare
+     * @throws SQLException
+     */
+    public void eliminaUser(User user) throws SQLException {
+        prpst = con.prepareStatement("delete from Admin where Username = ?");
+        prpst.setString(1, user.getNome());
+        prpst.execute();
+    }
+
+    /**
+     * Modifica i dati di un utente
+     * @param newUser utente da modificare
+     * @throws SQLException
+     */
+    public void modificaUser(User newUser) throws SQLException {
+        prpst = null;
+
+        prpst = con.prepareStatement("update Admin set Password = ?, Amministratore = ?, " +
+                "where Username = ?");
+
+        prpst.setString(1, newUser.getPassword());
+        prpst.setInt(2, newUser.getTipo());
+        prpst.setString(3, newUser.getNome());
+
+        prpst.execute();
+    }
 
     /**
      * Iscrive un giocatore al Matchplay dell' anno corrente

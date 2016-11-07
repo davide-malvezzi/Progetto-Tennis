@@ -52,7 +52,8 @@ public class loginController {
                 admin = db.login(usr, pwd);
                 if (admin == 0)
                     mainApp.showGuestUI();
-                else if (admin == 1) mainApp.showProgramUI();
+                else if (admin == 1)
+                    mainApp.showProgramUI();
                 else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Errore");

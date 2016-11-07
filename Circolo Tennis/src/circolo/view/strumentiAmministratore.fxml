@@ -4,33 +4,25 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.strumentiAmminstratoreController">
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button mnemonicParsing="false" text="Nuovo Utente" />
-            <Button mnemonicParsing="false" text="Modifica Utente" />
+          <Button fx:id="nuovo" mnemonicParsing="false" onAction="#handleNuovo" text="Nuovo Utente" />
+            <Button fx:id="modifica" mnemonicParsing="false" onAction="#handleModifica" text="Modifica" />
+            <Button fx:id="elimina" mnemonicParsing="false" onAction="#handleElimina" text="Elimina" />
         </buttons>
       </ButtonBar>
    </bottom>
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="usersTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="90.0" text="Nome Utente" />
-            <TableColumn prefWidth="71.0" text="Password" />
-            <TableColumn prefWidth="111.0" text="Tipo Accesso" />
+          <TableColumn fx:id="nomeCol" prefWidth="90.0" text="Nome Utente" />
+            <TableColumn fx:id="passwordCol" prefWidth="71.0" text="Password" />
+            <TableColumn fx:id="tipoCol" prefWidth="111.0" text="Tipo Accesso" />
         </columns>
       </TableView>
    </center>
-   <left>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <items>
-          <Button mnemonicParsing="false" text="Gestione Utenti" />
-        </items>
-      </ToolBar>
-   </left>
 </BorderPane>

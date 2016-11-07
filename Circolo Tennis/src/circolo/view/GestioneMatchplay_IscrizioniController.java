@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 /**
- * Classe che gestisce l'interfaccia del pannello Matchplay sezione Iscriizoni
+ * Classe che gestisce l'interfaccia del pannello Matchplay sezione Iscrizioni
  */
 public class GestioneMatchplay_IscrizioniController {
 

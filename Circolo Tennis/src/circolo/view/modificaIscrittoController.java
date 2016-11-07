@@ -35,6 +35,13 @@ public class modificaIscrittoController {
      */
     private Giocatore oldGiocatore;
 
+    /**
+     * le classifiche giuste sono:
+     * 4.NC 4.6 4.5 4.4 4.3 4.2 4.1
+     * 3.5 3.4 3.3 3.2 3.1
+     * 2.8 2.7 2.6 2.5 2.4 2.3 2.2 2.1
+     * i prima categoria puoi rimuoverli
+     */
 
     @FXML
     private void initialize(){
