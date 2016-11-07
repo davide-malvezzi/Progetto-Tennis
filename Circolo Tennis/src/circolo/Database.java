@@ -114,8 +114,8 @@ public class Database {
                 "Edizione INTEGER," +
                 "Nome TEXT," +
                 "Cognome TEXT," +
-                "Girone INTEGER," +
-                "Punti TEXT," +
+                "Girone INTEGER DEFAULT 0," +
+                "Punti INTEGER DEFAULT 0," +
                 "UNIQUE (ID_Giocatore,Edizione))");
         stm.execute("create table Admin(" +
                 "Username TEXT primary key, " +
