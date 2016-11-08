@@ -7,18 +7,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.strumentiAmminstratoreController">
+<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.strumentiAmminstratoreController">
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="nuovo" mnemonicParsing="false" onAction="#handleNuovo" text="Nuovo Utente" />
             <Button fx:id="modifica" mnemonicParsing="false" onAction="#handleModifica" text="Modifica" />
             <Button fx:id="elimina" mnemonicParsing="false" onAction="#handleElimina" text="Elimina" />
         </buttons>
       </ButtonBar>
    </bottom>
    <center>
-      <TableView fx:id="usersTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="nomeCol" prefWidth="90.0" text="Nome Utente" />
             <TableColumn fx:id="passwordCol" prefWidth="71.0" text="Password" />
@@ -27,6 +26,6 @@
       </TableView>
    </center>
    <top>
-      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" prefWidth="1500.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="topPane" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" prefWidth="1500.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER" />
    </top>
 </BorderPane>

@@ -240,6 +240,31 @@ public class Database {
     }
 
     /**
+     * Metodo che carica dal db un parte degli utenti
+     * @param offset indica quanti utenti non considerare dall'inizio
+     * @return Una lista che contiene 10 utenti
+     * @throws SQLException
+     */
+    public ObservableList<User> loadUtenti(int offset) throws SQLException {
+        prpst = null;
+        ObservableList<User> lista = FXCollections.observableArrayList();
+        ResultSet rs;
+        prpst = con.prepareStatement("select * from admin limit 10 offset ?");
+        prpst.setInt(1, offset);
+        rs = prpst.executeQuery();
+
+        while (rs.next()) {
+            User tmp = new User();
+            tmp.setNome(rs.getString("Username"));
+            tmp.setPassword(rs.getString("Password"));
+            tmp.setTipo(rs.getInt("Amministratore"));
+            lista.add(tmp);
+        }
+
+        return lista;
+    }
+
+    /**
      * Metodo dinamico che ricerca un giocatore nel db in base ai suoi parametri
      * @param giocatore Giocatore da ricercare
      * @param offset indica quanti giocatori non considerare dall'inizio

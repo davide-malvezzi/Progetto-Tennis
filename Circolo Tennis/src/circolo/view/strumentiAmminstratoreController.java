@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -37,38 +38,56 @@ public class strumentiAmminstratoreController {
     @FXML
     private TableColumn<User, Integer> tipoCol;
     @FXML
-    private Button nuovo;
-    @FXML
     private Button modifica;
     @FXML
     private Button elimina;
 
     private Database db;
+    private User user;
     private ObservableList<User> lista;
 
-    /**
-     * pannello che contiene i comandi per modificare i dati dell'utente
-     */
-    private AnchorPane listaPane;
-    User user = new User();
-    ButtonBar defaultPane;
+    private int offset = 0;
 
-    private boolean modificaClicked = false;
+    private boolean modificaClick = false;
+    private int offsetModifica = 0;
+
+    ButtonBar defaultPane;
 
     private User selezionato = new User();
     private modificaUtenteController controllerUtente;
 
+    /**
+     * Inizializza il pannello gestione iscritti
+     */
+    @FXML
+    private void initialize() {
+        defaultPane = (ButtonBar) pane.getBottom();
+        try {
+            db = Database.getInstance();
+            lista = db.loadUtenti(offsetModifica);
+            nomeCol.setCellValueFactory(cellData -> cellData.getValue().getNomeProperty());
+            passwordCol.setCellValueFactory(cellData -> cellData.getValue().getPasswordProperty());
+            tipoCol.setCellValueFactory(cellData -> cellData.getValue().getTipo() == 1 ? new SimpleStringProperty("Amministratore") : new SimpleStringProperty("Ospite"));
+
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Selezione(newValue));
+            table.setItems(lista);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            AlertUtil.displayGenericError();
+        }
+    }
+
     @FXML
     private void handleModifica() {
-        if (!modificaClicked) {
+        if (!modificaClick) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/modificaUtente.fxml"));
             try {
-                listaPane = loader.load();
+                pane = loader.load();
                 controllerUtente = loader.getController();
                 controllerUtente.setParametri(selezionato);
-                modificaClicked = true;
-                pane.setBottom(listaPane);
+                modificaClick = true;
+                pane.setBottom(pane);
             } catch (IOException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -76,7 +95,7 @@ public class strumentiAmminstratoreController {
                 alert.setHeaderText("Si è verificato un problema interno");
                 alert.showAndWait();
             }
-        } else pane.setBottom(listaPane);
+        } else pane.setBottom(pane);
     }
 
     @FXML
