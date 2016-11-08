@@ -1,7 +1,6 @@
 package circolo.view;
 
 import circolo.Database;
-import circolo.Giocatore;
 import circolo.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -26,6 +25,17 @@ public class modificaUtenteController {
     private TableView<User> table;
 
     private User oldUser;
+
+
+    @FXML
+    private void initialize(){
+        try{
+            db = Database.getInstance();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Cambia i dati dell'utente
@@ -62,5 +72,11 @@ public class modificaUtenteController {
             newTipo.setSelected(user.getTipo() == 1);
             this.oldUser = user;
         }
+    }
+
+    public void setControlli(BorderPane pane,ButtonBar defaultPane,TableView<User> table){
+        this.controlPane = pane;
+        this.defaultPane = defaultPane;
+        this.table = table;
     }
 }

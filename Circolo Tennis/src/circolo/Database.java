@@ -240,17 +240,15 @@ public class Database {
     }
 
     /**
-     * Metodo che carica dal db un parte degli utenti
-     * @param offset indica quanti utenti non considerare dall'inizio
+     * Metodo che carica dal db gli utenti
      * @return Una lista che contiene 10 utenti
      * @throws SQLException
      */
-    public ObservableList<User> loadUtenti(int offset) throws SQLException {
+    public ObservableList<User> loadUtenti() throws SQLException {
         prpst = null;
         ObservableList<User> lista = FXCollections.observableArrayList();
         ResultSet rs;
-        prpst = con.prepareStatement("select * from admin limit 10 offset ?");
-        prpst.setInt(1, offset);
+        prpst = con.prepareStatement("select * from admin");
         rs = prpst.executeQuery();
 
         while (rs.next()) {
@@ -398,6 +396,30 @@ public class Database {
         prpst.execute();
     }
 
+
+    /**
+     * Metodo che inserisce un nuovo utente nel sistema
+     * @param user utente da inserire
+     * @return <code>false</code> se l'utente è già presente, <true>se l'operazione ha successo</true>
+     * @throws SQLException
+     */
+    public boolean nuovoUser(User user) throws SQLException {
+        ResultSet rs;
+        prpst = con.prepareStatement("select exists(SELECT 1 FROM admin WHERE username = ? limit 1) as find");
+        prpst.setString(1, user.getNome());
+        rs = prpst.executeQuery();
+        if (rs.getInt("find") == 1) return false;
+
+
+        prpst = con.prepareStatement("insert into Admin values (?,?,?)");
+        prpst.setString(1,user.getNome());
+        prpst.setString(2,user.getPassword());
+        prpst.setInt(3,user.getTipo());
+
+        prpst.execute();
+        return true;
+    }
+
     /**
      * Rimuove un utente dal db
      * @param user utente da eliminare
@@ -417,7 +439,7 @@ public class Database {
     public void modificaUser(User newUser) throws SQLException {
         prpst = null;
 
-        prpst = con.prepareStatement("update Admin set Password = ?, Amministratore = ?, " +
+        prpst = con.prepareStatement("update Admin set Password = ?, Amministratore = ? " +
                 "where Username = ?");
 
         prpst.setString(1, newUser.getPassword());

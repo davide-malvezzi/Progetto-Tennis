@@ -5,12 +5,18 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Classe che modella gli utenti che possono accedere al sistema
+ */
 public class User {
     private StringProperty nome;
     private StringProperty password;
     private SimpleIntegerProperty tipo;
 
     public User() {
+        nome = new SimpleStringProperty();
+        password = new SimpleStringProperty();
+        tipo = new SimpleIntegerProperty();
     }
 
     //getter and setters
