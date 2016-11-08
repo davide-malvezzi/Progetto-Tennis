@@ -24,30 +24,24 @@ import java.time.LocalTime;
  * Classe che gestisce l'interfaccia del pannello Strumenti Amministratore
  */
 public class strumentiAmminstratoreController {
-
     @FXML
     private BorderPane pane;
-
     @FXML
-    private TableView<User> usersTable;
-
+    private AnchorPane topPane;
     @FXML
-    private TableColumn<User, String> nomeUsersTable;
-
+    private TableView<User> table;
     @FXML
-    private TableColumn<User, String> passwordUsersTable;
-
+    private TableColumn<User, String> nomeCol;
     @FXML
-    private TableColumn<User, Integer> tipoUsersTable;
-
+    private TableColumn<User, String> passwordCol;
     @FXML
-    private Button nuovoUtente;
-
+    private TableColumn<User, Integer> tipoCol;
     @FXML
-    private Button modificaUtente;
-
+    private Button nuovo;
     @FXML
-    private Button eliminaUtente;
+    private Button modifica;
+    @FXML
+    private Button elimina;
 
     private Database db;
     private ObservableList<User> lista;

@@ -34,6 +34,11 @@ public class ProgramUIController {
     @FXML
     private ComboBox<String> sezioneMatchplay;
 
+    /**
+     * Tab che contiene la gestione Strumenti Amministratore
+     */
+    @FXML
+    private Tab Strumenti;
 
     BorderPane pane;
     /**
@@ -52,10 +57,16 @@ public class ProgramUIController {
      * Boolean che indica se il pannello di gestione gironi del matchplay è già stato caricato
      */
     private boolean gironiLoaded;
+    /**
+     * Boolean che indica se il pannello di gestione strumenti amministratore è già stato caricato
+     */
+    private boolean strumentiLoaded;
+
     private BorderPane partitePane;
     private BorderPane gironiPane;
     private BorderPane iscrizioniPane;
     private BorderPane contentMatchplay;
+    private BorderPane strumentiPane;
 
     public ProgramUIController() {
     }
@@ -65,6 +76,7 @@ public class ProgramUIController {
         MainApp.getRoot().getTop().setVisible(true);
         prenotazioniLoaded = false;
         matchplayLoaded = false;
+        strumentiLoaded = false;
         sezioneMatchplay.getItems().addAll("Iscrizioni","Gironi","Partite");
         sezioneMatchplay.setValue("Iscrizioni");
         FXMLLoader loaderIscritti = new FXMLLoader();
@@ -153,6 +165,24 @@ public class ProgramUIController {
                 contentMatchplay.setCenter(iscrizioniPane);
         }
 
+    }
+
+    /**
+     * Metodo che mostra il pannello degli strumenti amministratore
+     */
+    @FXML
+    private void showStrumentiAmministratore() {
+        if (!strumentiLoaded) {
+            strumentiLoaded = true;
+            FXMLLoader loaderStrumenti = new FXMLLoader();
+            loaderStrumenti.setLocation(MainApp.class.getResource("view/strumentiAmministratore.fxml"));
+            try {
+                pane = loaderStrumenti.load();
+                Strumenti.setContent(pane);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
