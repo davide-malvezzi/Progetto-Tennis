@@ -690,6 +690,7 @@ public class Database {
                 giocatore.setCognome(rs.getString("cognome"));
                 giocatore.setID(rs.getInt("ID_Giocatore"));
                 giocatore.setGirone(rs.getInt("girone"));
+                giocatore.setFascia(rs.getInt("fascia"));
                 lista.get(i).add(giocatore);
             }
         }

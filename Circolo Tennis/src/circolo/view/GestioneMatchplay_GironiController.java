@@ -53,6 +53,11 @@ public class GestioneMatchplay_GironiController {
     @FXML
     private TableColumn<GiocatoreMatchplay, String> CognomegironeA;
     /**
+     * tabella che contiene la fascia dei giocatori del girone A
+     */
+    @FXML
+    private TableColumn<GiocatoreMatchplay, Integer> FasciagironeA;
+    /**
      * tabella che contiene il nome dei giocatori del girone B
      */
     @FXML
@@ -62,6 +67,11 @@ public class GestioneMatchplay_GironiController {
      */
     @FXML
     private TableColumn<GiocatoreMatchplay, String> CognomegironeB;
+    /**
+     * tabella che contiene la fascia dei giocatori del girone B
+     */
+    @FXML
+    private TableColumn<GiocatoreMatchplay, Integer> FasciagironeB;
     /**
      * tabella che contiene il nome dei giocatori del girone C
      */
@@ -73,6 +83,11 @@ public class GestioneMatchplay_GironiController {
     @FXML
     private TableColumn<GiocatoreMatchplay, String> CognomegironeC;
     /**
+     * tabella che contiene la fascia dei giocatori del girone C
+     */
+    @FXML
+    private TableColumn<GiocatoreMatchplay, Integer> FasciagironeC;
+    /**
      * tabella che contiene il nome dei giocatori del girone D
      */
     @FXML
@@ -82,6 +97,11 @@ public class GestioneMatchplay_GironiController {
      */
     @FXML
     private TableColumn<GiocatoreMatchplay, String> CognomegironeD;
+    /**
+     * tabella che contiene la fascia dei giocatori del girone D
+     */
+    @FXML
+    private TableColumn<GiocatoreMatchplay, Integer> FasciagironeD;
     /**
      * tabella che contiene il nome dei giocatori del girone A
      */
@@ -131,12 +151,16 @@ public class GestioneMatchplay_GironiController {
 
         NomegironeA.setCellValueFactory(cellData -> cellData.getValue().getNomeProperty());
         CognomegironeA.setCellValueFactory(cellData -> cellData.getValue().getCognomeProperty());
+        FasciagironeA.setCellValueFactory(cellData -> cellData.getValue().getFasciaProperty().asObject());
         NomegironeB.setCellValueFactory(cellData -> cellData.getValue().getNomeProperty());
         CognomegironeB.setCellValueFactory(cellData -> cellData.getValue().getCognomeProperty());
+        FasciagironeB.setCellValueFactory(cellData -> cellData.getValue().getFasciaProperty().asObject());
         NomegironeC.setCellValueFactory(cellData -> cellData.getValue().getNomeProperty());
         CognomegironeC.setCellValueFactory(cellData -> cellData.getValue().getCognomeProperty());
+        FasciagironeC.setCellValueFactory(cellData -> cellData.getValue().getFasciaProperty().asObject());
         NomegironeD.setCellValueFactory(cellData -> cellData.getValue().getNomeProperty());
         CognomegironeD.setCellValueFactory(cellData -> cellData.getValue().getCognomeProperty());
+        FasciagironeD.setCellValueFactory(cellData -> cellData.getValue().getFasciaProperty().asObject());
 
         inserisciA.setOnAction(event -> handleInserisciGirone(1));
         inserisciB.setOnAction(event -> handleInserisciGirone(2));

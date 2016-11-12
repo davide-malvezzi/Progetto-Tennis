@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="555.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.GestioneMatchplay_GironiController">
+<BorderPane prefHeight="555.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.GestioneMatchplay_GironiController">
    <top>
       <AnchorPane prefHeight="150.0" prefWidth="1000.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER">
          <children>
@@ -44,6 +44,7 @@
                      <columns>
                         <TableColumn fx:id="NomegironeA" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeA" prefWidth="75.0" text="Cognome" />
+                        <TableColumn fx:id="FasciagironeA" prefWidth="75.0" text="Fascia" />
                      </columns>
                   </TableColumn>
                </columns>
@@ -57,6 +58,7 @@
                      <columns>
                         <TableColumn fx:id="NomegironeB" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeB" prefWidth="75.0" text="Cognome" />
+                        <TableColumn fx:id="FasciagironeB" prefWidth="75.0" text="Fascia" />
                      </columns>
                   </TableColumn>
                </columns>
@@ -70,6 +72,7 @@
                      <columns>
                         <TableColumn fx:id="NomegironeC" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeC" prefWidth="75.0" text="Cognome" />
+                        <TableColumn fx:id="FasciagironeC" prefWidth="75.0" text="Fascia" />
                      </columns>
                   </TableColumn>
                </columns>
@@ -83,6 +86,7 @@
                      <columns>
                         <TableColumn fx:id="NomegironeD" prefWidth="75.0" text="Nome" />
                         <TableColumn fx:id="CognomegironeD" prefWidth="75.0" text="Cognome" />
+                        <TableColumn fx:id="FasciagironeD" prefWidth="75.0" text="Fascia" />
                      </columns>
                   </TableColumn>
                </columns>
