@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="516.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.loginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="516.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.loginController">
    <center>
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
@@ -23,8 +23,8 @@
             <Label layoutX="14.0" layoutY="86.0" text="Username" />
             <Label layoutX="14.0" layoutY="125.0" text="Password" />
             <TextField fx:id="username" layoutX="79.0" layoutY="82.0" />
-            <PasswordField fx:id="password" layoutX="79.0" layoutY="121.0" onAction="#handleLogin"/>
-            <Button fx:id="backdoor" layoutX="79.0" layoutY="166.0" mnemonicParsing="false" text="Backdoor" />
+            <PasswordField fx:id="password" layoutX="79.0" layoutY="121.0" onAction="#handleLogin" />
+            <Button fx:id="backdoor" disable="true" layoutX="79.0" layoutY="166.0" mnemonicParsing="false" text="Backdoor" />
             <Button layoutX="176.0" layoutY="166.0" mnemonicParsing="false" onAction="#handleLogin" text="Login" />
          </children>
       </Pane>
