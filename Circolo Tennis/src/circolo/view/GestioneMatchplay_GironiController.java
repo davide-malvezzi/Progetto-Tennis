@@ -273,6 +273,16 @@ public class GestioneMatchplay_GironiController {
 
     }
 
+    /**
+     * Metodo che mostra o nasconde la colonna Fascia
+     */
+    public void handleMostraFasce() {
+        FasciagironeA.setVisible(! FasciagironeA.isVisible());
+        FasciagironeB.setVisible(! FasciagironeB.isVisible());
+        FasciagironeC.setVisible(! FasciagironeC.isVisible());
+        FasciagironeD.setVisible(! FasciagironeD.isVisible());
+    }
+
     private void generaPartiteGirone(ObservableList<GiocatoreMatchplay> list, Integer girone) {
         LinkedList<GiocatoreMatchplay> giocatori;
         ArrayList<Partita> partite = new ArrayList<>();

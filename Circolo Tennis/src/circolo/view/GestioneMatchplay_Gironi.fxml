@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="555.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.GestioneMatchplay_GironiController">
+<BorderPane prefHeight="555.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="circolo.view.GestioneMatchplay_GironiController">
    <top>
       <AnchorPane prefHeight="150.0" prefWidth="1000.0" styleClass="anchor" stylesheets="@background.css" BorderPane.alignment="CENTER">
          <children>
@@ -102,6 +102,7 @@
          <children>
             <ButtonBar prefHeight="45.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
                <buttons>
+                  <Button fx:id="mostraFasce" mnemonicParsing="false" onAction="#handleMostraFasce" text="Mostra/Nascondi Fasce" />
                   <Button fx:id="creaPartite" mnemonicParsing="false" onAction="#handleCreaPartite" text="Blocca e Genera Partite" />
                </buttons>
                <HBox.margin>
